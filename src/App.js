@@ -1,4 +1,5 @@
 import us2 from "./us2.png"
+import "./App.css"
 
 function US2() {
     return <svg width={800} height={"800"} viewBox="-400 -400 800 800" unitsPerEm>
@@ -7,7 +8,7 @@ function US2() {
         <circle r={400} x={0} y={0} fillOpacity={0.5}></circle>
         <circle r={360} x={0} y={0} fill="white" fillOpacity={0.5}></circle>
         <text stroke="white" fill="white" x={-125} y={-60} fontSize={50} textLength={250} lengthAdjust="spacingAndGlyphs" fontFamily="lenya69">СКОРОСТЬ</text>
-        <rect rx={5} x={0} y={0} width={10} height={60} transform={"translate(-5,-340) rotate(20,5,340)"}  fill="white" stroke="white"></rect>
+        <rect rx={5} x={0} y={0} width={10} height={60} transform={"translate(-5,-340) rotate(20,5,340)"} fill="white" stroke="white"></rect>
     </svg>
 }
 
