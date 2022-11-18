@@ -13,7 +13,7 @@ const angles = ticks.map((t, i) => Math.sqrt(t - a) * b + c)
 function US2() {
     console.log(angles)
     return <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width={800} height={"800"} viewBox="-400 -400 800 800" id="us2">
-        <image x={-400} y={-400} width={800} height={800} href={us2} />
+        {/* <image x={-400} y={-400} width={800} height={800} href={us2} /> */}
         <circle r={400} x={0} y={0} fillOpacity={0.5}></circle>
         <circle r={370} x={0} y={0} fill="white" fillOpacity={0.5}></circle>
         <text stroke="white" fill="white" x={-125} y={-60} fontSize={50} letterSpacing={-3} textLength={250} lengthAdjust="spacingAndGlyphs" fontFamily="lenya69">СКОРОСТЬ</text>
