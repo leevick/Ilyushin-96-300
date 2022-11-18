@@ -5,7 +5,9 @@
   "repository": "git@github.com:leevick/ilyushin-96-300.git",
   "author": "Victor <victor-li@outlook.com>",
   "license": "MIT",
+  "type": "module",
   "dependencies": {
+    "node-html-parser": "^6.1.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "^5.0.1"
@@ -19,6 +21,12 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "postbuild": "react-snap"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   },
   "browserslist": {
     "production": [
