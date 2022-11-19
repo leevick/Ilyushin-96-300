@@ -24,7 +24,7 @@ def build(ctx):
     # SVG generation -> *.svg
     for i in instruments:
         print(i)
-        ctx(rule=f"cd ../vectors && ./export_svg.js {i}",
+        ctx(rule=f"cd ../vectors && node ./export_svg.js {i}",
             source="../../vectors/build/index.html", target=f"../../vectors/build/{i}.svg")
     # Generate texture
     for i in instruments:
