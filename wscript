@@ -10,3 +10,4 @@ def configure(ctx):
 
 def build(ctx):
     ctx.recurse("vectors")
+    ctx.recurse("model")

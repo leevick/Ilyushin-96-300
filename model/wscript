@@ -1,0 +1,16 @@
+#!/usr/bin/python3
+
+from glob import glob
+from pathlib import Path
+import os
+
+
+instruments = ['US2']
+
+def configure(ctx):
+    pass
+
+
+def build(ctx):
+    for i in instruments:
+        ctx(rule="blender -b -P ${SRC}", source=f"../model/{i}.py",target=f"../{i}.blend")
