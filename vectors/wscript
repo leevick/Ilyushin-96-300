@@ -29,5 +29,5 @@ def build(ctx):
     # Generate texture
     for i in instruments:
         print(i)
-        ctx(rule="inkscape -e ${TGT} -d 300 ${SRC}",
+        ctx(rule="inkscape -o ${TGT} -d 300 ${SRC}",
             source=f"../../vectors/build/{i}.svg", target=f"../texture/{i}.png")
