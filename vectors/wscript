@@ -4,7 +4,7 @@ from glob import glob
 from pathlib import Path
 
 
-instruments = ['us2']
+instruments = ['US2']
 
 
 def configure(ctx):

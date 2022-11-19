@@ -8,7 +8,7 @@ const html = fs.readFileSync("./build/index.html", 'utf-8')
 const root = parse(html)
 
 const fd = fs.openSync(`./build/${t}.svg`, "w+")
-const svg = root.querySelector('#us2').toString()
+const svg = root.querySelector(`#${t}`).toString()
 fs.writeSync(fd, '<?xml version="1.0" encoding="UTF-8"?>')
 fs.writeSync(fd, svg)
 fs.close(fd)
