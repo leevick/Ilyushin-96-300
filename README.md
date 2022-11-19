@@ -4,7 +4,25 @@
 
 Ilyushin Il-96-300 for MSFS/XPlane12/Prepar3D/FSX/FS9
 
+## Build Environment
 
+
+| Software |     Type      | Version | Windows | Ubuntu 20.04 | MacOS |
+| :------: | :-----------: | :------ | :-----: | :----------: | :---: |
+|  python  |    Program    | 3.8     |    √    |      √       |   ?   |
+|   waf    | Python script | 2.0.24  |    √    |      √       |   ?   |
+|   node   |    Program    | 18.12.1 |    √    |      √       |   ?   |
+| blender  |    Program    | 3.3.1   |    √    |      √       |   ?   |
+| inkscape |    Program    | 1.2.1   |    √    |      √       |   ?   |
+|   yarn   | NodeJS module | 1.22.19 |    √    |      √       |   ?   |
+
+```mermaid
+graph RL
+waf --> python
+yarn --> node
+blender
+inkscape
+```
 
 # Instruments
 
