@@ -25,6 +25,13 @@ Blender2MSFS2 --> Blender
 Inkscape
 ```
 
+## Development Plan
+
+- [ ] Experimental Stage
+- [ ] Development Stage
+- [ ] Test and Debug Stage
+- [ ] Release and Maintainance Stage
+
 # Instruments
 
 ## MCP ПУ-56
