@@ -21,6 +21,8 @@ def build(ctx):
     sources += ctx.path.ant_glob("export_svg.js")
     ctx(rule="cd ../vectors && yarn && yarn build",
         source=sources, target="../../vectors/build/index.html")
+    ctx(rule="cp ${SRC} ${TGT}", source=[
+        "../../vectors/src/center_upper_texture.jpg"], target="../texture/CentralPanel.jpg")
     # SVG generation -> *.svg
     for i in instruments:
         print(i)
