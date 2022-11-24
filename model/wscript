@@ -13,4 +13,4 @@ def configure(ctx):
 
 def build(ctx):
     for i in instruments:
-        ctx(rule="blender -b -P ${SRC}", source=f"../model/{i}.py",target=f"../{i}.blend")
+        ctx(rule=f"blender -b -P ${{SRC}} -- {i}", source="../model/models.py",target=f"../{i}.blend")
