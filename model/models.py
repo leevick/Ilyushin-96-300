@@ -61,7 +61,7 @@ def generateClockGlass() -> bpy.types.Material:
         return bpy.data.materials[index]
     else:
         # Create glass material
-        matGlass = bpy.data.materials.new(name="glass")
+        matGlass = bpy.data.materials.new(name="clock_glass")
         matGlass.use_nodes = True
         nodes = matGlass.node_tree.nodes
         links = matGlass.node_tree.links
