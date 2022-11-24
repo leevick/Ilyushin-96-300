@@ -200,21 +200,21 @@ class US2(BlenderModel):
         pass
 
 
-def digWhole(object: bpy.types.Object, radius: float, height: float, location) -> bpy.types.Object:
+def digHole(obj: bpy.types.Object, radius: float, height: float, location) -> None:
     # Create cut object
     bpy.ops.mesh.primitive_cylinder_add(
         radius=radius, depth=height, vertices=72, location=location)
     cut = bpy.context.active_object
 
     # Apply boolean
-
-    boolean = object.modifiers.new(type="BOOLEAN", name="cut_ops")
+    bpy.context.view_layer.objects.active = obj
+    boolean = obj.modifiers.new(type="BOOLEAN", name="cut_ops")
     boolean.object = cut
     boolean.operation = "DIFFERENCE"
+    cut.hide_set(True)
     bpy.ops.object.modifier_apply(modifier="cut_ops")
     bpy.data.objects.remove(cut)
-    base = bpy.context.active_object
-    return base
+    return
 
 
 class CentralPanel(BlenderModel):
@@ -242,9 +242,9 @@ class CentralPanel(BlenderModel):
         us2_y = height * scale / 10000.0 / 2 - 66.25e-3
 
         us2: US2 = US2()
+        digHole(panel, us2.radius, 1, (us2_x, us2_y, 0))
         us2.create()
-        us2.model.location = (us2_x, us2_y, 10e-3)
-        # digWhole(us2.model, us2.radius, 1, (us2_x, us2_y, 0))
+        us2.model.location = (us2_x, us2_y, -10e-3)
 
         bpy.ops.object.select_all(action="DESELECT")
         us2.model.select_set(True)
