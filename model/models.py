@@ -18,7 +18,7 @@ def generatePanelBackgroud(name: str) -> bpy.types.Material:
         links = matFace.node_tree.links
 
         nodes[0].inputs['Roughness'].default_value = 1.0
-        nodes[0].inputs['Specular'].default_value = 0.1
+        nodes[0].inputs['Specular'].default_value = 0.0
         nodes[0].inputs['Metallic'].default_value = 0.0
         nodeImage = nodes.new("ShaderNodeTexImage")
         nodeImage.image = bpy.data.images.load(
@@ -105,18 +105,24 @@ class BlenderModel:
 
 
 class US2(BlenderModel):
-    def __init__(self) -> None:
+    radius: float
+    thickness: float
+    depth: float
+    glassPosition: float
+    model: bpy.types.Object
+
+    def __init__(self, radius=40e-3, thickness=3e-3, depth=10e-3, glassPosition=5e-3) -> None:
         super().__init__()
+        self.radius = radius
+        self.thickness = thickness
+        self.depth = depth
+        self.glassPosition = glassPosition
 
     def create(self) -> bpy.types.Object:
-        radius = 40e-3
-        thickness = 3e-3
-        depth = 10e-3
-        glassPosition = 5e-3
 
         # Create cut object
         bpy.ops.mesh.primitive_cylinder_add(
-            radius=radius - thickness, depth=depth + 2 * thickness, vertices=72, location=(0, 0, 0))
+            radius=self.radius - self.thickness, depth=self.depth + 2 * self.thickness, vertices=72, location=(0, 0, 0))
 
         bpy.context.active_object.name = 'cut'
         cut = bpy.context.active_object
@@ -124,7 +130,7 @@ class US2(BlenderModel):
         # Create base
 
         bpy.ops.mesh.primitive_cylinder_add(
-            radius=radius, depth=depth, vertices=72)
+            radius=self.radius, depth=self.depth, vertices=72)
         bpy.context.active_object.name = 'base'
         base = bpy.context.active_object
 
@@ -141,7 +147,7 @@ class US2(BlenderModel):
         # Create glass
 
         bpy.ops.mesh.primitive_cylinder_add(
-            radius=radius - thickness, depth=1e-3, vertices=72, location=(0, 0, depth / 2 - glassPosition))
+            radius=self.radius - self.thickness, depth=1e-3, vertices=72, location=(0, 0, self.depth / 2 - self.glassPosition))
         bpy.context.active_object.name = 'glass'
         glass = bpy.context.active_object
         glass.data.materials.append(generateClockGlass())
@@ -149,7 +155,7 @@ class US2(BlenderModel):
         # Create face
 
         bpy.ops.mesh.primitive_circle_add(
-            radius=radius, fill_type="NGON", location=(0, 0, -depth/2))
+            radius=self.radius, fill_type="NGON", location=(0, 0, -self.depth/2))
         face = bpy.context.active_object
         face.data.materials.append(generateClockFace(__class__.__name__))
 
@@ -160,9 +166,11 @@ class US2(BlenderModel):
         glass.select_set(True)
 
         bpy.ops.object.join()
-        bpy.context.active_object.name = "US2"
+        bpy.context.active_object.name = __class__.__name__
 
-        return bpy.context.active_object
+        self.model = bpy.context.active_object
+
+        return self.model
 
     def render(self) -> None:
         # Add render camera
@@ -192,6 +200,23 @@ class US2(BlenderModel):
         pass
 
 
+def digWhole(object: bpy.types.Object, radius: float, height: float, location) -> bpy.types.Object:
+    # Create cut object
+    bpy.ops.mesh.primitive_cylinder_add(
+        radius=radius, depth=height, vertices=72, location=location)
+    cut = bpy.context.active_object
+
+    # Apply boolean
+
+    boolean = object.modifiers.new(type="BOOLEAN", name="cut_ops")
+    boolean.object = cut
+    boolean.operation = "DIFFERENCE"
+    bpy.ops.object.modifier_apply(modifier="cut_ops")
+    bpy.data.objects.remove(cut)
+    base = bpy.context.active_object
+    return base
+
+
 class CentralPanel(BlenderModel):
 
     def __init__(self) -> None:
@@ -200,16 +225,29 @@ class CentralPanel(BlenderModel):
     def create(self) -> bpy.types.Object:
         width = 1742
         height = 918
-        scale = 4.4
+        scale = 2.2
 
         # Create cut object
-        bpy.ops.mesh.primitive_plane_add(
-            scale=(width*scale/10000, height*scale/10000, 1))
+        bpy.ops.mesh.primitive_plane_add()
+
+        x, y, z = bpy.context.active_object.dimensions
+        bpy.context.active_object.dimensions = width * \
+            scale / 10000.0, height * scale / 10000.0, z
+
         bpy.context.active_object.name = 'CentralPanelBackgroud'
         panel = bpy.context.active_object
         panel.data.materials.append(generatePanelBackgroud(__class__.__name__))
 
+        us2_x = 51.25e-3 - width * scale / 10000.0 / 2
+        us2_y = height * scale / 10000.0 / 2 - 66.25e-3
+
+        us2: US2 = US2()
+        us2.create()
+        us2.model.location = (us2_x, us2_y, 10e-3)
+        # digWhole(us2.model, us2.radius, 1, (us2_x, us2_y, 0))
+
         bpy.ops.object.select_all(action="DESELECT")
+        us2.model.select_set(True)
         panel.select_set(True)
         bpy.ops.object.join()
         bpy.context.active_object.name = "CentralPanel"
@@ -219,7 +257,7 @@ class CentralPanel(BlenderModel):
     def render(self) -> None:
         # Add render camera
 
-        bpy.ops.object.camera_add(location=(0, -0.1, 0.3),
+        bpy.ops.object.camera_add(location=(0, -0.2, 0.6),
                                   rotation=(math.atan(1/3), 0, 0))
         bpy.context.scene.camera = bpy.context.object
 
