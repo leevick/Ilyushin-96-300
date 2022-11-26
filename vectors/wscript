@@ -4,7 +4,7 @@ from glob import glob
 from pathlib import Path
 
 
-instruments = ['US2', 'RMI']
+instruments = ['US2', 'RMI', 'RMIFace', 'RMICompass']
 
 
 def configure(ctx):

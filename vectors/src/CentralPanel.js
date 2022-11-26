@@ -46,14 +46,48 @@ export class US2 extends Component {
                     if (tick % 100 === 0) {
                         return <rect x={0} y={0} width={10} height={60} transform={`translate(-5,-340) rotate(${a},5,340)`} fill="white" stroke="white"></rect>
                     } else if (tick % 50 === 0) {
-                        return <rect x={0} y={0} width={5} height={60} transform={`translate(-5,-340) rotate(${a},5,340)`} fill="white" stroke="white"></rect>
+                        return <rect x={0} y={0} width={5} height={60} transform={`translate(-2.5,-340) rotate(${a},2.5,340)`} fill="white" stroke="white"></rect>
                     } else {
-                        return <rect x={0} y={0} width={5} height={30} transform={`translate(-5,-340) rotate(${a},5,340)`} fill="white" stroke="white"></rect>
+                        return <rect x={0} y={0} width={5} height={30} transform={`translate(-2.5,-340) rotate(${a},2.5,340)`} fill="white" stroke="white"></rect>
                     }
                 })
             }
         </g>
     }
+}
+
+export class RMICompass extends Component {
+    constructor(props) {
+        super(props)
+        this.width = 600
+        this.height = 600
+        this.top = -300
+        this.left = -300
+    }
+
+    render() {
+        const mainTicks = Array.from(Array(72)).map((_, i) => i * 5).filter(v => v % 30 === 0)
+        const majorTicks = Array.from(Array(72)).map((_, i) => i * 5).filter(v => v % 30 !== 0 && v % 10 === 0)
+        const minorTicks = Array.from(Array(72)).map((_, i) => i * 5).filter(v => v % 30 !== 0 && v % 10 !== 0)
+
+        return <g id="RMICompass" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
+            {/* <circle x={0} y={0} r={370} fillOpacity={1.0} fill="red"></circle> */}
+            <circle x={0} y={0} r={300} fillOpacity={1}></circle>
+            {
+                mainTicks.map(i => <rect x={0} y={0} width={8} height={50} transform={`translate(-4,-300) rotate(${i},4,300)`} fill="white" stroke="white"></rect>)
+            }
+            {
+                majorTicks.map(i => <rect x={0} y={0} width={5} height={40} transform={`translate(-2.5,-300) rotate(${i},2.5,300)`} fill="white" stroke="white"></rect>)
+            }
+            {
+                minorTicks.map(i => <rect x={0} y={0} width={5} height={20} transform={`translate(-2.5,-300) rotate(${i},2.5,300)`} fill="white" stroke="white"></rect>)
+            }
+            {
+                mainTicks.map(i => <text transform={`translate(0,-210) rotate(${i},0,210)`} dominantBaseline={"middle"} textAnchor="middle" stroke="white" fill="white" x={0} y={0} fontSize={80} fontFamily="lenya69">{`${i === 0 ? "С" : i / 10}`}</text>)
+            }
+        </g>
+    }
+
 }
 
 export class RMIFace extends Component {
@@ -63,15 +97,31 @@ export class RMIFace extends Component {
         this.height = 740
         this.top = -370
         this.left = -370
+        this.edge = 77
     }
-
     render() {
+        const mainTicks = Array.from(Array(72)).map((_, i) => i * 5).filter(v => v % 30 === 0)
+        const labels_upper = [6, 30]
+        const labels_lower = [12, 24]
         return <g id="RMIFace" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
-            <circle x={0} y={0} r={370} fillOpacity={0.5}></circle>
+            <circle x={0} y={0} r={370} fillOpacity={1}></circle>
+            {
+                mainTicks.map(i => <rect x={0} y={0} width={5} height={60} transform={`translate(-2.5,-345) rotate(${i},2.5,345)`} fill="orange" stroke="orange"></rect>)
+            }
+            <g transform="rotate(0,0,0)">
+                <RMICompass></RMICompass>
+            </g>
+            <path transform="translate(0,-300)" fill="white" d={`M 0 0 L ${this.edge / 2} ${-this.edge / 2 * Math.sqrt(3)} L ${-this.edge / 2} ${-this.edge / 2 * Math.sqrt(3)} Z`}></path>
+            {
+                labels_upper.map(l => <text fontWeight={"bold"} transform={`translate(${Math.sin(l * 10 / 180 * Math.PI) * 315},${-Math.cos(l * 10 / 180 * Math.PI) * 315 - 30})`} dominantBaseline={"middle"} textAnchor="middle" stroke="orange" fill="orange" x={0} y={0} fontSize={50} fontFamily="lenya69">{l}</text>)
+            }
+            {
+                labels_lower.map(l => <text fontWeight={"bold"} transform={`translate(${Math.sin(l * 10 / 180 * Math.PI) * 345},${-Math.cos(l * 10 / 180 * Math.PI) * 345 - 30})`} dominantBaseline={"middle"} textAnchor="middle" stroke="orange" fill="orange" x={0} y={0} fontSize={50} fontFamily="lenya69">{l}</text>)
+            }
         </g>
     }
-
 }
+
 export class RMI extends Component {
     constructor(props) {
         super(props)
@@ -83,9 +133,9 @@ export class RMI extends Component {
 
     render() {
         return <g id="RMI" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
-            <rect x={-this.width / 2} y={-this.height / 2 - 100} width={this.width} height={this.height} fill="rgb(101,139,148)" fillOpacity={0.5}></rect>
-            <text stroke="white" fill="white" x={-210} y={410} fontSize={50} letterSpacing={-3} textLength={130} lengthAdjust="spacingAndGlyphs" fontWeight={"bold"} fontFamily="lenya69">APK</text>
-            <text stroke="white" fill="white" x={210 - 130} y={410} fontSize={50} letterSpacing={-3} textLength={130} lengthAdjust="spacingAndGlyphs" fontWeight={"bold"} fontFamily="lenya69">APK</text>
+            <rect x={-this.width / 2} y={-this.height / 2 - 100} width={this.width} height={this.height} fill="rgb(101,139,148)" fillOpacity={1}></rect>
+            <text stroke="white" fill="white" x={-210} y={410} fontSize={70} letterSpacing={-3} textLength={130} lengthAdjust="spacingAndGlyphs" fontWeight={"bold"} fontFamily="lenya69">APK</text>
+            <text stroke="white" fill="white" x={210 - 130} y={410} fontSize={70} letterSpacing={-3} textLength={130} lengthAdjust="spacingAndGlyphs" fontWeight={"bold"} fontFamily="lenya69">APK</text>
             <text stroke="white" fill="white" x={- 395} y={135} fontSize={70} fontWeight={"bold"} fontFamily="lenya69">V</text>
             <text stroke="white" fill="white" x={- 395} y={185} fontSize={70} fontWeight={"bold"} fontFamily="lenya69">O</text>
             <text stroke="white" fill="white" x={- 395} y={235} fontSize={70} fontWeight={"bold"} fontFamily="lenya69">R</text>
