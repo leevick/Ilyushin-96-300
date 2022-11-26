@@ -1,5 +1,6 @@
 // import "./center.jpg" as CentralPanelBackgroud;
 
+// import { Component, React } from "react"
 import center_upper_texture from "./center_upper_texture.jpg"
 
 
@@ -12,6 +13,8 @@ export default function CentralPanel() {
     const sig_h = 165
     const rmi_w = 800
     const rmi_h = 1150
+    const stab_w = 300
+    const stab_h = 670
 
     return <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width={1742 * scale} height={scale * 918} viewBox={`0 0 ${scale * 1742} ${scale * 918}`} id="CentralPanel" >
         <image x={0} y={0} width={1742 * scale} height={918 * scale} href={center_upper_texture} />
@@ -26,6 +29,12 @@ export default function CentralPanel() {
         <g name="rmi" transform="translate(3335,950)">
             <rect x={-rmi_w / 2} y={-rmi_h / 2 - 100} width={rmi_w} height={rmi_h} fill="#ffffffa0"></rect>
             <circle name="" cx={0} cy={0} r={370} fill="#ffffffa0" ></circle>
+        </g>
+        <g name="stab_disp" transform="translate(553,1545)">
+            <rect width={stab_w} height={stab_h} x={-stab_w / 2} y={-stab_h / 2}></rect>
+        </g>
+        <g name="stab_sig" transform="translate(205,1545)">
+            <rect width={sig_w} height={2 * sig_h} x={-sig_w / 2} y={-sig_h}></rect>
         </g>
     </svg >
 }

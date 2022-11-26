@@ -4,7 +4,7 @@ from glob import glob
 from pathlib import Path
 
 
-instruments = ['US2']
+instruments = ['US2', 'CentralPanel']
 
 
 def configure(ctx):
