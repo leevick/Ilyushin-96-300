@@ -1,4 +1,5 @@
 import bpy
+import bmesh
 import sys
 import os
 import math
@@ -284,13 +285,30 @@ class RMI(BlenderModel):
         bevel.segments = 3
         bpy.ops.object.modifier_apply(modifier="bevel2")
 
-        # extrude : bpy.types.GeometryNodeExtrudeMesh =
+        bpy.ops.object.mode_set(mode='EDIT')
+        bpy.ops.mesh.select_mode(type='FACE')
+        bpy.ops.mesh.select_all(action='SELECT')
 
-        # bpy.ops.object.editmode_toggle()
+        bm = bmesh.new()
+        bm = bmesh.from_edit_mesh(bpy.context.object.data)
 
-        # bpy.ops.transform.resize(
-        #     value=(width / 10000.0, height / 10000.0, 10e-3), center_override=(0, 0, 0))
-        # bpy.ops.object.editmode_toggle()
+        for f in bm.faces:
+            face = f.normal
+        r = bmesh.ops.extrude_face_region(bm, geom=bm.faces[:])
+        verts = [e for e in r['geom'] if isinstance(e, bmesh.types.BMVert)]
+        TranslateDirection = face * 10e-3  # Extrude Strength/Length
+        bmesh.ops.translate(bm, vec=TranslateDirection, verts=verts)
+
+        bmesh.update_edit_mesh(bpy.context.object.data)
+        bm.free()
+
+        bpy.ops.object.editmode_toggle()
+
+        saved_location = bpy.context.scene.cursor.location.xyz   # returns a vector
+        bpy.context.scene.cursor.location = (0.0, -10e-3, 0.0)
+        bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
+        bpy.context.scene.cursor.location.xyz = saved_location
+        bpy.ops.transform.translate(value=(0, 10e-3, 0))
 
         pass
 
