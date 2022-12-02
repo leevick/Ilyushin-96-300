@@ -248,6 +248,28 @@ def digHole(obj: bpy.types.Object, radius: float, height: float, location) -> No
     return
 
 
+def extrudeFace(obj: bpy.types.Object, depth=10e-3) -> None:
+    bpy.ops.object.mode_set(mode='EDIT')
+    bpy.ops.mesh.select_mode(type='FACE')
+    bpy.ops.mesh.select_all(action='SELECT')
+
+    bm = bmesh.new()
+    bm = bmesh.from_edit_mesh(obj.data)
+
+    for f in bm.faces:
+        face = f.normal
+    r = bmesh.ops.extrude_face_region(bm, geom=bm.faces[:])
+    verts = [e for e in r['geom'] if isinstance(e, bmesh.types.BMVert)]
+    TranslateDirection = face * depth  # Extrude Strength/Length
+    bmesh.ops.translate(bm, vec=TranslateDirection, verts=verts)
+
+    bmesh.update_edit_mesh(obj.data)
+    bm.free()
+
+    bpy.ops.object.editmode_toggle()
+    pass
+
+
 class RMI(BlenderModel):
     def __init__(self) -> None:
         super().__init__()
@@ -255,6 +277,7 @@ class RMI(BlenderModel):
     def create(self) -> bpy.types.Object:
         width = 800
         height = 1150
+        depth = 5e-3
 
         # Create cut object
         bpy.ops.mesh.primitive_plane_add()
@@ -262,7 +285,7 @@ class RMI(BlenderModel):
         bpy.ops.object.editmode_toggle()
         x, y, z = bpy.context.active_object.dimensions
         bpy.ops.transform.resize(
-            value=(width / 10000.0, height / 10000.0, z), center_override=(0, 0, 0))
+            value=(width / 10000.0 / 2.0, height / 10000.0 / 2.0, z), center_override=(0, 0, 0))
         bpy.ops.object.editmode_toggle()
 
         panel = bpy.context.active_object
@@ -285,57 +308,39 @@ class RMI(BlenderModel):
         bevel.segments = 3
         bpy.ops.object.modifier_apply(modifier="bevel2")
 
-        bpy.ops.object.mode_set(mode='EDIT')
-        bpy.ops.mesh.select_mode(type='FACE')
-        bpy.ops.mesh.select_all(action='SELECT')
+        extrudeFace(bpy.context.active_object, depth=depth)
 
-        bm = bmesh.new()
-        bm = bmesh.from_edit_mesh(bpy.context.object.data)
+        # Move origin
 
-        for f in bm.faces:
-            face = f.normal
-        r = bmesh.ops.extrude_face_region(bm, geom=bm.faces[:])
-        verts = [e for e in r['geom'] if isinstance(e, bmesh.types.BMVert)]
-        TranslateDirection = face * 10e-3  # Extrude Strength/Length
-        bmesh.ops.translate(bm, vec=TranslateDirection, verts=verts)
-
-        bmesh.update_edit_mesh(bpy.context.object.data)
-        bm.free()
-
-        bpy.ops.object.editmode_toggle()
-
-        saved_location = bpy.context.scene.cursor.location.xyz   # returns a vector
+        saved_location = bpy.context.scene.cursor.location.xyz
         bpy.context.scene.cursor.location = (0.0, -10e-3, 0.0)
         bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
         bpy.context.scene.cursor.location.xyz = saved_location
         bpy.ops.transform.translate(value=(0, 10e-3, 0))
 
-        pass
+        # Dig hole
+        panel = bpy.context.active_object
+        digHole(panel, 37e-3, 1.0, (0, 0, 0))
 
-    def render(self, name: str) -> None:
-        # Add render camera
+        # Add RMI Face
+        bpy.ops.mesh.primitive_circle_add(
+            radius=37e-3, fill_type="NGON", location=(0, 0, -depth + 1e-3))
+        rmi_face = bpy.context.active_object
+        rmi_face.data.materials.append(generateClockFace("RMIFace"))
+        extrudeFace(rmi_face, 1e-3)
 
-        bpy.ops.object.camera_add(location=(0, -0.2, 0.6),
-                                  rotation=(math.atan(1/3), 0, 0))
-        bpy.context.scene.camera = bpy.context.object
+        # Add RMI compass
+        bpy.ops.mesh.primitive_circle_add(
+            radius=30e-3, fill_type="NGON", location=(0, 0, -depth + 2e-3))
+        rmi_compass = bpy.context.active_object
+        rmi_compass.data.materials.append(generateClockFace("RMICompass"))
+        extrudeFace(rmi_compass, 1e-3)
 
-        # Add render light
-
-        bpy.ops.object.light_add(
-            location=(0, 1, 0.5), rotation=(-math.pi / 2 + math.atan(0.5), 0, 0), type="AREA")
-        light = bpy.data.lights[0]
-        light.energy = 200
-        light.color = (1, 1, 1)
-
-        # Set GPU render
-
-        # bpy.context.scene.render.engine = 'CYCLES'
-        bpy.context.preferences.addons["cycles"].preferences.compute_device_type = "CUDA"
-        bpy.context.scene.cycles.device = "GPU"
-        bpy.context.preferences.addons["cycles"].preferences.get_devices()
-
-        bpy.context.scene.render.filepath = pathlib.Path.cwd().as_posix() + "/" + name
-        bpy.ops.render.render(write_still=True)
+        # Add RMI glass
+        bpy.ops.mesh.primitive_cylinder_add(
+            radius=37e-3, depth=1e-3, vertices=72, location=(0, 0, -0.5e-3))
+        glass = bpy.context.active_object
+        glass.data.materials.append(generateClockGlass())
 
         pass
 
