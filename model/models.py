@@ -150,7 +150,7 @@ class BlenderModel:
 
         # Set GPU render
 
-        # bpy.context.scene.render.engine = 'CYCLES'
+        bpy.context.scene.render.engine = 'CYCLES'
         bpy.context.preferences.addons["cycles"].preferences.compute_device_type = "CUDA"
         bpy.context.scene.cycles.device = "GPU"
         bpy.context.preferences.addons["cycles"].preferences.get_devices()
@@ -248,6 +248,22 @@ def digHole(obj: bpy.types.Object, radius: float, height: float, location) -> No
     return
 
 
+def digHoleObj(obj: bpy.types.Object, obj2: bpy.types.Object) -> None:
+    # Create cut object
+    cut = obj2
+
+    # Apply boolean
+    bpy.context.view_layer.objects.active = obj
+    boolean = obj.modifiers.new(type="BOOLEAN", name="cut_ops")
+    boolean.object = cut
+    boolean.solver = "FAST"
+    boolean.operation = "DIFFERENCE"
+    cut.hide_set(True)
+    bpy.ops.object.modifier_apply(modifier="cut_ops")
+    bpy.data.objects.remove(cut)
+    return
+
+
 def extrudeFace(obj: bpy.types.Object, depth=10e-3) -> None:
     bpy.ops.object.mode_set(mode='EDIT')
     bpy.ops.mesh.select_mode(type='FACE')
@@ -273,6 +289,56 @@ def extrudeFace(obj: bpy.types.Object, depth=10e-3) -> None:
 class RMI(BlenderModel):
     def __init__(self) -> None:
         super().__init__()
+
+    def createOutline(self) -> bpy.types.Object:
+        scale = 1.005
+        width = 800 * scale
+        height = 1150 * scale
+        depth = 5e-3
+
+        # Create cut object
+        bpy.ops.mesh.primitive_plane_add()
+
+        bpy.ops.object.editmode_toggle()
+        x, y, z = bpy.context.active_object.dimensions
+        bpy.ops.transform.resize(
+            value=(width / 10000.0 / 2.0, height / 10000.0 / 2.0, z), center_override=(0, 0, 0))
+        bpy.ops.object.editmode_toggle()
+
+        panel = bpy.context.active_object
+
+        bpy.context.view_layer.objects.active = panel
+        bevel: bpy.types.BevelModifier = panel.modifiers.new(
+            type="BEVEL", name="bevel")
+        bevel.affect = "VERTICES"
+        bevel.offset_type = "OFFSET"
+        bevel.width = 15e-3 * scale
+        bpy.ops.object.modifier_apply(modifier="bevel")
+
+        bevel: bpy.types.BevelModifier = panel.modifiers.new(
+            type="BEVEL", name="bevel2")
+        bevel.affect = "VERTICES"
+        bevel.offset_type = "OFFSET"
+        bevel.width = 1e-3 * scale
+        bevel.segments = 3
+        bpy.ops.object.modifier_apply(modifier="bevel2")
+
+        extrudeFace(bpy.context.active_object, depth=depth)
+
+        # Move origin
+
+        saved_location = bpy.context.scene.cursor.location.xyz
+        bpy.context.scene.cursor.location = (0.0, -10e-3, 0.0)
+        bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
+        bpy.context.scene.cursor.location.xyz = saved_location
+        bpy.ops.transform.translate(value=(0, 10e-3, depth/2))
+
+        saved_location = bpy.context.scene.cursor.location.xyz
+        bpy.context.scene.cursor.location = (0.0, 0.0, 0.0)
+        bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
+        bpy.context.scene.cursor.location.xyz = saved_location
+
+        return bpy.context.active_object
 
     def create(self) -> bpy.types.Object:
         width = 800
@@ -304,7 +370,7 @@ class RMI(BlenderModel):
             type="BEVEL", name="bevel2")
         bevel.affect = "VERTICES"
         bevel.offset_type = "OFFSET"
-        bevel.width = 2e-3
+        bevel.width = 1e-3
         bevel.segments = 3
         bpy.ops.object.modifier_apply(modifier="bevel2")
 
@@ -324,14 +390,14 @@ class RMI(BlenderModel):
 
         # Add RMI Face
         bpy.ops.mesh.primitive_circle_add(
-            radius=37e-3, fill_type="NGON", location=(0, 0, -depth + 1e-3))
+            radius=37e-3, fill_type="NGON", vertices=72, location=(0, 0, -depth + 1e-3))
         rmi_face = bpy.context.active_object
         rmi_face.data.materials.append(generateClockFace("RMIFace"))
         extrudeFace(rmi_face, 1e-3)
 
         # Add RMI compass
         bpy.ops.mesh.primitive_circle_add(
-            radius=30e-3, fill_type="NGON", location=(0, 0, -depth + 2e-3))
+            radius=30e-3, fill_type="NGON", vertices=72, location=(0, 0, -depth + 2e-3))
         rmi_compass = bpy.context.active_object
         rmi_compass.data.materials.append(generateClockFace("RMICompass"))
         extrudeFace(rmi_compass, 1e-3)
@@ -342,7 +408,19 @@ class RMI(BlenderModel):
         glass = bpy.context.active_object
         glass.data.materials.append(generateClockGlass())
 
-        pass
+        bpy.ops.object.select_all(action="DESELECT")
+        rmi_compass.select_set(True)
+        rmi_face.select_set(True)
+        glass.select_set(True)
+        panel.select_set(True)
+        bpy.ops.object.join()
+
+        saved_location = bpy.context.scene.cursor.location.xyz
+        bpy.context.scene.cursor.location = (0.0, 0.0, 0.0)
+        bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
+        bpy.context.scene.cursor.location.xyz = saved_location
+
+        return bpy.context.active_object
 
 
 class CentralPanel(BlenderModel):
@@ -374,11 +452,26 @@ class CentralPanel(BlenderModel):
         us2.create()
         us2.model.location = (us2_x, us2_y, -10e-3)
 
+        # RMI Outline
+        rmi = RMI()
+        rmiOutline = rmi.createOutline()
+        rmiOutline.location = (0.14188, 0.00598, 0)
+
+        digHoleObj(panel, rmiOutline)
+
+        rmiModel = rmi.create()
+        rmiModel.location = (0.14188, 0.00598, 0)
+
         bpy.ops.object.select_all(action="DESELECT")
         us2.model.select_set(True)
         panel.select_set(True)
+        rmiModel.select_set(True)
         bpy.ops.object.join()
-        bpy.context.active_object.name = "CentralPanel"
+
+        saved_location = bpy.context.scene.cursor.location.xyz
+        bpy.context.scene.cursor.location = (0.0, 0.0, 0.0)
+        bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
+        bpy.context.scene.cursor.location.xyz = saved_location
 
         return bpy.context.active_object
 
@@ -399,7 +492,7 @@ class CentralPanel(BlenderModel):
 
         # Set GPU render
 
-        # bpy.context.scene.render.engine = 'CYCLES'
+        bpy.context.scene.render.engine = 'CYCLES'
         bpy.context.preferences.addons["cycles"].preferences.compute_device_type = "CUDA"
         bpy.context.scene.cycles.device = "GPU"
         bpy.context.preferences.addons["cycles"].preferences.get_devices()
