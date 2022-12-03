@@ -444,6 +444,8 @@ class CentralPanel(BlenderModel):
         panel = bpy.context.active_object
         panel.data.materials.append(generatePanelBackgroud(__class__.__name__))
 
+        extrudeFace(panel, 0.001)
+
         us2_x = 51.25e-3 - width * scale / 10000.0 / 2
         us2_y = height * scale / 10000.0 / 2 - 66.25e-3
 
@@ -501,6 +503,96 @@ class CentralPanel(BlenderModel):
         bpy.ops.render.render(write_still=True)
 
         pass
+
+
+def screwAroundZ(obj: bpy.types.Object) -> bpy.types.Object:
+
+    bpy.context.view_layer.objects.active = obj
+    mod: bpy.types.ScrewModifier = obj.modifiers.new(
+        type="SCREW", name="screw")
+    mod.steps = 72
+    # bpy.ops.object.modifier_apply(modifier="screw")
+
+    # mod.name = "screw"
+    # mod.axis = 'Z'
+
+    # screw: bpy.types.ScrewModifier = obj.modifiers.new(
+    #     type="SCREW", name="screw")
+    # screw.steps = 72
+    # # bevel.affect = "VERTICES"
+    # # bevel.offset_type = "OFFSET"
+    # # bevel.width = 15e-3 * scale
+
+
+class AGR(BlenderModel):
+    def __init__(self) -> None:
+        super().__init__()
+
+    def create(self) -> bpy.types.Object:
+        shieldDepth = 5e-3
+        shieldInnerRadius = 31e-3
+        shieldSlopeRadius = 40e-3
+        shieldOuterRadius = 45e-3
+        ballArc = 60.0
+        ballRadius = (shieldInnerRadius - 1e-3) / \
+            math.sin(ballArc / 2 / 180 * math.pi)
+        ballLocationZ = - shieldDepth - \
+            (shieldInnerRadius - 1e-3) / math.tan(ballArc / 2 / 180 * math.pi)
+
+        curveData = bpy.data.curves.new('myCurve', type='CURVE')
+        curveData.dimensions = '2D'
+        curveData.fill_mode = 'BOTH'
+
+        coords = [(0, shieldInnerRadius, -shieldDepth),
+                  (0, shieldSlopeRadius, 0),
+                  (0, shieldOuterRadius, 0)
+                  ]
+        polyline = curveData.splines.new('POLY')
+        polyline.points.add(len(coords)-1)
+        # polyline.use_endpoint_u = True
+        # polyline.use_cyclic_u = True
+
+        for i, coord in enumerate(coords):
+            x, y, z = coord
+            polyline.points[i].co = (x, y, z, 1)
+
+        # create Object
+        curveOB = bpy.data.objects.new('myCurve', curveData)
+
+        # attach to scene and validate context
+        view_layer = bpy.context.view_layer
+        curveOB = bpy.data.objects.new('myCurve', curveData)
+        view_layer.active_layer_collection.collection.objects.link(curveOB)
+
+        curveOB.select_set(True)
+
+        screwAroundZ(curveOB)
+
+        bpy.ops.object.convert(target="MESH")
+
+        bpy.ops.object.mode_set(mode='EDIT')
+        bpy.ops.mesh.select_mode(type='FACE')
+        bpy.ops.mesh.select_all(action='SELECT')
+
+        bpy.ops.uv.cube_project()
+
+        bpy.ops.object.editmode_toggle()
+
+        shield: bpy.types.Object = bpy.context.active_object
+        shield.data.materials.append(generateClockFace("AGRShield"))
+
+        # Add ball
+
+        bpy.ops.mesh.primitive_uv_sphere_add(
+            radius=ballRadius, location=(0, 0, ballLocationZ), segments=72, ring_count=36)
+        ball: bpy.types.Object = bpy.context.active_object
+        ball.data.materials.append(generateClockFace("AGRBall"))
+        ball.rotation_euler[0] = math.radians(-90)
+
+        return bpy.context.active_object
+
+
+pass
 
 
 argv = sys.argv
