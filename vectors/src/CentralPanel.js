@@ -149,6 +149,74 @@ export class RMI extends Component {
     }
 }
 
+export class AGRBall extends Component {
+    constructor(props) {
+        super(props)
+        this.width = 2 * props.radius
+        this.height = 2 * props.radius
+        this.left = -props.radius
+        this.top = - props.radius
+    }
+
+    render() {
+        return <g id="AGRBall" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
+            <rect x={this.left} y={this.top} width={this.width} height={this.height / 2} fill="rgb(187,231,244)"></rect>
+            <rect x={this.left} y={0} width={this.width} height={this.height / 2} fill="rgb(117,64,58)"></rect>
+        </g>
+    }
+}
+
+export class AGRShield extends Component {
+    constructor(props) {
+        super(props)
+        this.width = 900
+        this.height = 900
+        this.left = -450
+        this.top = -450
+        this.mainTicks = [0, 90, 120, 240, 270]
+        this.minorTicks = [130, 140, 160, 170, 190, 200, 220, 230]
+        this.majorTicks = [150, 210]
+        this.texts = [152, 208]
+        this.ballRadius = (310 - 10) / Math.sin(60 / 2 / 180 * Math.PI)
+    }
+
+    render() {
+        return <g id="AGRShield" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
+            {/* <circle x={0} y={0} r={500} fillOpacity={0.0}></circle> */}
+            <AGRBall radius={this.ballRadius}></AGRBall>
+
+            <circle x={0} y={0} r={380} stroke="rgb(20,10,10)" strokeWidth={140} strokeOpacity={1.0} fillOpacity={0}></circle>
+            {
+                this.mainTicks.map(i => <rect x={0} y={0} width={8} height={40} transform={`translate(-4,-350) rotate(${i},4,350)`} fill="white" stroke="white"></rect>)
+            }
+            {
+                this.minorTicks.map(i => <rect x={0} y={0} width={5} height={20} transform={`translate(-2.5,-330) rotate(${i},2.5,330)`} fill="white" stroke="white"></rect>)
+            }
+            {
+                this.majorTicks.map(i => <rect x={0} y={0} width={8} height={20} transform={`translate(-4,-330) rotate(${i},4,330)`} fill="white" stroke="white"></rect>)
+            }
+            {
+                this.texts.map(i => <text fontWeight={"bold"} transform={`translate(${Math.sin(i / 180 * Math.PI) * 365},${-Math.cos(i / 180 * Math.PI) * 365})`} dominantBaseline={"middle"} textAnchor="middle" stroke="white" fill="white" x={0} y={0} fontSize={60} fontFamily="lenya69">{30}</text>)
+            }
+            {/* <circle x={0} y={0} r={310} fillOpacity={0.5}></circle> */}
+        </g >
+    }
+
+
+}
+
+export class AGR extends Component {
+    constructor(props) {
+        super(props)
+    }
+
+    render() {
+        return <g>
+            <AGRShield></AGRShield>
+        </g>
+    }
+}
+
 
 export default class CentralPanel extends Component {
 
@@ -195,6 +263,9 @@ export default class CentralPanel extends Component {
             </g>
             <g name="stab_sig" transform="translate(205,1545)">
                 <rect width={this.sig_w} height={2 * this.sig_h} x={-this.sig_w / 2} y={-this.sig_h}></rect>
+            </g>
+            <g transform="translate(1487,750)">
+                <AGR></AGR>
             </g>
         </g>
     }
