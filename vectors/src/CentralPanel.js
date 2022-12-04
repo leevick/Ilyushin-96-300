@@ -152,17 +152,47 @@ export class RMI extends Component {
 export class AGRBall extends Component {
     constructor(props) {
         super(props)
-        this.width = 2 * props.radius
+        this.width = 4 * props.radius
         this.height = 2 * props.radius
-        this.left = -props.radius
+        this.left = -2 * props.radius
         this.top = - props.radius
+
+        this.ticks = [-45, -40, -35, -30, -25, -20, -15, -10, -5, 5, 10, 15, 20, 25, 30, 35, 40, 45]
+        this.widths = [6, 36, 6, 36, 6, 36, 6, 12, 3, 3, 12, 6, 36, 6, 36, 6, 36, 6]
+
+        this.hideTick = [10, 20, 30, -10, -20, -30]
+        this.hideWidth = [6, 6, 6, 6, 6, 6]
+        this.hideFont = [40, 50, 60, 40, 50, 60]
+
+
+
     }
 
     render() {
+
+        const r = this.props.radius
         return <g id="AGRBall" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
             <rect x={this.left} y={this.top} width={this.width} height={this.height / 2} fill="rgb(187,231,244)"></rect>
             <rect x={this.left} y={0} width={this.width} height={this.height / 2} fill="rgb(117,64,58)"></rect>
-        </g>
+
+            {
+                this.ticks.map((t, i) => (
+                    <line x1={-r * this.widths[i] / 90.0 - r} x2={r * this.widths[i] / 90.0 - r} y1={this.height / 180.0 * t} y2={this.height / 180.0 * t} strokeWidth={2} stroke={t < 0 ? "black" : "white"}></line>
+                ))
+            }
+            {
+                this.hideTick.map((t, i) => (
+                    <line x1={-r * this.hideWidth[i] / 90.0 - r} x2={r * this.hideWidth[i] / 90.0 - r} y1={this.height / 180.0 * t} y2={this.height / 180.0 * t} strokeWidth={10} stroke={t < 0 ? "rgb(187,231,244)" : "rgb(117,64,58)"}></line>
+                ))
+            }
+            {
+                this.hideTick.map((t, i) => (
+                    <text fontWeight={"bold"} dominantBaseline={"middle"} textAnchor="middle" stroke={t > 0 ? "white" : "black"} fill={t > 0 ? "white" : "black"} x={-r} y={this.height / 180.0 * t} fontSize={this.hideFont[i]} fontFamily="lenya69">{Math.abs(t)}</text>
+                ))
+            }
+            <line x1={this.left} x2={-this.left} y1={0} y2={0} strokeWidth={2} stroke="white"></line>
+            <line x1={-this.props.radius} x2={-this.props.radius} y1={this.top} y2={-this.top} strokeWidth={2} stroke="white"></line>
+        </g >
     }
 }
 
@@ -177,15 +207,18 @@ export class AGRShield extends Component {
         this.minorTicks = [130, 140, 160, 170, 190, 200, 220, 230]
         this.majorTicks = [150, 210]
         this.texts = [152, 208]
-        this.ballRadius = (310 - 10) / Math.sin(60 / 2 / 180 * Math.PI)
+        this.ballRadius = 450
+        this.edge = 50
     }
 
     render() {
         return <g id="AGRShield" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
             {/* <circle x={0} y={0} r={500} fillOpacity={0.0}></circle> */}
-            <AGRBall radius={this.ballRadius}></AGRBall>
+            <g transform="translate(450,0)">
+                <AGRBall radius={this.ballRadius}></AGRBall>
+            </g>
 
-            <circle x={0} y={0} r={380} stroke="rgb(20,10,10)" strokeWidth={140} strokeOpacity={1.0} fillOpacity={0}></circle>
+            <circle x={0} y={0} r={380} stroke="rgb(20,10,10)" strokeWidth={140} strokeOpacity={1} fillOpacity={0}></circle>
             {
                 this.mainTicks.map(i => <rect x={0} y={0} width={8} height={40} transform={`translate(-4,-350) rotate(${i},4,350)`} fill="white" stroke="white"></rect>)
             }
@@ -198,6 +231,7 @@ export class AGRShield extends Component {
             {
                 this.texts.map(i => <text fontWeight={"bold"} transform={`translate(${Math.sin(i / 180 * Math.PI) * 365},${-Math.cos(i / 180 * Math.PI) * 365})`} dominantBaseline={"middle"} textAnchor="middle" stroke="white" fill="white" x={0} y={0} fontSize={60} fontFamily="lenya69">{30}</text>)
             }
+            <path transform="translate(0,310)" fill="white" d={`M 0 0 L ${this.edge / 2} ${this.edge / 2 * Math.sqrt(3)} L ${-this.edge / 2} ${this.edge / 2 * Math.sqrt(3)} Z`}></path>
             {/* <circle x={0} y={0} r={310} fillOpacity={0.5}></circle> */}
         </g >
     }
