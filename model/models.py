@@ -72,9 +72,9 @@ def generateClockFace(name: str) -> bpy.types.Material:
         nodes = matFace.node_tree.nodes
         links = matFace.node_tree.links
 
-        nodes[0].inputs['Roughness'].default_value = 0.21
-        nodes[0].inputs['Specular'].default_value = 0.031
-        nodes[0].inputs['Metallic'].default_value = 0.5
+        nodes[0].inputs['Roughness'].default_value = 0.9
+        nodes[0].inputs['Specular'].default_value = 0.1
+        nodes[0].inputs['Metallic'].default_value = 0.8
         nodeImage = nodes.new("ShaderNodeTexImage")
         nodeImage.image = bpy.data.images.load(
             f"{os.getcwd()}/texture/{name}.png", check_existing=False)
@@ -464,10 +464,16 @@ class CentralPanel(BlenderModel):
         rmiModel = rmi.create()
         rmiModel.location = (0.14188, 0.00598, 0)
 
+        # AGR
+        digHole(panel, 50e-3, 1, (-0.04292, 0.02598, 0))
+        agr: bpy.types.Object = AGR().create()
+        agr.location = (-0.04292, 0.02598, 0)
+
         bpy.ops.object.select_all(action="DESELECT")
         us2.model.select_set(True)
         panel.select_set(True)
         rmiModel.select_set(True)
+        agr.select_set(True)
         bpy.ops.object.join()
 
         saved_location = bpy.context.scene.cursor.location.xyz
@@ -524,6 +530,28 @@ def screwAroundZ(obj: bpy.types.Object) -> bpy.types.Object:
     # # bevel.width = 15e-3 * scale
 
 
+def createPolyLine(coords, name: str) -> bpy.types.Object:
+    curveData = bpy.data.curves.new(name, type='CURVE')
+    curveData.dimensions = '2D'
+    curveData.fill_mode = 'BOTH'
+    polyline = curveData.splines.new('POLY')
+    polyline.points.add(len(coords)-1)
+
+    for i, coord in enumerate(coords):
+        x, y, z = coord
+        polyline.points[i].co = (x, y, z, 1)
+
+    # create Object
+    # curveOB = bpy.data.objects.new('myCurve', curveData)
+
+    # attach to scene and validate context
+    view_layer = bpy.context.view_layer
+    curveOB = bpy.data.objects.new(name, curveData)
+    view_layer.active_layer_collection.collection.objects.link(curveOB)
+
+    return curveOB
+
+
 class AGR(BlenderModel):
     def __init__(self) -> None:
         super().__init__()
@@ -533,39 +561,19 @@ class AGR(BlenderModel):
         shieldInnerRadius = 31e-3
         shieldSlopeRadius = 40e-3
         shieldOuterRadius = 45e-3
-        ballArc = 60.0
-        ballRadius = (shieldInnerRadius - 1e-3) / \
-            math.sin(ballArc / 2 / 180 * math.pi)
-        ballLocationZ = - shieldDepth - \
-            (shieldInnerRadius - 1e-3) / math.tan(ballArc / 2 / 180 * math.pi)
+        # ballGap = 5e-3
+        # ballArc = 60.0
 
-        curveData = bpy.data.curves.new('myCurve', type='CURVE')
-        curveData.dimensions = '2D'
-        curveData.fill_mode = 'BOTH'
+        ballRadius = 45e-3
+        ballLocationZ = - shieldDepth - ballRadius + 3e-3
 
         coords = [(0, shieldInnerRadius, -shieldDepth),
                   (0, shieldSlopeRadius, 0),
                   (0, shieldOuterRadius, 0)
                   ]
-        polyline = curveData.splines.new('POLY')
-        polyline.points.add(len(coords)-1)
-        # polyline.use_endpoint_u = True
-        # polyline.use_cyclic_u = True
 
-        for i, coord in enumerate(coords):
-            x, y, z = coord
-            polyline.points[i].co = (x, y, z, 1)
-
-        # create Object
-        curveOB = bpy.data.objects.new('myCurve', curveData)
-
-        # attach to scene and validate context
-        view_layer = bpy.context.view_layer
-        curveOB = bpy.data.objects.new('myCurve', curveData)
-        view_layer.active_layer_collection.collection.objects.link(curveOB)
-
+        curveOB = createPolyLine(coords, "agr_ball")
         curveOB.select_set(True)
-
         screwAroundZ(curveOB)
 
         bpy.ops.object.convert(target="MESH")
@@ -581,6 +589,20 @@ class AGR(BlenderModel):
         shield: bpy.types.Object = bpy.context.active_object
         shield.data.materials.append(generateClockFace("AGRShield"))
 
+        # Add container
+
+        curveContainer = createPolyLine(
+            [(0, 0, -shieldDepth - 2*ballRadius),
+             (0, shieldOuterRadius, -shieldDepth - 2*ballRadius),
+             (0, shieldOuterRadius, 0),
+             ], "agr_container")
+        curveContainer.select_set(True)
+        screwAroundZ(curveContainer)
+
+        bpy.ops.object.convert(target="MESH")
+        container = bpy.context.active_object
+        container.data.materials.append(generateClockBase())
+
         # Add ball
 
         bpy.ops.mesh.primitive_uv_sphere_add(
@@ -588,6 +610,18 @@ class AGR(BlenderModel):
         ball: bpy.types.Object = bpy.context.active_object
         ball.data.materials.append(generateClockFace("AGRBall"))
         ball.rotation_euler[0] = math.radians(-90)
+        bpy.ops.object.shade_smooth()
+
+        bpy.ops.object.select_all(action="DESELECT")
+        container.select_set(True)
+        ball.select_set(True)
+        shield.select_set(True)
+        bpy.ops.object.join()
+
+        saved_location = bpy.context.scene.cursor.location.xyz
+        bpy.context.scene.cursor.location = (0.0, 0.0, 0.0)
+        bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
+        bpy.context.scene.cursor.location.xyz = saved_location
 
         return bpy.context.active_object
 
