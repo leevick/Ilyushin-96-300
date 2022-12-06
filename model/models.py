@@ -5,6 +5,10 @@ import os
 import math
 import pathlib
 
+dir = pathlib.Path(__file__).parent.as_posix()
+if not dir in sys.path:
+    sys.path.append(dir)
+
 
 def generatePanelBackgroud(name: str) -> bpy.types.Material:
 
@@ -465,7 +469,7 @@ class CentralPanel(BlenderModel):
         rmiModel.location = (0.14188, 0.00598, 0)
 
         # AGR
-        digHole(panel, 50e-3, 1, (-0.04292, 0.02598, 0))
+        digHole(panel, 45e-3, 1, (-0.04292, 0.02598, 0))
         agr: bpy.types.Object = AGR().create()
         agr.location = (-0.04292, 0.02598, 0)
 
@@ -612,10 +616,18 @@ class AGR(BlenderModel):
         ball.rotation_euler[0] = math.radians(-90)
         bpy.ops.object.shade_smooth()
 
+        # Glass
+        bpy.ops.mesh.primitive_cylinder_add(
+            radius=45e-3, depth=1e-3, vertices=72, location=(0, 0, 1e-3))
+        bpy.context.active_object.name = 'glass'
+        glass = bpy.context.active_object
+        glass.data.materials.append(generateClockGlass())
+
         bpy.ops.object.select_all(action="DESELECT")
         container.select_set(True)
         ball.select_set(True)
         shield.select_set(True)
+        glass.select_set(True)
         bpy.ops.object.join()
 
         saved_location = bpy.context.scene.cursor.location.xyz
