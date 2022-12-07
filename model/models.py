@@ -4,6 +4,7 @@ import sys
 import os
 import math
 import pathlib
+import random
 
 dir = pathlib.Path(__file__).parent.as_posix()
 if not dir in sys.path:
@@ -50,6 +51,35 @@ def generateInstrumentBackground(name: str) -> bpy.types.Material:
         nodeImage.image = bpy.data.images.load(
             f"{os.getcwd()}/texture/{name}.png", check_existing=False)
         links.new(nodeImage.outputs["Color"], nodes[0].inputs["Base Color"])
+
+        bump = nodes.new("ShaderNodeBump")
+
+        musgrave = nodes.new("ShaderNodeTexMusgrave")
+        musgrave.inputs["Scale"].default_value = 47.3
+        musgrave.inputs["Detail"].default_value = 15.0
+        musgrave.inputs["Dimension"].default_value = 0.0
+
+        links.new(bump.outputs['Normal'], nodes[0].inputs['Normal'])
+        links.new(musgrave.outputs[0], bump.inputs[2])
+
+        return matFace
+
+
+def generateColorBump(color) -> bpy.types.Material:
+    index = bpy.data.materials.find(f"color_bump_{hash(color)}")
+    if index != -1:
+        return bpy.data.materials[index]
+    else:
+        matFace = bpy.data.materials.new(name=f"color_bump_{hash(color)}")
+        matFace.use_nodes = True
+
+        nodes = matFace.node_tree.nodes
+        links = matFace.node_tree.links
+
+        nodes[0].inputs['Roughness'].default_value = 1.0
+        nodes[0].inputs['Specular'].default_value = 0.0
+        nodes[0].inputs['Metallic'].default_value = 0.0
+        nodes[0].inputs['Base Color'].default_value = color
 
         bump = nodes.new("ShaderNodeBump")
 
@@ -221,13 +251,34 @@ class US2(BlenderModel):
         face = bpy.context.active_object
         face.data.materials.append(generateClockFace(__class__.__name__))
 
+        # Create Nails
+
+        nails = [
+            Nut().create(), Nut().create(), Nut().create(), Nut().create()]
+
+        for i in range(2):
+            for j in range(2):
+                nails[2 * i +
+                      j].location = (375e-4 if i == 1 else -375e-4, 365e-4 if j == 1 else -365e-4, self.depth/2)
+                nails[2*i+j].rotation_euler[2] = random.uniform(0, math.pi)
+                nails[2*i+j].data.materials.append(
+                    generateColorBump((101/256.0, 139.0/256.0, 148.0/256.0, 1)))
+
         bpy.ops.object.select_all(action="DESELECT")
 
         face.select_set(True)
         base.select_set(True)
         glass.select_set(True)
+        for n in nails:
+            n.select_set(True)
 
         bpy.ops.object.join()
+
+        saved_location = bpy.context.scene.cursor.location.xyz
+        bpy.context.scene.cursor.location = (0.0, 0, self.depth / 2)
+        bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
+        bpy.context.scene.cursor.location.xyz = saved_location
+
         bpy.context.active_object.name = __class__.__name__
 
         self.model = bpy.context.active_object
@@ -456,7 +507,7 @@ class CentralPanel(BlenderModel):
         us2: US2 = US2()
         digHole(panel, us2.radius, 1, (us2_x, us2_y, 0))
         us2.create()
-        us2.model.location = (us2_x, us2_y, -10e-3)
+        us2.model.location = (us2_x, us2_y, 0)
 
         # RMI Outline
         rmi = RMI()
@@ -638,7 +689,58 @@ class AGR(BlenderModel):
         return bpy.context.active_object
 
 
-pass
+class Nut(BlenderModel):
+    def __init__(self,
+                 radius: float = 3e-3,
+                 height: float = 2e-3,
+                 width: float = 1e-3,
+                 depth: float = 1.8e-3
+                 ) -> None:
+        super().__init__()
+
+        self.height = height
+        self.angle: float = math.atan(radius / (radius - height))
+        self.r: float = radius / math.sin(self.angle)
+        self.segs: int = math.floor(self.angle / (2.0 * math.pi) * 72.0)
+        self.radius: float = radius
+        self.depth: float = depth
+        self.width: float = width
+
+    def create(self) -> bpy.types.Object:
+        bpy.ops.mesh.primitive_uv_sphere_add(
+            radius=self.r, location=(0, 0, self.height - self.r), ring_count=8, segments=16)
+        nuts = bpy.context.active_object
+
+        bpy.ops.mesh.primitive_cube_add(location=(0, 0, -1))
+        cut1 = bpy.context.active_object
+
+        digHoleObj(nuts, cut1)
+
+        bpy.ops.mesh.primitive_cube_add(
+            location=(0, 0, self.height - self.depth + 1))
+        cut2 = bpy.context.active_object
+        cut2.dimensions = (self.width, 2, 2)
+
+        digHoleObj(nuts, cut2)
+
+        nuts = bpy.context.active_object
+        nuts.select_set(True)
+
+        bpy.ops.object.convert(target="MESH")
+        bpy.ops.object.mode_set(mode='EDIT')
+        bpy.ops.mesh.select_mode(type='FACE')
+        bpy.ops.mesh.select_all(action='SELECT')
+        bpy.ops.uv.cube_project()
+        bpy.ops.object.editmode_toggle()
+
+        bpy.ops.object.shade_smooth()
+
+        saved_location = bpy.context.scene.cursor.location.xyz
+        bpy.context.scene.cursor.location = (0.0, 0.0, 0.0)
+        bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
+        bpy.context.scene.cursor.location.xyz = saved_location
+
+        return bpy.context.active_object
 
 
 argv = sys.argv

@@ -52,6 +52,10 @@ export class US2 extends Component {
                     }
                 })
             }
+            <circle cx={-375} cy={-365} r={30} fill="red" fillOpacity={1}></circle>
+            <circle cx={-375} cy={365} r={30} fill="red" fillOpacity={1}></circle>
+            <circle cx={375} cy={-365} r={30} fill="red" fillOpacity={1}></circle>
+            <circle cx={375} cy={365} r={30} fill="red" fillOpacity={1}></circle>
         </g>
     }
 }
