@@ -149,6 +149,10 @@ export class RMI extends Component {
             <text stroke="orange" textAnchor="middle" fill="orange" x={-160} y={-600} fontSize={60} letterSpacing={-3} textLength={70} lengthAdjust="spacingAndGlyphs" fontWeight={"bold"} fontFamily="lenya69">Д1</text>
             <text stroke="green" textAnchor="middle" fill="green" x={160} y={-600} fontSize={60} letterSpacing={-3} textLength={70} lengthAdjust="spacingAndGlyphs" fontWeight={"bold"} fontFamily="lenya69">Д2</text>
             <RMIFace></RMIFace>
+            <circle cx={-355} cy={-640} r={30} fill="red" fillOpacity={1}></circle>
+            <circle cx={355} cy={-640} r={30} fill="red" fillOpacity={1}></circle>
+            <circle cx={-355} cy={440} r={30} fill="red" fillOpacity={1}></circle>
+            <circle cx={355} cy={440} r={30} fill="red" fillOpacity={1}></circle>
         </g>
     }
 }
@@ -260,6 +264,43 @@ export class AGR extends Component {
 }
 
 
+export class CentralPanelBackgroud extends Component {
+    constructor(props) {
+        super(props)
+        this.scale = 2.2
+        this.width = this.scale * 1742
+        this.height = this.scale * 918
+        this.left = 0
+        this.top = 0
+    }
+
+    render() {
+        return <g id="CentralPanelBackgroud" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
+            <rect x={0} y={0} width={this.width} height={this.height} fill="rgb(101,139,148)" fillOpacity={1}></rect>
+            <g transform="translate(0,0)">
+                <text stroke="white" fill="white" x={70} y={1150} fontSize={60} letterSpacing={-3} lengthAdjust="spacingAndGlyphs" fontFamily="lenya69">ПЕРЕСТАБЬ</text>
+                <text stroke="white" fill="white" x={85} y={1210} fontSize={60} letterSpacing={-3} lengthAdjust="spacingAndGlyphs" fontFamily="lenya69">СТАБ</text>
+                <text stroke="white" fill="white" x={250} y={1210} fontSize={60} letterSpacing={-3} lengthAdjust="spacingAndGlyphs" fontFamily="lenya69">НА</text>
+                <text stroke="white" fill="white" x={100} y={1270} fontSize={60} letterSpacing={-3} lengthAdjust="spacingAndGlyphs" fontFamily="lenya69">ПИКИРОВ</text>
+            </g>
+            <g transform="translate(0,710)">
+                <text stroke="white" fill="white" x={70} y={1150} fontSize={60} letterSpacing={-3} lengthAdjust="spacingAndGlyphs" fontFamily="lenya69">ПЕРЕСТАБЬ</text>
+                <text stroke="white" fill="white" x={85} y={1210} fontSize={60} letterSpacing={-3} lengthAdjust="spacingAndGlyphs" fontFamily="lenya69">СТАБ</text>
+                <text stroke="white" fill="white" x={250} y={1210} fontSize={60} letterSpacing={-3} lengthAdjust="spacingAndGlyphs" fontFamily="lenya69">НА</text>
+                <text stroke="white" fill="white" x={110} y={1270} fontSize={60} letterSpacing={-3} lengthAdjust="spacingAndGlyphs" fontFamily="lenya69">КАБРИР</text>
+            </g>
+            <g transform="translate(1000,1320)">
+                <text stroke="white" fill="white" x={0} y={0} fontSize={60} letterSpacing={-3} lengthAdjust="spacingAndGlyphs" fontFamily="lenya69">1</text>
+                <text stroke="white" fill="white" x={280} y={0} fontSize={60} letterSpacing={-3} lengthAdjust="spacingAndGlyphs" fontFamily="lenya69">2</text>
+                <text stroke="white" fill="white" x={570} y={0} fontSize={60} letterSpacing={-3} lengthAdjust="spacingAndGlyphs" fontFamily="lenya69">3</text>
+                <text stroke="white" fill="white" x={860} y={0} fontSize={60} letterSpacing={-3} lengthAdjust="spacingAndGlyphs" fontFamily="lenya69">4</text>
+            </g>
+
+        </g>
+    }
+}
+
+
 export default class CentralPanel extends Component {
 
     constructor(props) {
@@ -285,6 +326,7 @@ export default class CentralPanel extends Component {
             <image x={0} y={0} width={1742 * this.scale} height={918 * this.scale} href={center_upper_texture} />
             {/* <circle name="us2" cx={512.5} cy={662.5} r={400} fill={"white"} fillOpacity={0.5} ></circle> */}
 
+            <CentralPanelBackgroud></CentralPanelBackgroud>
             <g transform="translate(512.5,662.5)">
                 <US2></US2>
             </g>

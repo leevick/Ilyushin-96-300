@@ -4,7 +4,8 @@ from glob import glob
 from pathlib import Path
 
 
-instruments = ['US2', 'RMI', 'RMIFace', 'RMICompass', 'AGRShield', 'AGRBall']
+instruments = ['US2', 'RMI', 'RMIFace', 'RMICompass',
+               'AGRShield', 'AGRBall', 'CentralPanelBackgroud']
 
 
 def configure(ctx):

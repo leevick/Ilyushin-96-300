@@ -13,11 +13,11 @@ if not dir in sys.path:
 
 def generatePanelBackgroud(name: str) -> bpy.types.Material:
 
-    index = bpy.data.materials.find(f"pannel_{name}")
+    index = bpy.data.materials.find(f"pannel_{hash(name)}")
     if index != -1:
         return bpy.data.materials[index]
     else:
-        matFace = bpy.data.materials.new(name=f"pannel_{name}")
+        matFace = bpy.data.materials.new(name=f"pannel_{hash(name)}")
         matFace.use_nodes = True
 
         nodes = matFace.node_tree.nodes
@@ -28,7 +28,7 @@ def generatePanelBackgroud(name: str) -> bpy.types.Material:
         nodes[0].inputs['Metallic'].default_value = 0.0
         nodeImage = nodes.new("ShaderNodeTexImage")
         nodeImage.image = bpy.data.images.load(
-            f"{os.getcwd()}/texture/{name}.jpg", check_existing=False)
+            f"{os.getcwd()}/texture/{name}", check_existing=False)
         links.new(nodeImage.outputs["Color"], nodes[0].inputs["Base Color"])
         return matFace
 
@@ -52,15 +52,15 @@ def generateInstrumentBackground(name: str) -> bpy.types.Material:
             f"{os.getcwd()}/texture/{name}.png", check_existing=False)
         links.new(nodeImage.outputs["Color"], nodes[0].inputs["Base Color"])
 
-        bump = nodes.new("ShaderNodeBump")
+        # bump = nodes.new("ShaderNodeBump")
 
-        musgrave = nodes.new("ShaderNodeTexMusgrave")
-        musgrave.inputs["Scale"].default_value = 47.3
-        musgrave.inputs["Detail"].default_value = 15.0
-        musgrave.inputs["Dimension"].default_value = 0.0
+        # musgrave = nodes.new("ShaderNodeTexMusgrave")
+        # musgrave.inputs["Scale"].default_value = 47.3
+        # musgrave.inputs["Detail"].default_value = 15.0
+        # musgrave.inputs["Dimension"].default_value = 0.0
 
-        links.new(bump.outputs['Normal'], nodes[0].inputs['Normal'])
-        links.new(musgrave.outputs[0], bump.inputs[2])
+        # links.new(bump.outputs['Normal'], nodes[0].inputs['Normal'])
+        # links.new(musgrave.outputs[0], bump.inputs[2])
 
         return matFace
 
@@ -76,20 +76,20 @@ def generateColorBump(color) -> bpy.types.Material:
         nodes = matFace.node_tree.nodes
         links = matFace.node_tree.links
 
-        nodes[0].inputs['Roughness'].default_value = 1.0
-        nodes[0].inputs['Specular'].default_value = 0.0
-        nodes[0].inputs['Metallic'].default_value = 0.0
+        nodes[0].inputs['Roughness'].default_value = 0.9
+        nodes[0].inputs['Specular'].default_value = 0.1
+        nodes[0].inputs['Metallic'].default_value = 0.8
         nodes[0].inputs['Base Color'].default_value = color
 
-        bump = nodes.new("ShaderNodeBump")
+        # bump = nodes.new("ShaderNodeBump")
 
-        musgrave = nodes.new("ShaderNodeTexMusgrave")
-        musgrave.inputs["Scale"].default_value = 47.3
-        musgrave.inputs["Detail"].default_value = 15.0
-        musgrave.inputs["Dimension"].default_value = 0.0
+        # musgrave = nodes.new("ShaderNodeTexMusgrave")
+        # musgrave.inputs["Scale"].default_value = 47.3
+        # musgrave.inputs["Detail"].default_value = 15.0
+        # musgrave.inputs["Dimension"].default_value = 0.0
 
-        links.new(bump.outputs['Normal'], nodes[0].inputs['Normal'])
-        links.new(musgrave.outputs[0], bump.inputs[2])
+        # links.new(bump.outputs['Normal'], nodes[0].inputs['Normal'])
+        # links.new(musgrave.outputs[0], bump.inputs[2])
 
         return matFace
 
@@ -262,7 +262,7 @@ class US2(BlenderModel):
                       j].location = (375e-4 if i == 1 else -375e-4, 365e-4 if j == 1 else -365e-4, self.depth/2)
                 nails[2*i+j].rotation_euler[2] = random.uniform(0, math.pi)
                 nails[2*i+j].data.materials.append(
-                    generateColorBump((101/256.0, 139.0/256.0, 148.0/256.0, 1)))
+                    generateColorBump((0.13, 0.258, 0.296, 1)))
 
         bpy.ops.object.select_all(action="DESELECT")
 
@@ -411,7 +411,7 @@ class RMI(BlenderModel):
 
         panel = bpy.context.active_object
         panel.data.materials.append(
-            generateInstrumentBackground(__class__.__name__))
+            generateClockFace(__class__.__name__))
 
         bpy.context.view_layer.objects.active = panel
         bevel: bpy.types.BevelModifier = panel.modifiers.new(
@@ -463,10 +463,26 @@ class RMI(BlenderModel):
         glass = bpy.context.active_object
         glass.data.materials.append(generateClockGlass())
 
+        nails = []
+
+        for i in range(2):
+            for j in range(2):
+                nails.append(Nut(radius=5e-3,
+                                 height=2e-3,
+                                 width=1.5e-3,
+                                 depth=1.8e-3).create())
+                nails[2 * i +
+                      j].location = (355e-4 if i == 1 else -355e-4, (440e-4 + 20e-3) if j == 1 else (-640e-4 + 20e-3), 0)
+                nails[2*i+j].rotation_euler[2] = random.uniform(0, math.pi)
+                nails[2*i+j].data.materials.append(
+                    generateColorBump((0.13, 0.258, 0.296, 1)))
+
         bpy.ops.object.select_all(action="DESELECT")
         rmi_compass.select_set(True)
         rmi_face.select_set(True)
         glass.select_set(True)
+        for n in nails:
+            n.select_set(True)
         panel.select_set(True)
         bpy.ops.object.join()
 
@@ -497,7 +513,7 @@ class CentralPanel(BlenderModel):
 
         bpy.context.active_object.name = 'CentralPanelBackgroud'
         panel = bpy.context.active_object
-        panel.data.materials.append(generatePanelBackgroud(__class__.__name__))
+        panel.data.materials.append(generateClockFace("CentralPanelBackgroud"))
 
         extrudeFace(panel, 0.001)
 
@@ -550,7 +566,7 @@ class CentralPanel(BlenderModel):
         bpy.ops.object.light_add(
             location=(0, 1, 0.5), rotation=(-math.pi / 2 + math.atan(0.5), 0, 0), type="AREA")
         light = bpy.data.lights[0]
-        light.energy = 200
+        light.energy = 100
         light.color = (1, 1, 1)
 
         # Set GPU render
@@ -688,7 +704,7 @@ class AGR(BlenderModel):
                       j].location = (470e-4 if i == 1 else -470e-4, 460e-4 if j == 1 else -460e-4, 0)
                 nails[2*i+j].rotation_euler[2] = random.uniform(0, math.pi)
                 nails[2*i+j].data.materials.append(
-                    generateColorBump((101/256.0, 139.0/256.0, 148.0/256.0, 1)))
+                    generateColorBump((0.13, 0.258, 0.296, 1)))
 
         bpy.ops.object.select_all(action="DESELECT")
         container.select_set(True)
