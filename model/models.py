@@ -216,14 +216,12 @@ class US2(BlenderModel):
         bpy.ops.mesh.primitive_cylinder_add(
             radius=self.radius - self.thickness, depth=self.depth + 2 * self.thickness, vertices=72, location=(0, 0, 0))
 
-        bpy.context.active_object.name = 'cut'
         cut = bpy.context.active_object
 
         # Create base
 
         bpy.ops.mesh.primitive_cylinder_add(
             radius=self.radius, depth=self.depth, vertices=72)
-        bpy.context.active_object.name = 'base'
         base = bpy.context.active_object
 
         # Apply boolean
@@ -232,7 +230,7 @@ class US2(BlenderModel):
         boolean.object = cut
         boolean.operation = "DIFFERENCE"
         bpy.ops.object.modifier_apply(modifier="cut_ops")
-        bpy.data.objects.remove(bpy.data.objects['cut'])
+        bpy.data.objects.remove(cut)
         base = bpy.context.active_object
         base.data.materials.append(generateClockBase())
 
@@ -240,7 +238,6 @@ class US2(BlenderModel):
 
         bpy.ops.mesh.primitive_cylinder_add(
             radius=self.radius - self.thickness, depth=1e-3, vertices=72, location=(0, 0, self.depth / 2 - self.glassPosition))
-        bpy.context.active_object.name = 'glass'
         glass = bpy.context.active_object
         glass.data.materials.append(generateClockGlass())
 
@@ -264,24 +261,20 @@ class US2(BlenderModel):
                 nails[2*i+j].data.materials.append(
                     generateColorBump((0.13, 0.258, 0.296, 1)))
 
-        bpy.ops.object.select_all(action="DESELECT")
-
-        face.select_set(True)
-        base.select_set(True)
-        glass.select_set(True)
+        face.parent = base
+        glass.parent = base
         for n in nails:
-            n.select_set(True)
+            n.parent = base
 
-        bpy.ops.object.join()
+        bpy.ops.object.select_all(action="DESELECT")
+        base.select_set(True)
 
         saved_location = bpy.context.scene.cursor.location.xyz
         bpy.context.scene.cursor.location = (0.0, 0, self.depth / 2)
         bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
         bpy.context.scene.cursor.location.xyz = saved_location
 
-        bpy.context.active_object.name = __class__.__name__
-
-        self.model = bpy.context.active_object
+        self.model = base
 
         return self.model
 
@@ -478,20 +471,20 @@ class RMI(BlenderModel):
                     generateColorBump((0.13, 0.258, 0.296, 1)))
 
         bpy.ops.object.select_all(action="DESELECT")
-        rmi_compass.select_set(True)
-        rmi_face.select_set(True)
-        glass.select_set(True)
+        rmi_compass.parent = panel
+        rmi_face.parent = panel
+        glass.parent = panel
         for n in nails:
-            n.select_set(True)
+            n.parent = panel
+
         panel.select_set(True)
-        bpy.ops.object.join()
 
         saved_location = bpy.context.scene.cursor.location.xyz
         bpy.context.scene.cursor.location = (0.0, 0.0, 0.0)
         bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
         bpy.context.scene.cursor.location.xyz = saved_location
 
-        return bpy.context.active_object
+        return panel
 
 
 class CentralPanel(BlenderModel):
@@ -507,11 +500,12 @@ class CentralPanel(BlenderModel):
         # Create cut object
         bpy.ops.mesh.primitive_plane_add()
 
+        bpy.ops.object.editmode_toggle()
         x, y, z = bpy.context.active_object.dimensions
-        bpy.context.active_object.dimensions = width * \
-            scale / 10000.0, height * scale / 10000.0, z
+        bpy.ops.transform.resize(
+            value=(width * scale / 10000.0 / 2.0, height * scale / 10000.0 / 2.0, z), center_override=(0, 0, 0))
+        bpy.ops.object.editmode_toggle()
 
-        bpy.context.active_object.name = 'CentralPanelBackgroud'
         panel = bpy.context.active_object
         panel.data.materials.append(generateClockFace("CentralPanelBackgroud"))
 
@@ -537,22 +531,24 @@ class CentralPanel(BlenderModel):
 
         # AGR
         digHole(panel, 45e-3, 1, (-0.04292, 0.02598, 0))
+
         agr: bpy.types.Object = AGR().create()
         agr.location = (-0.04292, 0.02598, 0)
 
         bpy.ops.object.select_all(action="DESELECT")
-        us2.model.select_set(True)
+
+        us2.model.parent = panel
+        rmiModel.parent = panel
+        agr.parent = panel
+
         panel.select_set(True)
-        rmiModel.select_set(True)
-        agr.select_set(True)
-        bpy.ops.object.join()
 
         saved_location = bpy.context.scene.cursor.location.xyz
         bpy.context.scene.cursor.location = (0.0, 0.0, 0.0)
         bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
         bpy.context.scene.cursor.location.xyz = saved_location
 
-        return bpy.context.active_object
+        return panel
 
     def render(self, name: str) -> None:
         # Add render camera
@@ -686,7 +682,6 @@ class AGR(BlenderModel):
         # Glass
         bpy.ops.mesh.primitive_cylinder_add(
             radius=45e-3, depth=1e-3, vertices=72, location=(0, 0, 1e-3))
-        bpy.context.active_object.name = 'glass'
         glass = bpy.context.active_object
         glass.data.materials.append(generateClockGlass())
 
@@ -707,20 +702,19 @@ class AGR(BlenderModel):
                     generateColorBump((0.13, 0.258, 0.296, 1)))
 
         bpy.ops.object.select_all(action="DESELECT")
-        container.select_set(True)
-        ball.select_set(True)
-        shield.select_set(True)
-        glass.select_set(True)
+        container.parent = shield
+        ball.parent = shield
+        glass.parent = shield
         for n in nails:
-            n.select_set(True)
-        bpy.ops.object.join()
+            n.parent = shield
 
+        shield.select_set(True)
         saved_location = bpy.context.scene.cursor.location.xyz
         bpy.context.scene.cursor.location = (0.0, 0.0, 0.0)
         bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
         bpy.context.scene.cursor.location.xyz = saved_location
 
-        return bpy.context.active_object
+        return shield
 
 
 class Nut(BlenderModel):
@@ -792,4 +786,4 @@ model: BlenderModel = classModel()
 model.create()
 bpy.ops.wm.save_mainfile(
     filepath=f"{os.getcwd()}/{argv[0]}.blend")
-model.render(argv[0])
+# model.render(argv[0])
