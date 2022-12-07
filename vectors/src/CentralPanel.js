@@ -251,6 +251,10 @@ export class AGR extends Component {
     render() {
         return <g>
             <AGRShield></AGRShield>
+            <circle cx={-470} cy={-460} r={50} fill="red" fillOpacity={1}></circle>
+            <circle cx={470} cy={-460} r={50} fill="red" fillOpacity={1}></circle>
+            <circle cx={470} cy={460} r={50} fill="red" fillOpacity={1}></circle>
+            <circle cx={-470} cy={460} r={50} fill="red" fillOpacity={1}></circle>
         </g>
     }
 }

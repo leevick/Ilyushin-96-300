@@ -674,11 +674,29 @@ class AGR(BlenderModel):
         glass = bpy.context.active_object
         glass.data.materials.append(generateClockGlass())
 
+        # Nails
+
+        nails = []
+
+        for i in range(2):
+            for j in range(2):
+                nails.append(Nut(radius=5e-3,
+                                 height=2e-3,
+                                 width=1.5e-3,
+                                 depth=1.8e-3).create())
+                nails[2 * i +
+                      j].location = (470e-4 if i == 1 else -470e-4, 460e-4 if j == 1 else -460e-4, 0)
+                nails[2*i+j].rotation_euler[2] = random.uniform(0, math.pi)
+                nails[2*i+j].data.materials.append(
+                    generateColorBump((101/256.0, 139.0/256.0, 148.0/256.0, 1)))
+
         bpy.ops.object.select_all(action="DESELECT")
         container.select_set(True)
         ball.select_set(True)
         shield.select_set(True)
         glass.select_set(True)
+        for n in nails:
+            n.select_set(True)
         bpy.ops.object.join()
 
         saved_location = bpy.context.scene.cursor.location.xyz
