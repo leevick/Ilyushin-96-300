@@ -310,9 +310,16 @@ export class VBM extends Component {
     }
 
     render() {
-        return <g id="VBMOutline" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
-            <path transform="translate(400,400)" d="M -400 280 L -280 400 L 280 400 L 400 280 L 400 -280 L 280 -400 L -280 -400 L -400 -280 Z" fillOpacity={0.5} ></path>
-        </g >
+        return <g>
+            <g id="VBMBase" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
+                <path transform="translate(400,400)" d="M -400 280 L -280 400 L 280 400 L 400 280 L 400 -280 L 280 -400 L -280 -400 L -400 -280 Z" fillOpacity={0.5} ></path>
+            </g >
+            <circle transform="translate(400,400)" cx={-370} cy={-370} r={30} fill="red" fillOpacity={1}></circle>
+
+            <circle transform="translate(400,400)" cx={370} cy={-370} r={30} fill="red" fillOpacity={1}></circle>
+            <circle transform="translate(400,400)" cx={370} cy={370} r={30} fill="red" fillOpacity={1}></circle>
+            <circle transform="translate(400,400)" cx={-370} cy={370} r={30} fill="red" fillOpacity={1}></circle>
+        </g>
     }
 }
 
@@ -351,7 +358,6 @@ export default class CentralPanel extends Component {
             <g name="vp">
                 <circle name="" cx={2465} cy={1500} r={400} fill={"white"} fillOpacity={1.0} ></circle>
             </g>
-            <rect x={2065} y={250} width={this.vbm_w} height={this.vbm_w} fillOpacity={0.8}></rect>
             <rect x={820} y={1330} width={this.sig_w * 4} height={this.sig_h * 4} fillOpacity={1.0}></rect>
             <rect x={3225} y={1500} width={this.sig_w * 2} height={this.sig_h * 3} fillOpacity={1.0}></rect>
             <circle cx={2465} cy={1500} r={400} fill={"white"} fillOpacity={1.0} ></circle>

@@ -269,10 +269,7 @@ class US2(BlenderModel):
         bpy.ops.object.select_all(action="DESELECT")
         base.select_set(True)
 
-        saved_location = bpy.context.scene.cursor.location.xyz
-        bpy.context.scene.cursor.location = (0.0, 0, self.depth / 2)
-        bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
-        bpy.context.scene.cursor.location.xyz = saved_location
+        moveOrigin((0.0, 0, self.depth / 2))
 
         self.model = base
 
@@ -375,16 +372,10 @@ class RMI(BlenderModel):
 
         # Move origin
 
-        saved_location = bpy.context.scene.cursor.location.xyz
-        bpy.context.scene.cursor.location = (0.0, -10e-3, 0.0)
-        bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
-        bpy.context.scene.cursor.location.xyz = saved_location
+        moveOrigin((0.0, -10e-3, 0.0))
         bpy.ops.transform.translate(value=(0, 10e-3, depth / 2))
 
-        saved_location = bpy.context.scene.cursor.location.xyz
-        bpy.context.scene.cursor.location = (0.0, 0.0, 0.0)
-        bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
-        bpy.context.scene.cursor.location.xyz = saved_location
+        moveOrigin((0.0, 0.0, 0.0))
 
         return bpy.context.active_object
 
@@ -426,10 +417,7 @@ class RMI(BlenderModel):
 
         # Move origin
 
-        saved_location = bpy.context.scene.cursor.location.xyz
-        bpy.context.scene.cursor.location = (0.0, -10e-3, 0.0)
-        bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
-        bpy.context.scene.cursor.location.xyz = saved_location
+        moveOrigin((0.0, -10e-3, 0.0))
         bpy.ops.transform.translate(value=(0, 10e-3, 0))
 
         # Dig hole
@@ -479,10 +467,7 @@ class RMI(BlenderModel):
 
         panel.select_set(True)
 
-        saved_location = bpy.context.scene.cursor.location.xyz
-        bpy.context.scene.cursor.location = (0.0, 0.0, 0.0)
-        bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
-        bpy.context.scene.cursor.location.xyz = saved_location
+        moveOrigin((0.0, 0.0, 0.0))
 
         # Animation
         rmi_compass.animation_data_create()
@@ -551,20 +536,30 @@ class CentralPanel(BlenderModel):
         digHole(panel, 45e-3, 1, (-0.04292, 0.02598, 0))
 
         agr: bpy.types.Object = AGR().create()
+
         agr.location = (-0.04292, 0.02598, 0)
+
+        # VBM
+        # vbm : bpy.types.Object = VBM().create()
+        vbm_outline: bpy.types.Object = VBM().createOutline()
+        vbm_outline.location = (
+            2465e-4 - width * 1.1 / 10000, height * 1.1 / 10000 - 650e-4, 0)
+        digHoleObj(panel, vbm_outline)
+
+        vbm: bpy.types.Object = VBM().create()
+        vbm.location = (
+            2465e-4 - width * 1.1 / 10000, height * 1.1 / 10000 - 650e-4, 0)
 
         bpy.ops.object.select_all(action="DESELECT")
 
         us2.model.parent = panel
         rmiModel.parent = panel
         agr.parent = panel
+        vbm.parent = panel
 
         panel.select_set(True)
 
-        saved_location = bpy.context.scene.cursor.location.xyz
-        bpy.context.scene.cursor.location = (0.0, 0.0, 0.0)
-        bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
-        bpy.context.scene.cursor.location.xyz = saved_location
+        moveOrigin((0.0, 0.0, 0.0))
 
         return panel
 
@@ -726,10 +721,7 @@ class AGR(BlenderModel):
             n.parent = shield
 
         shield.select_set(True)
-        saved_location = bpy.context.scene.cursor.location.xyz
-        bpy.context.scene.cursor.location = (0.0, 0.0, 0.0)
-        bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
-        bpy.context.scene.cursor.location.xyz = saved_location
+        moveOrigin((0.0, 0.0, 0.0))
 
         # Animation
         ball.animation_data_create()
@@ -766,33 +758,109 @@ class AGR(BlenderModel):
         return shield
 
 
+def importSvg(name: str) -> bpy.types.Object:
+    bpy.ops.import_curve.svg(
+        filepath=f"{os.getcwd()}/vectors/{name}.svg")
+
+    collection = bpy.data.collections[1]
+    curve = collection.objects[0]
+
+    bpy.data.collections[0].objects.link(curve)
+    collection.objects.unlink(curve)
+
+    bpy.data.collections.remove(collection)
+
+    ret: bpy.types.Object
+
+    for obj in bpy.data.objects:
+        if obj.type == "CURVE":
+            obj.data.materials.clear()
+            mesh = bpy.data.meshes.new_from_object(obj)
+            new_obj = bpy.data.objects.new(obj.name, mesh)
+            new_obj.matrix_world = obj.matrix_world
+            bpy.context.collection.objects.link(new_obj)
+            bpy.data.objects.remove(obj)
+            ret = new_obj
+            break
+
+    return ret
+
+
+def moveOrigin(org):
+    saved_location = bpy.context.scene.cursor.location.xyz
+    bpy.context.scene.cursor.location = org
+    bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
+    bpy.context.scene.cursor.location.xyz = saved_location
+
+
 class VBM(BlenderModel):
+
     def __init__(self) -> None:
         super().__init__()
 
-    def create(self) -> bpy.types.Object:
+    def createOutline(self) -> bpy.types.Object:
+        outline = importSvg("VBMBase")
+        outline.select_set(True)
 
-        bpy.ops.import_curve.svg(
-            filepath=f"{os.getcwd()}/vectors/VBMOutline.svg")
+        bpy.context.view_layer.objects.active = outline
 
-        collection = bpy.data.collections[1]
-        curve = collection.objects[0]
+        bevel: bpy.types.BevelModifier = outline.modifiers.new(
+            type="BEVEL", name="bevel2")
+        bevel.affect = "VERTICES"
+        bevel.offset_type = "OFFSET"
+        bevel.width = 1e-3
+        bevel.segments = 3
+        bpy.ops.object.modifier_apply(modifier="bevel2")
 
-        bpy.data.collections[0].objects.link(curve)
-        collection.objects.unlink(curve)
+        extrudeFace(bpy.context.active_object, depth=1)
+        w, h, d = bpy.context.active_object.dimensions
+        bpy.context.active_object.location = (-w / 2, -h / 2, 0.5)
+        moveOrigin((0, 0, 0))
 
-        bpy.data.collections.remove(collection)
-
-        for obj in bpy.data.objects:
-            if obj.type == "CURVE":
-                obj.data.materials.clear()
-                mesh = bpy.data.meshes.new_from_object(obj)
-                new_obj = bpy.data.objects.new(obj.name, mesh)
-                new_obj.matrix_world = obj.matrix_world
-                bpy.context.collection.objects.link(new_obj)
-                bpy.data.objects.remove(obj)
+        bpy.ops.object.editmode_toggle()
+        bpy.ops.transform.resize(
+            value=(1.005, 1.005, 1), center_override=(0, 0, 0))
+        bpy.ops.object.editmode_toggle()
 
         return bpy.context.active_object
+
+    def create(self) -> bpy.types.Object:
+
+        base = importSvg("VBMBase")
+        base.select_set(True)
+
+        bpy.context.view_layer.objects.active = base
+
+        bevel: bpy.types.BevelModifier = base.modifiers.new(
+            type="BEVEL", name="bevel2")
+        bevel.affect = "VERTICES"
+        bevel.offset_type = "OFFSET"
+        bevel.width = 1e-3 * 1.005
+        bevel.segments = 3
+        bpy.ops.object.modifier_apply(modifier="bevel2")
+
+        extrudeFace(bpy.context.active_object, depth=1e-3)
+        w, h, d = bpy.context.active_object.dimensions
+        bpy.context.active_object.location = (-w / 2, -h / 2, 0)
+        moveOrigin((0, 0, 0))
+
+        base = bpy.context.active_object
+
+        nails = [
+            Nut().create(), Nut().create(), Nut().create(), Nut().create()]
+
+        for i in range(2):
+            for j in range(2):
+                nails[2 * i +
+                      j].location = (370e-4 if i == 1 else -370e-4, 370e-4 if j == 1 else -370e-4, 0)
+                nails[2 * i + j].rotation_euler[2] = random.uniform(0, math.pi)
+                nails[2 * i + j].data.materials.append(
+                    generateColorBump((0.13, 0.258, 0.296, 1)))
+
+        for n in nails:
+            n.parent = base
+
+        return base
 
 
 class Nut(BlenderModel):
@@ -841,10 +909,7 @@ class Nut(BlenderModel):
 
         bpy.ops.object.shade_smooth()
 
-        saved_location = bpy.context.scene.cursor.location.xyz
-        bpy.context.scene.cursor.location = (0.0, 0.0, 0.0)
-        bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
-        bpy.context.scene.cursor.location.xyz = saved_location
+        moveOrigin((0.0, 0.0, 0.0))
 
         return bpy.context.active_object
 
