@@ -171,7 +171,7 @@ class BlenderModel:
         # Add render camera
 
         bpy.ops.object.camera_add(location=(0, -0.1, 0.3),
-                                  rotation=(math.atan(1/3), 0, 0))
+                                  rotation=(math.atan(1 / 3), 0, 0))
         bpy.context.scene.camera = bpy.context.object
 
         # Add render light
@@ -189,7 +189,7 @@ class BlenderModel:
         bpy.context.scene.cycles.device = "GPU"
         bpy.context.preferences.addons["cycles"].preferences.get_devices()
 
-        bpy.context.scene.render.filepath = pathlib.Path.cwd().as_posix()+"/" + \
+        bpy.context.scene.render.filepath = pathlib.Path.cwd().as_posix() + "/" + \
             name
         bpy.ops.render.render(write_still=True)
 
@@ -244,7 +244,7 @@ class US2(BlenderModel):
         # Create face
 
         bpy.ops.mesh.primitive_circle_add(
-            radius=self.radius, fill_type="NGON", location=(0, 0, -self.depth/2))
+            radius=self.radius, fill_type="NGON", location=(0, 0, -self.depth / 2))
         face = bpy.context.active_object
         face.data.materials.append(generateClockFace(__class__.__name__))
 
@@ -256,9 +256,9 @@ class US2(BlenderModel):
         for i in range(2):
             for j in range(2):
                 nails[2 * i +
-                      j].location = (375e-4 if i == 1 else -375e-4, 365e-4 if j == 1 else -365e-4, self.depth/2)
-                nails[2*i+j].rotation_euler[2] = random.uniform(0, math.pi)
-                nails[2*i+j].data.materials.append(
+                      j].location = (375e-4 if i == 1 else -375e-4, 365e-4 if j == 1 else -365e-4, self.depth / 2)
+                nails[2 * i + j].rotation_euler[2] = random.uniform(0, math.pi)
+                nails[2 * i + j].data.materials.append(
                     generateColorBump((0.13, 0.258, 0.296, 1)))
 
         face.parent = base
@@ -379,7 +379,7 @@ class RMI(BlenderModel):
         bpy.context.scene.cursor.location = (0.0, -10e-3, 0.0)
         bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
         bpy.context.scene.cursor.location.xyz = saved_location
-        bpy.ops.transform.translate(value=(0, 10e-3, depth/2))
+        bpy.ops.transform.translate(value=(0, 10e-3, depth / 2))
 
         saved_location = bpy.context.scene.cursor.location.xyz
         bpy.context.scene.cursor.location = (0.0, 0.0, 0.0)
@@ -466,8 +466,8 @@ class RMI(BlenderModel):
                                  depth=1.8e-3).create())
                 nails[2 * i +
                       j].location = (355e-4 if i == 1 else -355e-4, (440e-4 + 20e-3) if j == 1 else (-640e-4 + 20e-3), 0)
-                nails[2*i+j].rotation_euler[2] = random.uniform(0, math.pi)
-                nails[2*i+j].data.materials.append(
+                nails[2 * i + j].rotation_euler[2] = random.uniform(0, math.pi)
+                nails[2 * i + j].data.materials.append(
                     generateColorBump((0.13, 0.258, 0.296, 1)))
 
         bpy.ops.object.select_all(action="DESELECT")
@@ -554,7 +554,7 @@ class CentralPanel(BlenderModel):
         # Add render camera
 
         bpy.ops.object.camera_add(location=(0, -0.2, 0.6),
-                                  rotation=(math.atan(1/3), 0, 0))
+                                  rotation=(math.atan(1 / 3), 0, 0))
         bpy.context.scene.camera = bpy.context.object
 
         # Add render light
@@ -602,7 +602,7 @@ def createPolyLine(coords, name: str) -> bpy.types.Object:
     curveData.dimensions = '2D'
     curveData.fill_mode = 'BOTH'
     polyline = curveData.splines.new('POLY')
-    polyline.points.add(len(coords)-1)
+    polyline.points.add(len(coords) - 1)
 
     for i, coord in enumerate(coords):
         x, y, z = coord
@@ -659,8 +659,8 @@ class AGR(BlenderModel):
         # Add container
 
         curveContainer = createPolyLine(
-            [(0, 0, -shieldDepth - 2*ballRadius),
-             (0, shieldOuterRadius, -shieldDepth - 2*ballRadius),
+            [(0, 0, -shieldDepth - 2 * ballRadius),
+             (0, shieldOuterRadius, -shieldDepth - 2 * ballRadius),
              (0, shieldOuterRadius, 0),
              ], "agr_container")
         curveContainer.select_set(True)
@@ -697,8 +697,8 @@ class AGR(BlenderModel):
                                  depth=1.8e-3).create())
                 nails[2 * i +
                       j].location = (470e-4 if i == 1 else -470e-4, 460e-4 if j == 1 else -460e-4, 0)
-                nails[2*i+j].rotation_euler[2] = random.uniform(0, math.pi)
-                nails[2*i+j].data.materials.append(
+                nails[2 * i + j].rotation_euler[2] = random.uniform(0, math.pi)
+                nails[2 * i + j].data.materials.append(
                     generateColorBump((0.13, 0.258, 0.296, 1)))
 
         bpy.ops.object.select_all(action="DESELECT")
@@ -715,6 +715,35 @@ class AGR(BlenderModel):
         bpy.context.scene.cursor.location.xyz = saved_location
 
         return shield
+
+
+class VBM(BlenderModel):
+    def __init__(self) -> None:
+        super().__init__()
+
+    def create(self) -> bpy.types.Object:
+
+        bpy.ops.import_curve.svg(
+            filepath=f"{os.getcwd()}/../vectors/build/VBMOutline.svg")
+
+        collection = bpy.data.collections[1]
+        curve = collection.objects[0]
+
+        bpy.data.collections[0].objects.link(curve)
+        collection.objects.unlink(curve)
+
+        bpy.data.collections.remove(collection)
+
+        for obj in bpy.data.objects:
+            if obj.type == "CURVE":
+                obj.data.materials.clear()
+                mesh = bpy.data.meshes.new_from_object(obj)
+                new_obj = bpy.data.objects.new(obj.name, mesh)
+                new_obj.matrix_world = obj.matrix_world
+                bpy.context.collection.objects.link(new_obj)
+                bpy.data.objects.remove(obj)
+
+        return bpy.context.active_object
 
 
 class Nut(BlenderModel):
@@ -772,7 +801,7 @@ class Nut(BlenderModel):
 
 
 argv = sys.argv
-argv = argv[argv.index("--")+1:]
+argv = argv[argv.index("--") + 1:]
 
 bpy.data.meshes.remove(bpy.data.meshes[0])
 bpy.data.lights.remove(bpy.data.lights[0])

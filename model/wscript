@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 
+from waflib.Context import Context
 from glob import glob
 from pathlib import Path
 import os
 
-
-instruments = ['US2', 'CentralPanel', 'RMI', 'AGR']
+instruments = ['US2', 'CentralPanel', 'RMI', 'AGR', 'VBM']
 
 
 def configure(ctx):
