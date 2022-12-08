@@ -13,18 +13,51 @@ function removeChildHasId(root) {
     }
 }
 
-const t = process.argv.slice(2)[0]
+function getAllIds(root) {
+    var ret = []
+    if (root.hasAttribute("id")) {
+        if (root.getAttribute("id") !== "root") {
+            ret.push(root.getAttribute("id"))
+        }
+    }
+
+    for (var n of root.childNodes) {
+        if (n.nodeType === NodeType.ELEMENT_NODE) {
+            ret = ret.concat(getAllIds(n))
+        }
+    }
+    return ret
+}
+
+function export_svg(t) {
+    const html = fs.readFileSync("./build/index.html", 'utf-8')
+    const root = parse(html)
+
+    const fd = fs.openSync(`./build/${t}.svg`, "w+")
+    var svg = root.querySelector(`#${t}`)
+    removeChildHasId(svg)
+    const vb = svg.getAttribute("viewBox")
+
+    const width = parseFloat(vb.split(' ')[2])
+    const height = parseFloat(vb.split(' ')[3])
+
+
+    fs.writeSync(fd, '<?xml version="1.0" encoding="UTF-8"?>')
+    fs.writeSync(fd, `<svg width="${width / 10}mm" height="${height / 10}mm" viewBox="${vb}">`)
+    fs.writeSync(fd, svg.toString())
+    fs.writeSync(fd, "</svg>")
+    fs.close(fd)
+}
 
 const html = fs.readFileSync("./build/index.html", 'utf-8')
 const root = parse(html)
 
-const fd = fs.openSync(`./build/${t}.svg`, "w+")
-var svg = root.querySelector(`#${t}`)
-removeChildHasId(svg)
-const vb = svg.getAttribute("viewBox")
+const ids = getAllIds(root)
 
-fs.writeSync(fd, '<?xml version="1.0" encoding="UTF-8"?>')
-fs.writeSync(fd, `<svg viewBox="${vb}">`)
-fs.writeSync(fd, svg.toString())
-fs.writeSync(fd, "</svg>")
-fs.close(fd)
+console.log(ids)
+
+for (const i of ids) {
+    export_svg(i)
+}
+
+

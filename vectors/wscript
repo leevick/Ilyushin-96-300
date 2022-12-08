@@ -5,7 +5,7 @@ from pathlib import Path
 
 
 instruments = ['US2', 'RMI', 'RMIFace', 'RMICompass',
-               'AGRShield', 'AGRBall', 'CentralPanelBackgroud']
+               'AGRShield', 'AGRBall', 'CentralPanelBackgroud', 'VBMOutline']
 
 
 def configure(ctx):

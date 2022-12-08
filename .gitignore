@@ -4,3 +4,4 @@ build
 photo
 .lock-waf*build
 __pycache__
+.vscode

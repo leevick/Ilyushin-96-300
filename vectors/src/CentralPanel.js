@@ -300,6 +300,22 @@ export class CentralPanelBackgroud extends Component {
     }
 }
 
+export class VBM extends Component {
+    constructor(props) {
+        super(props)
+        this.width = 800
+        this.height = 800
+        this.top = 0
+        this.left = 0
+    }
+
+    render() {
+        return <g id="VBMOutline" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
+            <path transform="translate(400,400)" d="M -400 280 L -280 400 L 280 400 L 400 280 L 400 -280 L 280 -400 L -280 -400 L -400 -280 Z" fillOpacity={0.5} ></path>
+        </g >
+    }
+}
+
 
 export default class CentralPanel extends Component {
 
@@ -338,7 +354,11 @@ export default class CentralPanel extends Component {
             <rect x={2065} y={250} width={this.vbm_w} height={this.vbm_w} fillOpacity={0.8}></rect>
             <rect x={820} y={1330} width={this.sig_w * 4} height={this.sig_h * 4} fillOpacity={1.0}></rect>
             <rect x={3225} y={1500} width={this.sig_w * 2} height={this.sig_h * 3} fillOpacity={1.0}></rect>
-            {/* <circle cx={2465} cy={1500} r={400} fill={"white"} fillOpacity={1.0} ></circle> */}
+            <circle cx={2465} cy={1500} r={400} fill={"white"} fillOpacity={1.0} ></circle>
+
+            <g transform="translate(2065,250)">
+                <VBM></VBM>
+            </g>
             <g name="rmi" transform="translate(3335,950)">
                 <RMI></RMI>
             </g>
