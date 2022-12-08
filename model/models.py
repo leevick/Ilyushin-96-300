@@ -484,6 +484,24 @@ class RMI(BlenderModel):
         bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
         bpy.context.scene.cursor.location.xyz = saved_location
 
+        # Animation
+        rmi_compass.animation_data_create()
+        rmi_compass.animation_data.action = bpy.data.actions.new(
+            name="RotationAction")
+        fcurve = rmi_compass.animation_data.action.fcurves.new(
+            data_path="rotation_euler", index=2
+        )
+        k1 = fcurve.keyframe_points.insert(
+            frame=0,
+            value=0
+        )
+        k1.interpolation = "LINEAR"
+        k2 = fcurve.keyframe_points.insert(
+            frame=360,
+            value=2 * math.pi
+        )
+        k2.interpolation = "LINEAR"
+
         return panel
 
 
@@ -676,7 +694,6 @@ class AGR(BlenderModel):
             radius=ballRadius, location=(0, 0, ballLocationZ), segments=72, ring_count=36)
         ball: bpy.types.Object = bpy.context.active_object
         ball.data.materials.append(generateClockFace("AGRBall"))
-        ball.rotation_euler[0] = math.radians(-90)
         bpy.ops.object.shade_smooth()
 
         # Glass
@@ -713,6 +730,38 @@ class AGR(BlenderModel):
         bpy.context.scene.cursor.location = (0.0, 0.0, 0.0)
         bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
         bpy.context.scene.cursor.location.xyz = saved_location
+
+        # Animation
+        ball.animation_data_create()
+        ball.animation_data.action = bpy.data.actions.new(
+            name="agr_pitch_roll")
+        fcurve = ball.animation_data.action.fcurves.new(
+            data_path="rotation_euler", index=0
+        )
+        k1 = fcurve.keyframe_points.insert(
+            frame=0,
+            value=-math.pi / 4 - math.pi / 2
+        )
+        k1.interpolation = "LINEAR"
+        k2 = fcurve.keyframe_points.insert(
+            frame=90,
+            value=math.pi / 4 - math.pi / 2
+        )
+        k2.interpolation = "LINEAR"
+
+        fcurve = ball.animation_data.action.fcurves.new(
+            data_path="rotation_euler", index=1
+        )
+        k1 = fcurve.keyframe_points.insert(
+            frame=0,
+            value=-math.pi / 4
+        )
+        k1.interpolation = "LINEAR"
+        k2 = fcurve.keyframe_points.insert(
+            frame=90,
+            value=math.pi / 4
+        )
+        k2.interpolation = "LINEAR"
 
         return shield
 
