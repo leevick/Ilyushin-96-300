@@ -2,6 +2,7 @@
 
 from glob import glob
 from pathlib import Path
+from waflib.Context import Context
 
 
 instruments = ['US2', 'RMI', 'RMIFace', 'RMICompass',
@@ -12,25 +13,27 @@ def configure(ctx):
     pass
 
 
-def build(ctx):
-
+def build(ctx: Context):
     # Web generation -> index.html
     sources = ctx.path.ant_glob("public/*", recursive=True)
     sources += ctx.path.ant_glob("src/*", recursive=True)
     sources += ctx.path.ant_glob("yarn.lock")
     sources += ctx.path.ant_glob("package.json")
     sources += ctx.path.ant_glob("export_svg.js")
-    ctx(rule="cd ../vectors && yarn && yarn build",
-        source=sources, target="../../vectors/build/index.html")
-    ctx(rule="cp ${SRC} ${TGT}", source=[
-        "../../vectors/src/center_upper_texture.jpg"], target="../texture/CentralPanel.jpg")
-    # SVG generation -> *.svg
-    for i in instruments:
-        print(i)
-        ctx(rule=f"cd ../vectors && node ./export_svg.js {i}",
-            source="../../vectors/build/index.html", target=f"../../vectors/build/{i}.svg")
-    # Generate texture
-    for i in instruments:
-        print(i)
+
+    ctx(rule="cd ../vectors && yarn && yarn build && cp -rvf build/index.html ../build/vectors/",
+        source=sources, target="index.html")
+    ctx.add_group()
+
+    ctx(rule="node ../vectors/export_svg.js vectors/index.html vectors/")
+    ctx.add_group()
+
+    sources = []
+    targets = []
+    for p in glob("./build/vectors/*.svg"):
+        sources.append(Path(p).absolute().as_posix())
+        targets.append(Path(p).name)
+
+    for i in range(len(sources)):
         ctx(rule="inkscape -o ${TGT} -d 300 ${SRC}",
-            source=f"../../vectors/build/{i}.svg", target=f"../texture/{i}.png")
+            target=f"../texture/{targets[i].split('.')[0]}.png")

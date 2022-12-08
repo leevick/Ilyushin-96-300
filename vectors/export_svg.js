@@ -29,11 +29,11 @@ function getAllIds(root) {
     return ret
 }
 
-function export_svg(t) {
-    const html = fs.readFileSync("./build/index.html", 'utf-8')
+function export_svg(t, src, dst) {
+    const html = fs.readFileSync(src, 'utf-8')
     const root = parse(html)
 
-    const fd = fs.openSync(`./build/${t}.svg`, "w+")
+    const fd = fs.openSync(`${dst}/${t}.svg`, "w+")
     var svg = root.querySelector(`#${t}`)
     removeChildHasId(svg)
     const vb = svg.getAttribute("viewBox")
@@ -49,15 +49,16 @@ function export_svg(t) {
     fs.close(fd)
 }
 
-const html = fs.readFileSync("./build/index.html", 'utf-8')
+const sourceFile = process.argv.slice(2)[0]
+const destDir = process.argv.slice(2)[1]
+
+const html = fs.readFileSync(sourceFile, 'utf-8')
 const root = parse(html)
 
 const ids = getAllIds(root)
 
-console.log(ids)
-
 for (const i of ids) {
-    export_svg(i)
+    export_svg(i, sourceFile, destDir)
 }
 
 

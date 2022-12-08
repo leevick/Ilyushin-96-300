@@ -724,7 +724,7 @@ class VBM(BlenderModel):
     def create(self) -> bpy.types.Object:
 
         bpy.ops.import_curve.svg(
-            filepath=f"{os.getcwd()}/../vectors/build/VBMOutline.svg")
+            filepath=f"{os.getcwd()}/vectors/VBMOutline.svg")
 
         collection = bpy.data.collections[1]
         curve = collection.objects[0]
