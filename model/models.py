@@ -686,10 +686,24 @@ class AGR(BlenderModel):
         # Add ball
 
         bpy.ops.mesh.primitive_uv_sphere_add(
-            radius=ballRadius, location=(0, 0, ballLocationZ), segments=72, ring_count=36)
+            radius=ballRadius, location=(0, 0, 0), segments=32, ring_count=16)
         ball: bpy.types.Object = bpy.context.active_object
         ball.data.materials.append(generateClockFace("AGRBall"))
         bpy.ops.object.shade_smooth()
+
+        bpy.ops.object.editmode_toggle()
+        ov = bpy.context.copy()
+        ov['area'] = [a for a in bpy.context.screen.areas if a.type == "VIEW_3D"][0]
+        bpy.ops.transform.rotate(
+            ov, value=math.pi / 2, orient_axis='X', orient_type='LOCAL')
+        bpy.ops.object.editmode_toggle()
+
+        ball_empty = bpy.data.objects.new("empty", None)
+        bpy.context.view_layer.active_layer_collection.collection.objects.link(
+            ball_empty)
+
+        ball.parent = ball_empty
+        ball_empty.location = (0, 0, ballLocationZ)
 
         # Glass
         bpy.ops.mesh.primitive_cylinder_add(
@@ -715,7 +729,7 @@ class AGR(BlenderModel):
 
         bpy.ops.object.select_all(action="DESELECT")
         container.parent = shield
-        ball.parent = shield
+        ball_empty.parent = shield
         glass.parent = shield
         for n in nails:
             n.parent = shield
@@ -726,23 +740,26 @@ class AGR(BlenderModel):
         # Animation
         ball.animation_data_create()
         ball.animation_data.action = bpy.data.actions.new(
-            name="agr_pitch_roll")
+            name="agr_pitch")
         fcurve = ball.animation_data.action.fcurves.new(
             data_path="rotation_euler", index=0
         )
         k1 = fcurve.keyframe_points.insert(
             frame=0,
-            value=-math.pi / 4 - math.pi / 2
+            value=-math.pi / 4
         )
         k1.interpolation = "LINEAR"
         k2 = fcurve.keyframe_points.insert(
             frame=90,
-            value=math.pi / 4 - math.pi / 2
+            value=math.pi / 4
         )
         k2.interpolation = "LINEAR"
 
-        fcurve = ball.animation_data.action.fcurves.new(
-            data_path="rotation_euler", index=1
+        ball_empty.animation_data_create()
+        ball_empty.animation_data.action = bpy.data.actions.new(
+            name="agr_roll")
+        fcurve = ball_empty.animation_data.action.fcurves.new(
+            data_path="rotation_euler", index=2
         )
         k1 = fcurve.keyframe_points.insert(
             frame=0,
