@@ -94,6 +94,68 @@ export class RMICompass extends Component {
 
 }
 
+export class RMINeedleLeft extends Component {
+    constructor(props) {
+        super(props)
+        this.left = 0
+        this.top = 0
+        this.width = 60
+        this.height = 600
+    }
+
+    render() {
+        return <g id="RMINeedleLeft" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
+            <g transform="translate(30,300)">
+                <path fill="yellow" d="M 0 -300 c 0 0 0 70 -30 70 c 0 0 20 0 20 20 l 0 430 l 10 50 l 10 -50 l 0 -430 c 0 0 0 -20 20 -20 c 0 0 -30 0 -30 -70 Z"
+                    fillOpacity={1}></path>
+            </g>
+        </g>
+    }
+}
+
+export class RMINeedleRight extends Component {
+    constructor(props) {
+        super(props)
+        this.left = 0
+        this.top = 0
+        this.width = 100
+        this.height = 600
+        this.curve = [
+            "M 0 -300 ",
+            "c 0 0 0 80 -20 80 ",
+            "l -5 0 ",
+            "l -15 70 ",
+            "l 15 0 ",
+            "l 0 350 ",
+            "l 15 0 ",
+            "l 10 65 ",
+            "l 10 -65 ",
+            "l 15 0 ",
+            "l 0 -350 ",
+            "l 15 0 ",
+            "l -15 -70 ",
+            "l -5 0 ",
+            "c 0 0 -20 0 -20 -80 Z",
+            "M 10 -220 ",
+            "l 0 415 ",
+            "l -20 0 ",
+            "l 0 -415 ",
+            "l 20 0 Z",
+        ]
+    }
+
+    render() {
+        return <g id="RMINeedleRight" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
+            <g transform="translate(50,300)">
+                <path fill="rgb(0,255,0)" d={this.curve.reduce((prev, cur) => {
+                    return prev + cur
+                }, "")}
+                    fillOpacity={1}></path>
+            </g>
+        </g>
+    }
+}
+
 export class RMIFace extends Component {
     constructor(props) {
         super(props)
@@ -114,6 +176,12 @@ export class RMIFace extends Component {
             }
             <g transform="rotate(0,0,0)">
                 <RMICompass></RMICompass>
+            </g>
+            <g transform="translate(-30,-300)">
+                <RMINeedleLeft></RMINeedleLeft>
+            </g>
+            <g transform="translate(-50,-300)">
+                <RMINeedleRight></RMINeedleRight>
             </g>
             <path transform="translate(0,-300)" fill="white" d={`M 0 0 L ${this.edge / 2} ${-this.edge / 2 * Math.sqrt(3)} L ${-this.edge / 2} ${-this.edge / 2 * Math.sqrt(3)} Z`}></path>
             {
@@ -138,8 +206,8 @@ export class RMI extends Component {
     render() {
         return <g id="RMI" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
             <rect x={-this.width / 2} y={-this.height / 2 - 100} width={this.width} height={this.height} fill="rgb(101,139,148)" fillOpacity={1}></rect>
-            <text stroke="white" fill="white" x={-210} y={410} fontSize={70} letterSpacing={-3} textLength={130} lengthAdjust="spacingAndGlyphs" fontWeight={"bold"} fontFamily="lenya69">APK</text>
-            <text stroke="white" fill="white" x={210 - 130} y={410} fontSize={70} letterSpacing={-3} textLength={130} lengthAdjust="spacingAndGlyphs" fontWeight={"bold"} fontFamily="lenya69">APK</text>
+            <text stroke="white" fill="white" x={-190} y={410} fontSize={70} letterSpacing={-3} textLength={130} lengthAdjust="spacingAndGlyphs" fontWeight={"bold"} fontFamily="lenya69">APK</text>
+            <text stroke="white" fill="white" x={190 - 130} y={410} fontSize={70} letterSpacing={-3} textLength={130} lengthAdjust="spacingAndGlyphs" fontWeight={"bold"} fontFamily="lenya69">APK</text>
             <text stroke="white" fill="white" x={- 395} y={135} fontSize={70} fontWeight={"bold"} fontFamily="lenya69">V</text>
             <text stroke="white" fill="white" x={- 395} y={185} fontSize={70} fontWeight={"bold"} fontFamily="lenya69">O</text>
             <text stroke="white" fill="white" x={- 395} y={235} fontSize={70} fontWeight={"bold"} fontFamily="lenya69">R</text>
@@ -153,6 +221,53 @@ export class RMI extends Component {
             <circle cx={355} cy={-640} r={30} fill="red" fillOpacity={1}></circle>
             <circle cx={-355} cy={440} r={30} fill="red" fillOpacity={1}></circle>
             <circle cx={355} cy={440} r={30} fill="red" fillOpacity={1}></circle>
+            <g transform="translate(-300,340) rotate(-107)">
+                <g id="RMILeftHandleShape" viewBox="-60 -60 180 120">
+                    <path d={`M 120 -10 L ${30} ${-30 * Math.sqrt(3)} A 60 60 0 1 0 ${30} ${30 * Math.sqrt(3)} L 120 10 Z`} fillOpacity={1}></path>
+                </g>
+                <g id="RMILeftHandle" viewBox="-60 -60 180 120">
+                    <path d={`M 120 -10 L ${30} ${-30 * Math.sqrt(3)} A 60 60 0 1 0 ${30} ${30 * Math.sqrt(3)} L 120 10 Z`} fillOpacity={1}></path>
+                    <path d="M 110 5 a 5 5 0 0 0 0 -10 c 0 0 -40 0 -40 -20 a 5 5 0 0 0 -10 0 c 0 0 0 18 -30 13 l -75 -7 l 0 38 l 75 -7 c 0 0 30 -5 30 13 a 5 5 0 0 0 10 0 c 0 0 0 -20 40 -20 Z" fill="yellow"></path>
+                </g>
+            </g>
+            <g transform="translate(300,340) rotate(-210)">
+                <g id="RMIRightHandleShape" viewBox="-60 -60 180 120">
+                    <path d={`M 120 -10 L ${30} ${-30 * Math.sqrt(3)} A 60 60 0 1 0 ${30} ${30 * Math.sqrt(3)} L 120 10 Z`} fillOpacity={1}></path>
+                </g>
+                <g id="RMIRightHandle" viewBox="-60 -60 180 120">
+                    <path d={`M 120 -10 L ${30} ${-30 * Math.sqrt(3)} A 60 60 0 1 0 ${30} ${30 * Math.sqrt(3)} L 120 10 Z`} fillOpacity={1}></path>
+                    <path d="M 110 5 a 5 5 0 0 0 0 -10 c 0 0 -45 -5 -45 -10 l 0 -10 l -50 -10 l 0 15 l -50 0 l 0 12 l 90 0 a 8 8 0 0 1 0 16 l -90 0 l 0 12 l 50 0 l 0 15 l 50 -10 l 0 -10 c 0 0 0 -5 45 -10 Z" fill="green" fillOpacity={1}></path>
+                </g>
+            </g>
+            <g transform="translate(-130 285)">
+                <g id="RMIFlagMk" viewBox="-50 -50 100 100">
+                    <circle cx={0} cy={0} r={50} fillOpacity={1} fill={"rgb(255,100,0)"}></circle>
+                    <text fill="black" x={-30} y={20} fontSize={60} textLength={40} lengthAdjust="spacingAndGlyphs" fontFamily="lenya69">M</text>
+                    <text fill="black" x={5} y={20} fontSize={40} textLength={30} lengthAdjust="spacingAndGlyphs" fontFamily="lenya69">K</text>
+                </g>
+            </g>
+            <g transform="translate(-280 -285)">
+                <g id="RMIFlagKur1" viewBox="0 0 130 50">
+                    <rect x={0} y={0} width={130} height={50} fill="rgb(255,100,0)" fillOpacity={1}></rect>
+                    <text fill="black" x={40} y={45} fontSize={60} textLength={90} lengthAdjust="spacingAndGlyphs" fontFamily="lenya69">КУР1</text>
+                </g>
+            </g>
+            <g transform="translate(150 -285)">
+                <g id="RMIFlagKur2" viewBox="0 0 130 50">
+                    <rect x={0} y={0} width={130} height={50} fill="rgb(255,100,0)" fillOpacity={1}></rect>
+                    <text fill="black" x={5} y={45} fontSize={60} textLength={90} lengthAdjust="spacingAndGlyphs" fontFamily="lenya69">КУР2</text>
+                </g>
+            </g>
+            <g transform="translate(-145 -515)">
+                <g id="RMILEDLeft" viewBox="-135 -60 270 120">
+                    <rect x={-135} y={-60} width={270} height={120} fillOpacity={0.5} rx={20} ry={20}></rect>
+                </g>
+            </g>
+            <g transform="translate(145 -515)">
+                <g id="RMILEDRight" viewBox="-135 -60 270 120">
+                    <rect x={-135} y={-60} width={270} height={120} fillOpacity={0.5} rx={20} ry={20}></rect>
+                </g>
+            </g>
         </g>
     }
 }
