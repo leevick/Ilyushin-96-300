@@ -144,17 +144,17 @@ def generateClockBase() -> bpy.types.Material:
         return matBase
 
 
-def generateClockGlass() -> bpy.types.Material:
-    index = bpy.data.materials.find("clock_glass")
+def generateClockGlass(color=(1, 1, 1, 0)) -> bpy.types.Material:
+    index = bpy.data.materials.find(f"clock_glass_{hash(color)}")
     if index != -1:
         return bpy.data.materials[index]
     else:
         # Create glass material
-        matGlass = bpy.data.materials.new(name="clock_glass")
+        matGlass = bpy.data.materials.new(name=f"clock_glass_{hash(color)}")
         matGlass.use_nodes = True
         nodes = matGlass.node_tree.nodes
         links = matGlass.node_tree.links
-        nodes[0].inputs['Base Color'].default_value = (1, 1, 1, 0)
+        nodes[0].inputs['Base Color'].default_value = color
         nodes[0].inputs['Transmission'].default_value = 1
         nodes[0].inputs['Roughness'].default_value = 0.01
         return matGlass
@@ -407,8 +407,72 @@ class RMI(BlenderModel):
         moveOrigin((0.0, -10e-3, 0.0))
         bpy.ops.transform.translate(value=(0, 10e-3, 0))
 
+        # dig left window
+
+        cut = add_plane((270e-4, 120e-4), (-145e-4, 515e-4, 0))
+        bevel(cut, 2e-3, 6)
+        extrudeFace(cut, 40e-4)
+        cut.location.z = 20e-4
+        digHoleObj(panel, cut)
+
+        # dig right window
+
+        cut = add_plane((270e-4, 120e-4), (145e-4, 515e-4, 0))
+        bevel(cut, 2e-3, 6)
+        extrudeFace(cut, 40e-4)
+        cut.location.z = 20e-4
+        digHoleObj(panel, cut)
+
+        left_window = add_plane((270e-4, 120e-4), (-145e-4, 515e-4, 0))
+        bevel(left_window, 2e-3, 6)
+        extrudeFace(left_window, 5e-4)
+        left_window.data.materials.append(
+            generateClockGlass((0.8, 0.8, 0.8, 0)))
+
+        right_window = add_plane((270e-4, 120e-4), (145e-4, 515e-4, 0))
+        bevel(right_window, 2e-3, 6)
+        extrudeFace(right_window, 5e-4)
+        right_window.data.materials.append(
+            generateClockGlass((0.8, 0.8, 0.8, 0)))
+
+        leftHandle = importSvg("RMILeftHandleShape")
+        bpy.context.view_layer.objects.active = leftHandle
+        leftHandle.select_set(True)
+        bpy.ops.object.origin_set(type='ORIGIN_GEOMETRY', center='BOUNDS')
+        leftHandle.location = (0, 0, 0)
+        leftHandle.data.materials.append(
+            generatePanelBackgroud("RMILeftHandle.png"))
+        bpy.ops.object.mode_set(mode='EDIT')
+        bpy.ops.mesh.select_mode(type='FACE')
+        bpy.ops.mesh.select_all(action='SELECT')
+        bpy.ops.uv.cube_project(scale_to_bounds=True)
+        bpy.ops.object.mode_set(mode='OBJECT')
+        extrudeFace(leftHandle, 5e-3)
+        moveOrigin((-3e-3, 0, -5e-3))
+
+        bpy.ops.object.select_all(action="DESELECT")
+
+        rightHandle = importSvg("RMIRightHandleShape")
+        bpy.context.view_layer.objects.active = rightHandle
+        rightHandle.select_set(True)
+        bpy.ops.object.origin_set(type='ORIGIN_GEOMETRY', center='BOUNDS')
+        rightHandle.location = (0, 0, 0)
+        rightHandle.data.materials.append(
+            generatePanelBackgroud("RMIRightHandle.png"))
+        bpy.ops.object.mode_set(mode='EDIT')
+        bpy.ops.mesh.select_mode(type='FACE')
+        bpy.ops.mesh.select_all(action='SELECT')
+        bpy.ops.uv.cube_project(scale_to_bounds=True)
+        bpy.ops.object.mode_set(mode='OBJECT')
+        extrudeFace(rightHandle, 5e-3)
+        moveOrigin((-3e-3, 0, -5e-3))
+
+        leftHandle.location = (-300e-4, -340e-4, 0)
+        leftHandle.rotation_euler[2] = math.radians(-20)
+        rightHandle.location = (300e-4, -340e-4, 0)
+        rightHandle.rotation_euler[2] = math.radians(70)
+
         # Dig hole
-        panel = bpy.context.active_object
         digHole(panel, 37e-3, 1.0, (0, 0, 0))
 
         # Add RMI Face
@@ -449,6 +513,10 @@ class RMI(BlenderModel):
         rmi_compass.parent = panel
         rmi_face.parent = panel
         glass.parent = panel
+        left_window.parent = panel
+        right_window.parent = panel
+        leftHandle.parent = panel
+        rightHandle.parent = panel
         for n in nails:
             n.parent = panel
 
@@ -475,6 +543,16 @@ class RMI(BlenderModel):
         k2.interpolation = "LINEAR"
 
         return panel
+
+
+def add_plane(dimension=(1, 1), location=(0, 0, 0)) -> bpy.types.Object:
+    bpy.ops.mesh.primitive_plane_add(location=location)
+    bpy.ops.object.editmode_toggle()
+    x, y, z = bpy.context.active_object.dimensions
+    bpy.ops.transform.resize(
+        value=(dimension[0] / 2.0, dimension[1] / 2.0, z))
+    bpy.ops.object.editmode_toggle()
+    return bpy.context.active_object
 
 
 class CentralPanel(BlenderModel):
