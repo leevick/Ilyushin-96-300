@@ -489,6 +489,26 @@ class RMI(BlenderModel):
         rmi_compass.data.materials.append(generateClockFace("RMICompass"))
         extrudeFace(rmi_compass, 1e-3)
 
+        # Add left needle
+        bpy.ops.object.select_all(action="DESELECT")
+        ln = importSvg("RMINeedleLeft")
+        bpy.context.view_layer.objects.active = ln
+        ln.select_set(True)
+        moveOrigin((30e-4, 300e-4, 0))
+        ln.location = (0, 0, -depth + 3e-3)
+        ln.rotation_euler[2] = random.uniform(0, 2 * math.pi)
+        ln.data.materials.append(generateColorBump((0.9, 0.9, 0, 1)))
+
+        # Add right needle
+        bpy.ops.object.select_all(action="DESELECT")
+        rn = importSvg("RMINeedleRight")
+        bpy.context.view_layer.objects.active = rn
+        rn.select_set(True)
+        moveOrigin((50e-4, 300e-4, 0))
+        rn.location = (0, 0, -depth + 25e-4)
+        rn.rotation_euler[2] = random.uniform(0, 2 * math.pi)
+        rn.data.materials.append(generateColorBump((0, 0.9, 0, 1)))
+
         # Add RMI glass
         bpy.ops.mesh.primitive_cylinder_add(
             radius=37e-3, depth=1e-3, vertices=72, location=(0, 0, -0.5e-3))
@@ -517,6 +537,8 @@ class RMI(BlenderModel):
         right_window.parent = panel
         leftHandle.parent = panel
         rightHandle.parent = panel
+        ln.parent = panel
+        rn.parent = panel
         for n in nails:
             n.parent = panel
 
