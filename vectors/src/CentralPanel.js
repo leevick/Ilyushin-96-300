@@ -106,7 +106,7 @@ export class RMINeedleLeft extends Component {
     render() {
         return <g id="RMINeedleLeft" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
             <g transform="translate(30,300)">
-                <path fill="yellow" d="M 0 -300 c 0 0 0 70 -30 70 c 0 0 20 0 20 20 l 0 430 l 10 50 l 10 -50 l 0 -430 c 0 0 0 -20 20 -20 c 0 0 -30 0 -30 -70 Z"
+                <path fill="yellow" d="M -5 -300 c 0 0 0 65 -25 70 a 5 5 0 0 0 0 10 c 0 0 20 0 20 20 l 0 420 l 10 50 l 10 -50 l 0 -420 c 0 0 0 -20 20 -20 a 5 5 0 0 0 0 -10 c 0 0 -25 0 -25 -65 a 5 5 0 0 0 -10 0 Z"
                     fillOpacity={1}></path>
             </g>
         </g>
@@ -121,26 +121,28 @@ export class RMINeedleRight extends Component {
         this.width = 100
         this.height = 600
         this.curve = [
-            "M 0 -300 ",
-            "c 0 0 0 80 -20 80 ",
+            "M -5 -290 ",
+            "c 0 0 0 70 -15 70 ",
             "l -5 0 ",
             "l -15 70 ",
             "l 15 0 ",
             "l 0 350 ",
             "l 15 0 ",
-            "l 10 65 ",
-            "l 10 -65 ",
+            "l 10 70 ",
+            "l 10 -70 ",
             "l 15 0 ",
             "l 0 -350 ",
             "l 15 0 ",
             "l -15 -70 ",
             "l -5 0 ",
-            "c 0 0 -20 0 -20 -80 Z",
-            "M 10 -220 ",
-            "l 0 415 ",
-            "l -20 0 ",
-            "l 0 -415 ",
-            "l 20 0 Z",
+            "c 0 0 -20 0 -15 -70 ",
+            "a 5 5 0 0 0 -10 0 Z ",
+            "M 10 -210 ",
+            "l 0 395 ",
+            "a 10 10 0 0 1 -20 0 ",
+            "l 0 -395 ",
+            "a 10 10 0 0 1 20 0 Z",
+
         ]
     }
 
