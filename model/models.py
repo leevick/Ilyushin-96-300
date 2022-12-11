@@ -331,6 +331,17 @@ def extrudeFace(obj: bpy.types.Object, depth=10e-3) -> None:
     pass
 
 
+def bevel(obj: bpy.types.Object, width: float, segments: int = 1) -> None:
+    bpy.context.view_layer.objects.active = obj
+    bevel: bpy.types.BevelModifier = obj.modifiers.new(
+        type="BEVEL", name="bevel")
+    bevel.affect = "VERTICES"
+    bevel.offset_type = "OFFSET"
+    bevel.width = width
+    bevel.segments = segments
+    bpy.ops.object.modifier_apply(modifier="bevel")
+
+
 class RMI(BlenderModel):
     def __init__(self) -> None:
         super().__init__()
@@ -352,21 +363,9 @@ class RMI(BlenderModel):
 
         panel = bpy.context.active_object
 
-        bpy.context.view_layer.objects.active = panel
-        bevel: bpy.types.BevelModifier = panel.modifiers.new(
-            type="BEVEL", name="bevel")
-        bevel.affect = "VERTICES"
-        bevel.offset_type = "OFFSET"
-        bevel.width = 15e-3 * scale
-        bpy.ops.object.modifier_apply(modifier="bevel")
+        bevel(panel, 15e-3 * scale)
 
-        bevel: bpy.types.BevelModifier = panel.modifiers.new(
-            type="BEVEL", name="bevel2")
-        bevel.affect = "VERTICES"
-        bevel.offset_type = "OFFSET"
-        bevel.width = 1e-3 * scale
-        bevel.segments = 3
-        bpy.ops.object.modifier_apply(modifier="bevel2")
+        bevel(panel, 1e-3 * scale, 3)
 
         extrudeFace(bpy.context.active_object, depth=depth)
 
@@ -397,21 +396,9 @@ class RMI(BlenderModel):
         panel.data.materials.append(
             generateClockFace(__class__.__name__))
 
-        bpy.context.view_layer.objects.active = panel
-        bevel: bpy.types.BevelModifier = panel.modifiers.new(
-            type="BEVEL", name="bevel")
-        bevel.affect = "VERTICES"
-        bevel.offset_type = "OFFSET"
-        bevel.width = 15e-3
-        bpy.ops.object.modifier_apply(modifier="bevel")
+        bevel(panel, 15e-3)
 
-        bevel: bpy.types.BevelModifier = panel.modifiers.new(
-            type="BEVEL", name="bevel2")
-        bevel.affect = "VERTICES"
-        bevel.offset_type = "OFFSET"
-        bevel.width = 1e-3
-        bevel.segments = 3
-        bpy.ops.object.modifier_apply(modifier="bevel2")
+        bevel(panel, 1e-3, 3)
 
         extrudeFace(bpy.context.active_object, depth=depth)
 
@@ -821,15 +808,10 @@ class VBM(BlenderModel):
 
         bpy.context.view_layer.objects.active = outline
 
-        bevel: bpy.types.BevelModifier = outline.modifiers.new(
-            type="BEVEL", name="bevel2")
-        bevel.affect = "VERTICES"
-        bevel.offset_type = "OFFSET"
-        bevel.width = 1e-3
-        bevel.segments = 3
-        bpy.ops.object.modifier_apply(modifier="bevel2")
+        bevel(outline, 1e-3, 3)
 
         extrudeFace(bpy.context.active_object, depth=1)
+
         w, h, d = bpy.context.active_object.dimensions
         bpy.context.active_object.location = (-w / 2, -h / 2, 0.5)
         moveOrigin((0, 0, 0))
@@ -848,13 +830,7 @@ class VBM(BlenderModel):
 
         bpy.context.view_layer.objects.active = base
 
-        bevel: bpy.types.BevelModifier = base.modifiers.new(
-            type="BEVEL", name="bevel2")
-        bevel.affect = "VERTICES"
-        bevel.offset_type = "OFFSET"
-        bevel.width = 1e-3 * 1.005
-        bevel.segments = 3
-        bpy.ops.object.modifier_apply(modifier="bevel2")
+        bevel(base, 1e-3 * 1.005, 3)
 
         extrudeFace(bpy.context.active_object, depth=1e-3)
         w, h, d = bpy.context.active_object.dimensions
