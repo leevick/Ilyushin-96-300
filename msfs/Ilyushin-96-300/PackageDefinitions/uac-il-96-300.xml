@@ -4,7 +4,7 @@
 		<ContentType>AIRCRAFT</ContentType>
 		<Title>Ilyushin Il-96-300</Title>
 		<Manufacturer>uac</Manufacturer>
-		<Creator>Ilyushin</Creator>
+		<Creator>UAC</Creator>
 	</ItemSettings>
 	<Flags>
 		<VisibleInStore>false</VisibleInStore>
@@ -16,16 +16,16 @@
 			<Flags>
 				<FSXCompatibility>false</FSXCompatibility>
 			</Flags>
-			<AssetDir>PackageDefinitions\uac-ilyushin-96-300\ContentInfo</AssetDir>
-			<OutputDir>ContentInfo\uac-ilyushin-96-300</OutputDir>
+			<AssetDir>PackageDefinitions\uac-il-96-300\ContentInfo</AssetDir>
+			<OutputDir>ContentInfo\uac-il-96-300</OutputDir>
 		</AssetGroup>
-		<AssetGroup Name="aircraft">
+		<AssetGroup Name="uac-il-96-300">
 			<Type>SimObject</Type>
 			<Flags>
 				<FSXCompatibility>false</FSXCompatibility>
 			</Flags>
-			<AssetDir>PackageSources\SimObjects\Airplanes\aircraft\</AssetDir>
-			<OutputDir>SimObjects\Airplanes\aircraft\</OutputDir>
+			<AssetDir>PackageSources\SimObjects\Airplanes\uac-il-96-300\</AssetDir>
+			<OutputDir>SimObjects\Airplanes\uac-il-96-300\</OutputDir>
 		</AssetGroup>
 	</AssetGroups>
 </AssetPackage>

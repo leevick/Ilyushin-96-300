@@ -8,3 +8,7 @@ __pycache__
 _PackageInt
 Packages
 PackagesMetadata
+texture
+**/model/*.bin
+**/model/**.gltf
+**/model/**.png

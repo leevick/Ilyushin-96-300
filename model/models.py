@@ -549,7 +549,7 @@ class RMI(BlenderModel):
         # Animation
         rmi_compass.animation_data_create()
         rmi_compass.animation_data.action = bpy.data.actions.new(
-            name="RotationAction")
+            name="RMIHeading")
         fcurve = rmi_compass.animation_data.action.fcurves.new(
             data_path="rotation_euler", index=2
         )
@@ -1022,4 +1022,4 @@ model: BlenderModel = classModel()
 model.create()
 bpy.ops.wm.save_mainfile(
     filepath=f"{os.getcwd()}/{argv[0]}.blend")
-model.render(argv[0])
+# model.render(argv[0])
