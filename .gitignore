@@ -5,3 +5,6 @@ photo
 .lock-waf*build
 __pycache__
 .vscode
+_PackageInt
+Packages
+PackagesMetadata
