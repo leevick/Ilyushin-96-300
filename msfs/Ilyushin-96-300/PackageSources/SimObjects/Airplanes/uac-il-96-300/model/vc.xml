@@ -7,7 +7,9 @@
 		<LOD minSize="5" ModelFile="vc.gltf"/>
 		<LOD minSize="1" ModelFile="vc.gltf"/>
 	</LODS>
-	<Animation name="RMIHeading" length="360" type="Sim" typeParam2="RMIHeading" typeParam="AutoPlay"/>
+	<Animation name="RMIHeading" guid="BC935F16-43CD-4046-8EF3-06E44A5940AB" length="360" type="Sim" typeParam2="RMIHeading" typeParam="AutoPlay"/>
+	<Animation name="agr_roll" guid="E2E339A6-FCBF-43a9-A780-3473E03AB54B" length="90" type="Sim" typeParam2="agr_roll" typeParam="AutoPlay"/>
+	<Animation name="agr_pitch" guid="E6A307E6-D0D8-4ca0-8A8E-77B7EA22FFB9" length="90" type="Sim" typeParam2="agr_pitch" typeParam="AutoPlay"/>
 	<PartInfo>
 		<Name>RMIHeading</Name>
 		<AnimLength>360</AnimLength>
@@ -17,6 +19,34 @@
 					<Variable>PLANE HEADING DEGREES MAGNETIC</Variable>
 					<Units>radians</Units>
 					<Bias>0</Bias>
+					<Scale>57.295779513082320876798154814105</Scale>
+				</Sim>
+			</Parameter>
+		</Animation>
+	</PartInfo>
+	<PartInfo>
+		<Name>agr_roll</Name>
+		<AnimLength>90</AnimLength>
+		<Animation>
+			<Parameter>
+				<Sim>
+					<Variable>PLANE BANK DEGREES</Variable>
+					<Bias>45</Bias>
+					<Units>radians</Units>
+					<Scale>57.295779513082320876798154814105</Scale>
+				</Sim>
+			</Parameter>
+		</Animation>
+	</PartInfo>
+	<PartInfo>
+		<Name>agr_pitch</Name>
+		<AnimLength>90</AnimLength>
+		<Animation>
+			<Parameter>
+				<Sim>
+					<Variable>PLANE PITCH DEGREES</Variable>
+					<Bias>45</Bias>
+					<Units>radians</Units>
 					<Scale>57.295779513082320876798154814105</Scale>
 				</Sim>
 			</Parameter>

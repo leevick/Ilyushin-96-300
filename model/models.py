@@ -648,6 +648,10 @@ class CentralPanel(BlenderModel):
 
         moveOrigin((0.0, 0.0, 0.0))
 
+        panel.rotation_euler[0] = math.radians(90)
+        panel.rotation_euler[2] = math.radians(180)
+        panel.location = (0, -0.5, 0.7)
+
         return panel
 
     def render(self, name: str) -> None:
@@ -833,12 +837,12 @@ class AGR(BlenderModel):
         )
         k1 = fcurve.keyframe_points.insert(
             frame=0,
-            value=-math.pi / 4
+            value=math.pi / 4
         )
         k1.interpolation = "LINEAR"
         k2 = fcurve.keyframe_points.insert(
             frame=90,
-            value=math.pi / 4
+            value=-math.pi / 4
         )
         k2.interpolation = "LINEAR"
 
@@ -850,12 +854,12 @@ class AGR(BlenderModel):
         )
         k1 = fcurve.keyframe_points.insert(
             frame=0,
-            value=-math.pi / 4
+            value=math.pi / 4
         )
         k1.interpolation = "LINEAR"
         k2 = fcurve.keyframe_points.insert(
             frame=90,
-            value=math.pi / 4
+            value=-math.pi / 4
         )
         k2.interpolation = "LINEAR"
 
