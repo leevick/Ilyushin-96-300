@@ -248,6 +248,47 @@ class US2(BlenderModel):
         face = bpy.context.active_object
         face.data.materials.append(generateClockFace(__class__.__name__))
 
+        # Create needles
+
+        needle = importSvg("US2NeedleShape")
+        bpy.context.view_layer.objects.active = needle
+        needle.select_set(True)
+        bpy.ops.object.origin_set(type='ORIGIN_GEOMETRY', center='BOUNDS')
+        needle.location = (0, 110e-4, 0)
+        moveOrigin((0, 0, 0))
+        needle.location = (0, 0, -self.depth / 2 + 1e-3)
+        needle.data.materials.append(
+            generatePanelBackgroud("US2Needle.png"))
+        bpy.ops.object.mode_set(mode='EDIT')
+        bpy.ops.mesh.select_mode(type='FACE')
+        bpy.ops.mesh.select_all(action='SELECT')
+        bpy.ops.uv.cube_project(scale_to_bounds=True)
+        bpy.ops.object.mode_set(mode='OBJECT')
+
+        b = 17.8
+        a = -10
+        c = -170
+
+        needle.animation_data_create()
+        needle.animation_data.action = bpy.data.actions.new(
+            name="IAS")
+        fcurve = needle.animation_data.action.fcurves.new(
+            data_path="rotation_euler", index=2
+        )
+
+        k1 = fcurve.keyframe_points.insert(
+            frame=0,
+            value=0
+        )
+        k1.interpolation = "LINEAR"
+
+        for i in range(700):
+            k2 = fcurve.keyframe_points.insert(
+                frame=i + 100,
+                value=-(math.sqrt(i + 100 - a) * b + c) / 180.0 * math.pi
+            )
+            k2.interpolation = "LINEAR"
+
         # Create Nails
 
         nails = [
@@ -262,6 +303,7 @@ class US2(BlenderModel):
                     generateColorBump((0.13, 0.258, 0.296, 1)))
 
         face.parent = base
+        needle.parent = base
         glass.parent = base
         for n in nails:
             n.parent = base
