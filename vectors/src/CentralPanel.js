@@ -2,6 +2,7 @@
 
 import { Component, React } from "react"
 import center_upper_texture from "./center_upper_texture.jpg"
+import us2 from "./us2.png"
 
 
 const b = 17.8
@@ -52,6 +53,18 @@ export class US2 extends Component {
                     }
                 })
             }
+
+            <g transform="rotate(226)">
+                <g id="US2Needle" viewBox="-40 -300 80 380">
+                    <rect x={-40} y={-300} width={80} height={230} fill="white"></rect>
+                    <rect x={-40} y={-70} width={80} height={150}></rect>
+                </g>
+                <g id="US2NeedleShape" viewBox="-40 -300 80 380">
+                    <path d={`M 0 -300 L 10 -250 L 10 0 L 40 ${40 * Math.sqrt(3)} A 80 80 0 0 1 -40 ${40 * Math.sqrt(3)}  L -10 0 L -10 -250 Z`}></path>
+                </g>
+            </g>
+
+
             <circle cx={-375} cy={-365} r={30} fill="red" fillOpacity={1}></circle>
             <circle cx={-375} cy={365} r={30} fill="red" fillOpacity={1}></circle>
             <circle cx={375} cy={-365} r={30} fill="red" fillOpacity={1}></circle>
