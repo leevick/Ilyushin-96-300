@@ -437,13 +437,62 @@ export class VBM extends Component {
         this.height = 800
         this.top = 0
         this.left = 0
+        this.mainTicks = [0, 1, 2, 3, 4, 6, 7, 8, 9]
+        this.majorTicks = Array.from(Array(10)).map((_, i) => 18 + 36 * i)
+        this.minorTicks = []
+        for (var i = 0; i < 20; i++) {
+            for (var j = 1; j <= 4; j++) {
+                if ((i === 10 && j === 1) || (i === 9 && j === 4))
+                    continue
+                this.minorTicks.push(i * 18 + j * 3.6)
+            }
+        }
+
     }
 
     render() {
         return <g>
             <g id="VBMBase" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
-                <path transform="translate(400,400)" d="M -400 280 L -280 400 L 280 400 L 400 280 L 400 -280 L 280 -400 L -280 -400 L -400 -280 Z" fillOpacity={0.5} ></path>
+                <path transform="translate(400,400)" d="M -400 280 L -280 400 L 280 400 L 400 280 L 400 -280 L 280 -400 L -280 -400 L -400 -280 Z" fillOpacity={1.0} fill="rgb(101,139,148)" ></path>
             </g >
+            <g id="VBMFace" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
+                <g transform="translate(0,0)">
+                    <g id="VBMFaceShape" viewBox="45 45 710 710">
+                        <path d="M 755 400 a 355 355 0 0 0 -710 0 a 355 355 0 0 0 710 0 Z M 320 610 l 160 0 l 0 60 l -160 0 l 0 -60 Z M 200 360 l 100 0 l 0 80 l -100 0 l 0 -80 Z" fill="black" fillOpacity={0}></path>
+                    </g>
+                    <path d="M 755 400 a 355 355 0 0 0 -710 0 a 355 355 0 0 0 710 0 Z" fill="black" fillOpacity={1}></path>
+                    <text x={320} y={280} textLength={170} letterSpacing={-5} lengthAdjust="spacingAndGlyphs" fontFamily="lenya69" fontSize={50} stroke={"white"} fill={"white"}>ВЫСОТА</text>
+                    <text x={350} y={590} textLength={80} letterSpacing={-5} lengthAdjust="spacingAndGlyphs" fontFamily="lenya69" fontSize={50} stroke={"white"} fill={"white"}>гПа</text>
+                    <text x={220} y={480} fontFamily="lenya69" fontSize={50} stroke={"white"} fill={"white"}>км</text>
+                    <text dominantBaseline={"middle"} textAnchor="middle" stroke="white" fill="white" x={400} y={710} fontSize={100} fontFamily="lenya69">5</text>
+                    {
+                        this.mainTicks.map((t, i) => <text transform={`translate(${Math.sin(t * 36 / 180 * Math.PI) * 240},${-Math.cos(t * 36 / 180 * Math.PI) * 240 + 10})`} dominantBaseline={"middle"} textAnchor="middle" stroke="white" fill="white" x={400} y={400} fontSize={100} fontFamily="lenya69">{t}</text>)
+                    }
+                    <g transform="translate(400,400)">
+                        {
+
+                            this.majorTicks.map((t, i) => this.mainTicks.map(i => <rect x={0} y={0} width={8} height={30} transform={`translate(-4,-330) rotate(${t},4,330)`} fill="white" stroke="white"></rect>))
+                        }
+                        {
+
+                            this.mainTicks.map((t, i) => this.mainTicks.map(i => <rect x={0} y={0} width={10} height={50} transform={`translate(-5,-330) rotate(${t * 36},5,330)`} fill="white" stroke="white"></rect>))
+                        }
+                        {
+
+                            this.minorTicks.map((t, i) => this.mainTicks.map(i => <rect x={0} y={0} width={6} height={20} transform={`translate(-3,-330) rotate(${t},3,330)`} fill="white" stroke="white"></rect>))
+                        }
+                    </g>
+                    <g transform="translate(400,400) rotate(-41)">
+                        <g id="VBMLongNeedle">
+                            <rect x={-45} y={-40} width={90} height={141} fillOpacity={1} fill="black"></rect>
+                            <rect x={-45} y={-310} width={90} height={270} fillOpacity={1} fill="white"></rect>
+                        </g>
+                        <g id="VBMLongNeedleShape" viewBox="-45 -310 90 411">
+                            <path d="M 0 -310 l 20 40 l 0 50 c 0 0 -15 10 -15 30 l 0 80 c 0 0 0 5 10 20 l 0 140 l 30 40 a 100 100 0 0 1 -90 0 l 30 -40 l 0 -140 c 0 0 10 -15 10 -20 l 0 -80 c 0 0 0 -20 -15 -30 l 0 -50 Z" fillOpacity={1}></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
             <circle transform="translate(400,400)" cx={-370} cy={-370} r={30} fill="red" fillOpacity={1}></circle>
 
             <circle transform="translate(400,400)" cx={370} cy={-370} r={30} fill="red" fillOpacity={1}></circle>
