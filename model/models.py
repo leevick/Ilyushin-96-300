@@ -978,12 +978,56 @@ class VBM(BlenderModel):
 
         bevel(base, 1e-3 * 1.005, 3)
 
-        extrudeFace(bpy.context.active_object, depth=1e-3)
+        extrudeFace(bpy.context.active_object, depth=10e-3)
         w, h, d = bpy.context.active_object.dimensions
-        bpy.context.active_object.location = (-w / 2, -h / 2, 0)
+        bpy.context.active_object.location = (-w / 2, -h / 2, 2e-3)
         moveOrigin((0, 0, 0))
+        bpy.ops.object.mode_set(mode='EDIT')
+        bpy.ops.mesh.select_mode(type='FACE')
+        bpy.ops.mesh.select_all(action='SELECT')
+        bpy.ops.uv.cube_project(scale_to_bounds=True)
+        bpy.ops.object.mode_set(mode='OBJECT')
+        base.data.materials.append(generateColorBump((0.13, 0.258, 0.296, 1)))
 
         base = bpy.context.active_object
+        digHole(base, 355e-4, 1, (0, 0, 0))
+
+        face = importSvg("VBMFaceShape")
+        bpy.context.view_layer.objects.active = face
+        face.select_set(True)
+        bpy.ops.object.origin_set(type='ORIGIN_GEOMETRY', center='BOUNDS')
+        face.location = (0, 0, 0)
+        moveOrigin((0, 0, 0))
+        face.location = (0, 0, -5e-3)
+        face.data.materials.append(
+            generatePanelBackgroud("VBMFace.png"))
+        bpy.ops.object.mode_set(mode='EDIT')
+        bpy.ops.mesh.select_mode(type='FACE')
+        bpy.ops.mesh.select_all(action='SELECT')
+        bpy.ops.uv.cube_project(scale_to_bounds=True)
+        bpy.ops.object.mode_set(mode='OBJECT')
+
+        # glass
+        bpy.ops.mesh.primitive_circle_add(
+            radius=355e-4, fill_type="NGON", vertices=72, location=(0, 0, 0))
+        glass = bpy.context.active_object
+        glass.data.materials.append(generateClockGlass())
+
+        # needle
+        longNeedle = importSvg("VBMLongNeedleShape")
+        bpy.context.view_layer.objects.active = longNeedle
+        longNeedle.select_set(True)
+        bpy.ops.object.origin_set(type='ORIGIN_GEOMETRY', center='BOUNDS')
+        longNeedle.location = (0, 109.5e-4, 0)
+        moveOrigin((0, 0, 0))
+        longNeedle.location = (0, 0, -3e-3)
+        longNeedle.data.materials.append(
+            generatePanelBackgroud("VBMLongNeedle.png"))
+        bpy.ops.object.mode_set(mode='EDIT')
+        bpy.ops.mesh.select_mode(type='FACE')
+        bpy.ops.mesh.select_all(action='SELECT')
+        bpy.ops.uv.cube_project(scale_to_bounds=True)
+        bpy.ops.object.mode_set(mode='OBJECT')
 
         nails = [
             Nut().create(), Nut().create(), Nut().create(), Nut().create()]
@@ -998,6 +1042,10 @@ class VBM(BlenderModel):
 
         for n in nails:
             n.parent = base
+
+        face.parent = base
+        glass.parent = base
+        longNeedle.parent = base
 
         return base
 
