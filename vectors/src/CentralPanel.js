@@ -455,7 +455,7 @@ export class VBM extends Component {
             <g id="VBMBase" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
                 <path transform="translate(400,400)" d="M -400 280 L -280 400 L 280 400 L 400 280 L 400 -280 L 280 -400 L -280 -400 L -400 -280 Z" fillOpacity={1.0} fill="rgb(101,139,148)" ></path>
             </g >
-            <g id="VBMFace" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
+            <g id="VBMFace" viewBox={"45 45 710 710"}>
                 <g transform="translate(0,0)">
                     <g id="VBMFaceShape" viewBox="45 45 710 710">
                         <path d="M 755 400 a 355 355 0 0 0 -710 0 a 355 355 0 0 0 710 0 Z M 320 610 l 160 0 l 0 60 l -160 0 l 0 -60 Z M 200 360 l 100 0 l 0 80 l -100 0 l 0 -80 Z" fill="black" fillOpacity={0}></path>
@@ -483,7 +483,7 @@ export class VBM extends Component {
                         }
                     </g>
                     <g transform="translate(400,400) rotate(-41)">
-                        <g id="VBMLongNeedle">
+                        <g id="VBMLongNeedle" viewBox="-45 -310 90 411">
                             <rect x={-45} y={-40} width={90} height={141} fillOpacity={1} fill="black"></rect>
                             <rect x={-45} y={-310} width={90} height={270} fillOpacity={1} fill="white"></rect>
                         </g>
