@@ -11,6 +11,7 @@ if not dir in sys.path:
     sys.path.append(dir)
 
 from blender_model import BlenderModel
+from utils import add_plane
 
 
 def generatePanelBackgroud(name: str) -> bpy.types.Material:
@@ -573,16 +574,6 @@ class RMI(BlenderModel):
         k2.interpolation = "LINEAR"
 
         return panel
-
-
-def add_plane(dimension=(1, 1), location=(0, 0, 0)) -> bpy.types.Object:
-    bpy.ops.mesh.primitive_plane_add(location=location)
-    bpy.ops.object.editmode_toggle()
-    x, y, z = bpy.context.active_object.dimensions
-    bpy.ops.transform.resize(
-        value=(dimension[0] / 2.0, dimension[1] / 2.0, z))
-    bpy.ops.object.editmode_toggle()
-    return bpy.context.active_object
 
 
 class CentralPanel(BlenderModel):
