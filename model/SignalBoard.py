@@ -13,14 +13,18 @@ if not dir in sys.path:
 from blender_model import BlenderModel
 from utils import add_cube
 from models import digHoleObj
+from Materials import generateSignalBoardFrameMaterial, generateSignalBoardLightMaterial
 
 
 class SignalBoard(BlenderModel):
-    def __init__(self) -> None:
+    name: str = "StabTrimDown"
+
+    def __init__(self, name="StabTrimDown") -> None:
         super().__init__()
+        self.name = name
 
     def create(self) -> bpy.types.Object:
-        board = add_cube((250e-4, 150e-4, 5e-3))
+        board = add_cube((290e-4, 160e-4, 5e-3))
         bpy.ops.object.mode_set(mode='EDIT')
         bpy.ops.mesh.select_mode(type='EDGE')
         bpy.ops.mesh.select_all(action='DESELECT')
@@ -46,34 +50,26 @@ class SignalBoard(BlenderModel):
         bpy.ops.uv.cube_project(scale_to_bounds=True)
         bpy.ops.object.mode_set(mode='OBJECT')
 
-        cut = add_cube((220e-4, 120e-4, 1e-4), (0, 0, 25e-4))
+        cut = add_cube((240e-4, 130e-4, 1e-4), (0, 0, 25e-4))
 
         digHoleObj(board, cut)
 
+        board.data.materials.append(generateSignalBoardFrameMaterial())
+        board.data.materials.append(
+            generateSignalBoardLightMaterial(self.name))
+
+
         bpy.ops.object.mode_set(mode='EDIT')
         bpy.ops.mesh.select_mode(type='FACE')
-        bpy.ops.mesh.select_all(action="SELECT")
+        bpy.ops.mesh.select_all(action="DESELECT")
 
         bm = bmesh.from_edit_mesh(board.data)
-        # for f in bm.faces:
-        # if math.fabs(f.calc_area() -220e-4 * 120e-4) < 1e-5:
+        for f in bm.faces:
+            if math.fabs(f.calc_area() - (240e-4 * 130e-4)) < 1e-5:
+                f.select_set(True)
+                f.material_index = 1
+        bpy.ops.uv.cube_project(scale_to_bounds=True)
 
-            # print(f.calc_area())
-        # f.select_set(False)
+        bpy.ops.object.mode_set(mode='OBJECT')
 
         return board
-
-
-argv = sys.argv
-argv = argv[argv.index("--") + 1:]
-
-bpy.data.meshes.remove(bpy.data.meshes[0])
-bpy.data.lights.remove(bpy.data.lights[0])
-bpy.data.cameras.remove(bpy.data.cameras[0])
-
-
-model: BlenderModel = SignalBoard()
-model.create()
-bpy.ops.wm.save_mainfile(
-    filepath=f"{os.getcwd()}/{argv[0]}.blend")
-# model.render(argv[0])

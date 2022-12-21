@@ -12,7 +12,9 @@ if not dir in sys.path:
 
 from blender_model import BlenderModel
 from models import generateClockFace, extrudeFace, US2, digHole, digHoleObj, RMI, AGR, VBM, moveOrigin
-from utils import add_plane
+from SignalBoard import SignalBoard
+from utils import add_plane, add_cube
+
 
 
 class CentralPanel(BlenderModel):
@@ -75,6 +77,21 @@ class CentralPanel(BlenderModel):
         vbm.location = (
             2465e-4 - width * 1.1 / 10000, height * 1.1 / 10000 - 650e-4, 0)
 
+        # Stab Trims
+        cut = add_cube((295e-4, 2 * 165e-4, 1), (205e-4 - width * 1.1 / 10000,
+                       height * 1.1 / 10000 - 1545e-4, 0))
+        digHoleObj(panel, cut)
+
+        sigTrimUp = SignalBoard("StabTrimUp").create()
+        sigTrimUp.location = (205e-4 - width * 1.1 / 10000,
+                              height * 1.1 / 10000 - (1545e-4 - 165e-4 / 2), 0)
+        sigTrimUp.parent = panel
+
+        sigTrimDown = SignalBoard("StabTrimDown").create()
+        sigTrimDown.location = (205e-4 - width * 1.1 / 10000,
+                                height * 1.1 / 10000 - (1545e-4 + 165e-4 / 2), 0)
+        sigTrimDown.parent = panel
+
         bpy.ops.object.select_all(action="DESELECT")
 
         us2.model.parent = panel
@@ -118,18 +135,3 @@ class CentralPanel(BlenderModel):
         bpy.ops.render.render(write_still=True)
 
         pass
-
-
-argv = sys.argv
-argv = argv[argv.index("--") + 1:]
-
-bpy.data.meshes.remove(bpy.data.meshes[0])
-bpy.data.lights.remove(bpy.data.lights[0])
-bpy.data.cameras.remove(bpy.data.cameras[0])
-
-
-model: BlenderModel = CentralPanel()
-model.create()
-bpy.ops.wm.save_mainfile(
-    filepath=f"{os.getcwd()}/{argv[0]}.blend")
-# model.render(argv[0])

@@ -5,7 +5,7 @@ from glob import glob
 from pathlib import Path
 import os
 
-instruments = ['SignalBoard', 'CentralPanel']
+instruments = ['CentralPanel', 'SignalBoard']
 
 
 def configure(ctx):
@@ -14,5 +14,5 @@ def configure(ctx):
 
 def build(ctx):
     for i in instruments:
-        ctx(rule=f"blender -b -P ../model/{i}.py -- {i}",
-            source=["../model/models.py", f"../model/{i}.py"], target=f"../{i}.blend")
+        ctx(rule=f"blender -b -P ../model/generate.py -- {i}",
+            source=["../model/generate.py", "../model/models.py", "../model/Materials.py", f"../model/{i}.py"], target=f"../{i}.blend")
