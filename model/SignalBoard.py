@@ -12,6 +12,7 @@ if not dir in sys.path:
 
 from blender_model import BlenderModel
 from utils import add_cube
+from models import digHoleObj
 
 
 class SignalBoard(BlenderModel):
@@ -19,7 +20,7 @@ class SignalBoard(BlenderModel):
         super().__init__()
 
     def create(self) -> bpy.types.Object:
-        board = add_cube((260e-4, 160e-4, 5e-3))
+        board = add_cube((250e-4, 150e-4, 5e-3))
         bpy.ops.object.mode_set(mode='EDIT')
         bpy.ops.mesh.select_mode(type='EDGE')
         bpy.ops.mesh.select_all(action='DESELECT')
@@ -45,7 +46,22 @@ class SignalBoard(BlenderModel):
         bpy.ops.uv.cube_project(scale_to_bounds=True)
         bpy.ops.object.mode_set(mode='OBJECT')
 
-        return bpy.context.active_object
+        cut = add_cube((220e-4, 120e-4, 1e-4), (0, 0, 25e-4))
+
+        digHoleObj(board, cut)
+
+        bpy.ops.object.mode_set(mode='EDIT')
+        bpy.ops.mesh.select_mode(type='FACE')
+        bpy.ops.mesh.select_all(action="SELECT")
+
+        bm = bmesh.from_edit_mesh(board.data)
+        # for f in bm.faces:
+        # if math.fabs(f.calc_area() -220e-4 * 120e-4) < 1e-5:
+
+            # print(f.calc_area())
+        # f.select_set(False)
+
+        return board
 
 
 argv = sys.argv
@@ -60,4 +76,4 @@ model: BlenderModel = SignalBoard()
 model.create()
 bpy.ops.wm.save_mainfile(
     filepath=f"{os.getcwd()}/{argv[0]}.blend")
-model.render(argv[0])
+# model.render(argv[0])
