@@ -553,6 +553,18 @@ export default class CentralPanel extends Component {
             <g name="stab_sig" transform="translate(205,1545)">
                 <rect width={this.sig_w} height={2 * this.sig_h} x={-this.sig_w / 2} y={-this.sig_h}></rect>
             </g>
+            <g transform="translate(205,1545)">
+                <g transform={`translate(0,${-this.sig_h / 2})`}>
+                    <g id="StabTrimUp" viewBox="-120 -65 240 130">
+                        <path d="M -90 30 l 90 -30 l 90 30 l -90 -70 Z" fillOpacity={0} stroke="orange" strokeWidth={10}></path>
+                    </g>
+                </g>
+                <g transform={`translate(0,${this.sig_h / 2})`}>
+                    <g id="StabTrimDown" viewBox="-120 -65 240 130">
+                        <path d="M -90 -40 l 90 30 l 90 -30 l -90 70 Z" fillOpacity={0} stroke="orange" strokeWidth={10}></path>
+                    </g>
+                </g>
+            </g>
             <g transform="translate(1487,750)">
                 <AGR></AGR>
             </g>
