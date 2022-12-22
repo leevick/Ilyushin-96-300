@@ -287,7 +287,7 @@ export class RMI extends Component {
     }
 }
 
-export class AGRBall extends Component {
+export class AGBBall extends Component {
     constructor(props) {
         super(props)
         this.width = 4 * props.radius
@@ -309,7 +309,7 @@ export class AGRBall extends Component {
     render() {
 
         const r = this.props.radius
-        return <g id="AGRBall" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
+        return <g id="AGBBall" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
             <rect x={this.left} y={this.top} width={this.width} height={this.height / 2} fill="rgb(187,231,244)"></rect>
             <rect x={this.left} y={0} width={this.width} height={this.height / 2} fill="rgb(117,64,58)"></rect>
 
@@ -334,7 +334,7 @@ export class AGRBall extends Component {
     }
 }
 
-export class AGRShield extends Component {
+export class AGBShield extends Component {
     constructor(props) {
         super(props)
         this.width = 900
@@ -350,10 +350,10 @@ export class AGRShield extends Component {
     }
 
     render() {
-        return <g id="AGRShield" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
+        return <g id="AGBShield" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
             {/* <circle x={0} y={0} r={500} fillOpacity={0.0}></circle> */}
             <g transform="translate(450,0)">
-                <AGRBall radius={this.ballRadius}></AGRBall>
+                <AGBBall radius={this.ballRadius}></AGBBall>
             </g>
 
             <circle x={0} y={0} r={380} stroke="rgb(20,10,10)" strokeWidth={140} strokeOpacity={1} fillOpacity={0}></circle>
@@ -377,14 +377,14 @@ export class AGRShield extends Component {
 
 }
 
-export class AGR extends Component {
+export class AGB extends Component {
     constructor(props) {
         super(props)
     }
 
     render() {
         return <g>
-            <AGRShield></AGRShield>
+            <AGBShield></AGBShield>
             <circle cx={-470} cy={-460} r={50} fill="red" fillOpacity={1}></circle>
             <circle cx={470} cy={-460} r={50} fill="red" fillOpacity={1}></circle>
             <circle cx={470} cy={460} r={50} fill="red" fillOpacity={1}></circle>
@@ -591,7 +591,7 @@ export default class CentralPanel extends Component {
                 </g>
             </g>
             <g transform="translate(1487,750)">
-                <AGR></AGR>
+                <AGB></AGB>
             </g>
         </g>
     }

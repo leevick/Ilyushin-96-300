@@ -617,7 +617,7 @@ def createPolyLine(coords, name: str) -> bpy.types.Object:
     return curveOB
 
 
-class AGR(BlenderModel):
+class AGB(BlenderModel):
     def __init__(self) -> None:
         super().__init__()
 
@@ -637,7 +637,7 @@ class AGR(BlenderModel):
                   (0, shieldOuterRadius, 0)
                   ]
 
-        curveOB = createPolyLine(coords, "agr_ball")
+        curveOB = createPolyLine(coords, "agb_ball")
         curveOB.select_set(True)
         screwAroundZ(curveOB)
 
@@ -652,7 +652,7 @@ class AGR(BlenderModel):
         bpy.ops.object.editmode_toggle()
 
         shield: bpy.types.Object = bpy.context.active_object
-        shield.data.materials.append(generateClockFace("AGRShield"))
+        shield.data.materials.append(generateClockFace("AGBShield"))
 
         # Add container
 
@@ -660,7 +660,7 @@ class AGR(BlenderModel):
             [(0, 0, -shieldDepth - 2 * ballRadius),
              (0, shieldOuterRadius, -shieldDepth - 2 * ballRadius),
              (0, shieldOuterRadius, 0),
-             ], "agr_container")
+             ], "agb_container")
         curveContainer.select_set(True)
         screwAroundZ(curveContainer)
 
@@ -673,7 +673,7 @@ class AGR(BlenderModel):
         bpy.ops.mesh.primitive_uv_sphere_add(
             radius=ballRadius, location=(0, 0, 0), segments=32, ring_count=16)
         ball: bpy.types.Object = bpy.context.active_object
-        ball.data.materials.append(generateClockFace("AGRBall"))
+        ball.data.materials.append(generateClockFace("AGBBall"))
         bpy.ops.object.shade_smooth()
 
         bpy.ops.object.editmode_toggle()
@@ -725,7 +725,7 @@ class AGR(BlenderModel):
         # Animation
         ball.animation_data_create()
         ball.animation_data.action = bpy.data.actions.new(
-            name="agr_pitch")
+            name="agb_pitch")
         fcurve = ball.animation_data.action.fcurves.new(
             data_path="rotation_euler", index=0
         )
@@ -742,7 +742,7 @@ class AGR(BlenderModel):
 
         ball_empty.animation_data_create()
         ball_empty.animation_data.action = bpy.data.actions.new(
-            name="agr_roll")
+            name="agb_roll")
         fcurve = ball_empty.animation_data.action.fcurves.new(
             data_path="rotation_euler", index=2
         )

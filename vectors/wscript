@@ -6,7 +6,7 @@ from waflib.Context import Context
 
 
 instruments = ['US2', 'RMI', 'RMIFace', 'RMICompass',
-               'AGRShield', 'AGRBall', 'CentralPanelBackgroud', 'VBMOutline']
+               'AGBShield', 'AGBBall', 'CentralPanelBackgroud', 'VBMOutline']
 
 
 def configure(ctx):

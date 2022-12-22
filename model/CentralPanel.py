@@ -11,7 +11,7 @@ if not dir in sys.path:
     sys.path.append(dir)
 
 from blender_model import BlenderModel
-from models import generateClockFace, extrudeFace, US2, digHole, digHoleObj, RMI, AGR, VBM, moveOrigin
+from models import generateClockFace, extrudeFace, US2, digHole, digHoleObj, RMI, AGB, VBM, moveOrigin
 from SignalBoard import SignalBoard
 from utils import add_plane, add_cube
 
@@ -58,12 +58,12 @@ class CentralPanel(BlenderModel):
         rmiModel = rmi.create()
         rmiModel.location = (0.14188, 0.00598, 0)
 
-        # AGR
+        # AGB
         digHole(panel, 45e-3, 1, (-0.04292, 0.02598, 0))
 
-        agr: bpy.types.Object = AGR().create()
+        agb: bpy.types.Object = AGB().create()
 
-        agr.location = (-0.04292, 0.02598, 0)
+        agb.location = (-0.04292, 0.02598, 0)
 
         # VBM
         # vbm : bpy.types.Object = VBM().create()
@@ -114,7 +114,7 @@ class CentralPanel(BlenderModel):
 
         us2.model.parent = panel
         rmiModel.parent = panel
-        agr.parent = panel
+        agb.parent = panel
         vbm.parent = panel
 
         panel.select_set(True)

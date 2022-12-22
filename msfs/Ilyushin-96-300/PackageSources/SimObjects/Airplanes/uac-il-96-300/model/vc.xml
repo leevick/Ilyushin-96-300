@@ -8,8 +8,8 @@
 		<LOD minSize="1" ModelFile="vc.gltf"/>
 	</LODS>
 	<Animation name="RMIHeading" guid="BC935F16-43CD-4046-8EF3-06E44A5940AB" length="360" type="Sim" typeParam2="RMIHeading" typeParam="AutoPlay"/>
-	<Animation name="agr_roll" guid="E2E339A6-FCBF-43a9-A780-3473E03AB54B" length="90" type="Sim" typeParam2="agr_roll" typeParam="AutoPlay"/>
-	<Animation name="agr_pitch" guid="E6A307E6-D0D8-4ca0-8A8E-77B7EA22FFB9" length="90" type="Sim" typeParam2="agr_pitch" typeParam="AutoPlay"/>
+	<Animation name="agb_roll" guid="E2E339A6-FCBF-43a9-A780-3473E03AB54B" length="90" type="Sim" typeParam2="agb_roll" typeParam="AutoPlay"/>
+	<Animation name="agb_pitch" guid="E6A307E6-D0D8-4ca0-8A8E-77B7EA22FFB9" length="90" type="Sim" typeParam2="agb_pitch" typeParam="AutoPlay"/>
 	<Animation name="IAS" guid="E6A307E6-D0D8-4ca0-8A8E-77B7EA22FFBA" length="800" type="Sim" typeParam2="IAS" typeParam="AutoPlay"/>
 	<PartInfo>
 		<Name>RMIHeading</Name>
@@ -26,7 +26,7 @@
 		</Animation>
 	</PartInfo>
 	<PartInfo>
-		<Name>agr_roll</Name>
+		<Name>agb_roll</Name>
 		<AnimLength>90</AnimLength>
 		<Animation>
 			<Parameter>
@@ -40,7 +40,7 @@
 		</Animation>
 	</PartInfo>
 	<PartInfo>
-		<Name>agr_pitch</Name>
+		<Name>agb_pitch</Name>
 		<AnimLength>90</AnimLength>
 		<Animation>
 			<Parameter>
