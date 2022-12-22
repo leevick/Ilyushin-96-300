@@ -121,7 +121,7 @@ class CentralPanel(BlenderModel):
         bpy.ops.object.light_add(
             location=(0, 1, 0.5), rotation=(-math.pi / 2 + math.atan(0.5), 0, 0), type="AREA")
         light = bpy.data.lights[0]
-        light.energy = 100
+        light.energy = 10
         light.color = (1, 1, 1)
 
         # Set GPU render

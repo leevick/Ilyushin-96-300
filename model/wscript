@@ -13,6 +13,10 @@ def configure(ctx):
 
 
 def build(ctx):
+    sources = glob("./build/../model/*.py")
+    abs = []
+    for s in sources:
+        abs.append(Path(s).relative_to(Path("./build")).as_posix())
     for i in instruments:
         ctx(rule=f"blender -b -P ../model/generate.py -- {i}",
-            source=["../model/generate.py", "../model/models.py", "../model/Materials.py", f"../model/{i}.py"], target=f"../{i}.blend")
+            source=abs, target=f"../{i}.blend")
