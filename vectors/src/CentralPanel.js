@@ -537,7 +537,32 @@ export default class CentralPanel extends Component {
             <g name="vp">
                 <circle name="" cx={2465} cy={1500} r={400} fill={"white"} fillOpacity={1.0} ></circle>
             </g>
-            <rect x={820} y={1330} width={this.sig_w * 4} height={this.sig_h * 4} fillOpacity={1.0}></rect>
+            <g transform={`translate(${this.width / 2},${this.height / 2})`}>
+                <rect x={-1096.2} y={320.2} width={this.sig_w * 4} height={this.sig_h * 4} fillOpacity={1.0}></rect>
+                <g transform={`translate(${-1096.2 + this.sig_w / 2},${320.2 + this.sig_h / 2})`}>
+                    <g id="EngineFailure" viewBox="-120 -65 240 130">
+                        <text x={-50} y={-30} fontWeight={"bold"} letterSpacing={-3} textLength={100} fontSize={50} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="rgb(255,0,0)" fill="rgb(255,0,0)" fontFamily="lenya69">ДВИГ</text>
+                        <text x={-62.5} y={30} fontWeight={"bold"} letterSpacing={-3} textLength={125} fontSize={50} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="rgb(255,0,0)" fill="rgb(255,0,0)" fontFamily="lenya69">ОТКАЗ</text>
+                    </g>
+                </g>
+                <g transform={`translate(${-1096.2 + this.sig_w / 2},${320.2 + this.sig_h / 2 + this.sig_h})`}>
+                    <g id="EngineFault" viewBox="-120 -65 240 130">
+                        <text x={-50} y={-30} fontWeight={"bold"} letterSpacing={-3} textLength={100} fontSize={50} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="rgb(255,255,0)" fill="rgb(255,255,0)" fontFamily="lenya69">ДВИГ</text>
+                        <text x={-75} y={30} fontWeight={"bold"} letterSpacing={-3} textLength={150} fontSize={50} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="rgb(255,255,0)" fill="rgb(255,255,0)" fontFamily="lenya69">НЕИСПР</text>
+                    </g>
+                </g>
+                <g transform={`translate(${-1096.2 + this.sig_w / 2},${320.2 + this.sig_h / 2 + 2 * this.sig_h})`}>
+                    <g id="ReverseOn" viewBox="-120 -65 240 130">
+                        <text x={-75} y={-30} fontWeight={"bold"} letterSpacing={-3} textLength={150} fontSize={50} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="rgb(0,0,255)" fill="rgb(0,0,255)" fontFamily="lenya69">РЕЗЕРС</text>
+                        <text x={-37.5} y={30} fontWeight={"bold"} letterSpacing={-3} textLength={75} fontSize={50} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="rgb(0,0,255)" fill="rgb(0,0,255)" fontFamily="lenya69">ВКЛ</text>
+                    </g>
+                </g>
+                <g transform={`translate(${-1096.2 + this.sig_w / 2},${320.2 + this.sig_h / 2 + 3 * this.sig_h})`}>
+                    <g id="EngineSurge" viewBox="-120 -65 240 130">
+                        <text x={-75} y={0} fontWeight={"bold"} letterSpacing={-3} textLength={150} fontSize={50} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="rgb(255,255,0)" fill="rgb(255,255,0)" fontFamily="lenya69">ПОМПАЖ</text>
+                    </g>
+                </g>
+            </g>
             <rect x={3225} y={1500} width={this.sig_w * 2} height={this.sig_h * 3} fillOpacity={1.0}></rect>
             <circle cx={2465} cy={1500} r={400} fill={"white"} fillOpacity={1.0} ></circle>
 
