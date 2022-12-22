@@ -16,7 +16,6 @@ from SignalBoard import SignalBoard
 from utils import add_plane, add_cube
 
 
-
 class CentralPanel(BlenderModel):
 
     def __init__(self) -> None:
@@ -91,6 +90,25 @@ class CentralPanel(BlenderModel):
         sigTrimDown.location = (205e-4 - width * 1.1 / 10000,
                                 height * 1.1 / 10000 - (1545e-4 + 165e-4 / 2), 0)
         sigTrimDown.parent = panel
+
+        # Engine Signals
+
+        cut = add_cube((295e-4 * 4, 165e-4 * 4, 1), (-1096.2e-4 +
+                       2 * 295e-4, -320.2e-4 - 2 * 165e-4, 0))
+
+        digHoleObj(panel, cut)
+
+        signalTexts = ["EngineFailure", "EngineFailure", "EngineFailure", "EngineFailure",
+                       "EngineFault", "EngineFault", "EngineFault", "EngineFault",
+                       "ReverseOn", "ReverseOn", "ReverseOn", "ReverseOn",
+                       "EngineSurge", "EngineSurge", "EngineSurge", "EngineSurge", ]
+
+        for i in range(4):
+            for j in range(4):
+                sig = SignalBoard(signalTexts[i + 4 * j]).create()
+                sig.location = (-1096.2e-4 + 0.5 * 295e-4 + i *
+                                295e-4, -320.2e-4 - 0.5 * 165e-4 - j * 165e-4, 0)
+                sig.parent = panel
 
         bpy.ops.object.select_all(action="DESELECT")
 
