@@ -14,5 +14,6 @@ def build(ctx):
     ctx(rule="cp -r texture ../msfs/Ilyushin-96-300/PackageSources/SimObjects/Airplanes/uac-il-96-300/")
     ctx.recurse("model")
     ctx.add_group()
-    ctx(rule="blender -b -P ../export_vc.py -- ${SRC} ../msfs/Ilyushin-96-300/PackageSources/SimObjects/Airplanes/uac-il-96-300/model/vc",source="CentralPanel.blend")
+    ctx(rule="blender -b -P ../export_vc.py -- CentralPanel.blend ../msfs/Ilyushin-96-300/PackageSources/SimObjects/Airplanes/uac-il-96-300/model/vc",
+        source=["CentralPanel.blend", "export_vc.py"])
     ctx.add_group()

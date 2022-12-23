@@ -12,3 +12,4 @@ texture
 **/model/*.bin
 **/model/**.gltf
 **/model/**.png
+**/model/*.xml

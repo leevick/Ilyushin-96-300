@@ -5,6 +5,8 @@ import os
 import math
 import pathlib
 import random
+from io_scene_gltf2_msfs.blender.msfs_material_prop_update import MSFS_Material_Property_Update
+from io_scene_gltf2_msfs.blender.msfs_material_function import MSFS_Material
 
 dir = pathlib.Path(__file__).parent.as_posix()
 if not dir in sys.path:
@@ -147,7 +149,7 @@ def generateClockBase() -> bpy.types.Material:
         return matBase
 
 
-def generateClockGlass(color=(1, 1, 1, 0)) -> bpy.types.Material:
+def generateClockGlass(color=(1, 1, 1, 0.001)) -> bpy.types.Material:
     index = bpy.data.materials.find(f"clock_glass_{hash(color)}")
     if index != -1:
         return bpy.data.materials[index]
@@ -155,11 +157,13 @@ def generateClockGlass(color=(1, 1, 1, 0)) -> bpy.types.Material:
         # Create glass material
         matGlass = bpy.data.materials.new(name=f"clock_glass_{hash(color)}")
         matGlass.use_nodes = True
-        nodes = matGlass.node_tree.nodes
-        links = matGlass.node_tree.links
-        nodes[0].inputs['Base Color'].default_value = color
-        nodes[0].inputs['Transmission'].default_value = 1
-        nodes[0].inputs['Roughness'].default_value = 0.01
+        matGlass.msfs_material_type = "msfs_glass"
+        matGlass.msfs_base_color_factor = color
+        msfs_mat = MSFS_Material(matGlass)
+
+        MSFS_Material_Property_Update.update_msfs_material_type(
+            matGlass, bpy.context)
+
         return matGlass
 
 
@@ -436,13 +440,13 @@ class RMI(BlenderModel):
         bevel(left_window, 2e-3, 6)
         extrudeFace(left_window, 5e-4)
         left_window.data.materials.append(
-            generateClockGlass((0.8, 0.8, 0.8, 0)))
+            generateClockGlass((0, 0, 0, 0.90)))
 
         right_window = add_plane((270e-4, 120e-4), (145e-4, 515e-4, 0))
         bevel(right_window, 2e-3, 6)
         extrudeFace(right_window, 5e-4)
         right_window.data.materials.append(
-            generateClockGlass((0.8, 0.8, 0.8, 0)))
+            generateClockGlass((0, 0, 0, 0.90)))
 
         leftHandle = importSvg("RMILeftHandleShape")
         bpy.context.view_layer.objects.active = leftHandle

@@ -27,4 +27,4 @@ model: BlenderModel = classModel()
 model.create()
 bpy.ops.wm.save_mainfile(
     filepath=f"{os.getcwd()}/{argv[0]}.blend")
-model.render(argv[0])
+# model.render(argv[0])
