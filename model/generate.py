@@ -10,6 +10,7 @@ if not dir in sys.path:
 from CentralPanel import CentralPanel
 from SignalBoard import SignalBoard
 from models import BlenderModel
+from Monitor import Monitor
 
 
 argv = sys.argv
