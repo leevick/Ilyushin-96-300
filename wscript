@@ -11,6 +11,7 @@ def configure(ctx):
         ctx.env.INK = "/Applications/Inkscape.app/Contents/MacOS/inkscape"
     else:
         ctx.env.BL = "blender"
+        ctx.env.INK = "inkscape"
     pass
 
 
