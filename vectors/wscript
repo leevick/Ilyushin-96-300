@@ -35,7 +35,8 @@ def build(ctx: Context):
         targets.append(Path(p).name)
 
     for i in range(len(sources)):
-        ctx(rule=f"inkscape -o ${{TGT}} -d 300 {sources[i]}",
+        ctx(rule=f"{ctx.env.INK} -o ${{TGT}} -d 300 {sources[i]}",
             target=f"../texture/{targets[i].split('.')[0]}.png")
         ctx.add_group()
-        ctx(rule=f"python ../vectors/resize.py ./texture/{targets[i].split('.')[0]}.png")
+        ctx(
+            rule=f"python ../vectors/resize.py ./texture/{targets[i].split('.')[0]}.png")

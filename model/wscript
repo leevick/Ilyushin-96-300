@@ -4,6 +4,7 @@ from waflib.Context import Context
 from glob import glob
 from pathlib import Path
 import os
+import platform
 
 instruments = ['CentralPanel']
 
@@ -18,5 +19,5 @@ def build(ctx):
     for s in sources:
         abs.append(Path(s).relative_to(Path("./build")).as_posix())
     for i in instruments:
-        ctx(rule=f"blender -b -P ../model/generate.py -- {i}",
+        ctx(rule=f"{ctx.env.BL} -b -P ../model/generate.py -- {i}",
             source=abs, target=f"../{i}.blend")
