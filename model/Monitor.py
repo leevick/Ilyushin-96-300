@@ -81,5 +81,5 @@ class Monitor(BlenderModel):
                 e.select_set(True)
         bpy.ops.transform.resize(value=(1.05, 1.05, 1))
         bpy.ops.object.mode_set(mode='OBJECT')
-
+        self.model = monitor
         return monitor

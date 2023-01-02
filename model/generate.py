@@ -11,6 +11,7 @@ from CentralPanel import CentralPanel
 from SignalBoard import SignalBoard
 from models import BlenderModel
 from Monitor import Monitor
+from PU56 import PU56
 
 
 argv = sys.argv

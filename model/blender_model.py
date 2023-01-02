@@ -9,6 +9,8 @@ if not dir in sys.path:
 
 
 class BlenderModel:
+    model: bpy.types.Object
+
     def __init__(self) -> None:
         pass
 
