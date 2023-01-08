@@ -14,16 +14,18 @@ from blender_model import BlenderModel
 from models import generateClockFace, extrudeFace, US2, digHole, digHoleObj, RMI, AGB, VBM, moveOrigin
 from SignalBoard import SignalBoard
 from utils import add_plane, add_cube, bevel, moveOrigin, digHoleObj, bevelWeight
+from Materials import generateColorBump, generateClockGlass, generateScreenGauge
 
 
 class Monitor(BlenderModel):
 
     width: float = 2000e-4
-    height: float = 2000e-4
+    height: float = 2200e-4
     depth: float = 500e-4
     screenWidth: float = 16e-2
-    screenHeight: float = 14e-2
-    screenDepth: float = 5e-4
+    screenHeight: float = 16e-2
+    glassDepth: float = 5e-4
+    screenDepth: float = 10e-4
     screenRadius: float = 2e-3
     edge_bevel: float = 50e-4
 
@@ -58,8 +60,8 @@ class Monitor(BlenderModel):
 
         cut = add_plane((self.screenWidth, self.screenHeight))
         bevel(cut, self.screenRadius, 6)
-        extrudeFace(cut, 2 * self.screenDepth)
-        cut.location = (0, 0, self.screenDepth)
+        extrudeFace(cut, 2 * self.glassDepth)
+        cut.location = (0, 0, self.glassDepth)
 
         digHoleObj(monitor, cut)
 
@@ -80,6 +82,33 @@ class Monitor(BlenderModel):
                     math.fabs(e.verts[1].co.y) < self.screenHeight / 2 + 1e-3:
                 e.select_set(True)
         bpy.ops.transform.resize(value=(1.05, 1.05, 1))
+
+        bpy.ops.object.mode_set(mode='EDIT')
+        bpy.ops.mesh.select_mode(type='FACE')
+        bpy.ops.mesh.select_all(action="DESELECT")
+
+        bm = bmesh.from_edit_mesh(monitor.data)
+        for f in bm.faces:
+            if math.fabs(f.calc_area() - self.screenWidth * self.screenWidth) < 1e-5:
+                bm.faces.remove(f)
+
+        bpy.ops.mesh.select_all(action="SELECT")
+        bpy.ops.uv.cube_project()
+
         bpy.ops.object.mode_set(mode='OBJECT')
+        monitor.data.materials.append(
+            generateColorBump((0.13, 0.258, 0.296, 1)))
+
+        glass = add_plane((self.screenWidth, self.screenHeight),
+                          (0, 0, -self.glassDepth))
+        glass.data.materials.append(
+            generateClockGlass((0, 0, 0, 0.5)))
+        glass.parent = monitor
+
+        screen = add_plane((1.05 * self.screenWidth, 1.05 * self.screenHeight),
+                           (0, 0, -self.screenDepth))
+        screen.data.materials.append(generateScreenGauge("KPI"))
+        screen.parent = monitor
+
         self.model = monitor
         return monitor

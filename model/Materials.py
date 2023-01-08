@@ -1,5 +1,7 @@
 import bpy
 import os
+from io_scene_gltf2_msfs.blender.msfs_material_prop_update import MSFS_Material_Property_Update
+from io_scene_gltf2_msfs.blender.msfs_material_function import MSFS_Material
 
 
 def generateSignalBoardFrameMaterial() -> bpy.types.Material:
@@ -75,3 +77,60 @@ def generateSignalBoardLightMaterial(name: str) -> bpy.types.Material:
         nodes[0].inputs["Emission Strength"].default_value = 10.0
 
         return sigLight
+
+
+def generateColorBump(color) -> bpy.types.Material:
+    index = bpy.data.materials.find(f"color_bump_{hash(color)}")
+    if index != -1:
+        return bpy.data.materials[index]
+    else:
+        matFace = bpy.data.materials.new(name=f"color_bump_{hash(color)}")
+        matFace.use_nodes = True
+
+        nodes = matFace.node_tree.nodes
+        links = matFace.node_tree.links
+
+        nodes[0].inputs['Roughness'].default_value = 0.9
+        nodes[0].inputs['Specular'].default_value = 0.1
+        nodes[0].inputs['Metallic'].default_value = 0.8
+        nodes[0].inputs['Base Color'].default_value = color
+
+        return matFace
+
+
+def generateClockGlass(color=(1, 1, 1, 0.001)) -> bpy.types.Material:
+    index = bpy.data.materials.find(f"clock_glass_{hash(color)}")
+    if index != -1:
+        return bpy.data.materials[index]
+    else:
+        # Create glass material
+        matGlass = bpy.data.materials.new(name=f"clock_glass_{hash(color)}")
+        matGlass.use_nodes = True
+        matGlass.msfs_material_type = "msfs_glass"
+        matGlass.msfs_base_color_factor = color
+        matGlass.msfs_roughness_factor = 0.05
+        msfs_mat = MSFS_Material(matGlass)
+
+        MSFS_Material_Property_Update.update_msfs_material_type(
+            matGlass, bpy.context)
+
+        return matGlass
+
+
+def generateScreenGauge(name: str) -> bpy.types.Material:
+    index = bpy.data.materials.find(f"$SCREEN_{name.upper()}")
+    if index != -1:
+        return bpy.data.materials[index]
+    else:
+        # Create glass material
+        matGlass = bpy.data.materials.new(name=f"$SCREEN_{name.upper()}")
+        matGlass.use_nodes = True
+        matGlass.msfs_material_type = "msfs_standard"
+        matGlass.msfs_base_color_factor = (0, 0, 0, 1)
+        matGlass.msfs_metallic_factor = 0.0
+        msfs_mat = MSFS_Material(matGlass)
+
+        MSFS_Material_Property_Update.update_msfs_material_type(
+            matGlass, bpy.context)
+
+        return matGlass

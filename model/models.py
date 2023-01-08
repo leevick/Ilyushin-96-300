@@ -5,8 +5,6 @@ import os
 import math
 import pathlib
 import random
-from io_scene_gltf2_msfs.blender.msfs_material_prop_update import MSFS_Material_Property_Update
-from io_scene_gltf2_msfs.blender.msfs_material_function import MSFS_Material
 
 dir = pathlib.Path(__file__).parent.as_posix()
 if not dir in sys.path:
@@ -14,6 +12,7 @@ if not dir in sys.path:
 
 from blender_model import BlenderModel
 from utils import add_plane
+from Materials import generateClockGlass
 
 
 def generatePanelBackgroud(name: str) -> bpy.types.Material:
@@ -147,24 +146,6 @@ def generateClockBase() -> bpy.types.Material:
         links.new(bump.outputs['Normal'], nodes[0].inputs['Normal'])
         links.new(musgrave.outputs[0], bump.inputs[2])
         return matBase
-
-
-def generateClockGlass(color=(1, 1, 1, 0.001)) -> bpy.types.Material:
-    index = bpy.data.materials.find(f"clock_glass_{hash(color)}")
-    if index != -1:
-        return bpy.data.materials[index]
-    else:
-        # Create glass material
-        matGlass = bpy.data.materials.new(name=f"clock_glass_{hash(color)}")
-        matGlass.use_nodes = True
-        matGlass.msfs_material_type = "msfs_glass"
-        matGlass.msfs_base_color_factor = color
-        msfs_mat = MSFS_Material(matGlass)
-
-        MSFS_Material_Property_Update.update_msfs_material_type(
-            matGlass, bpy.context)
-
-        return matGlass
 
 
 class US2(BlenderModel):
