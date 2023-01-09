@@ -35,7 +35,7 @@ def build(ctx: Context):
         targets.append(Path(p).name)
 
     for i in range(len(sources)):
-        ctx(rule=f"{ctx.env.INK} -o ${{TGT}} -d 300 {sources[i]}",
+        ctx(rule=f"{ctx.env.INK} --export-png-color-mode=RGBA_16 -o ${{TGT}} -d 300 {sources[i]}",
             target=f"../texture/{targets[i].split('.')[0]}.png")
         ctx.add_group()
         ctx(
