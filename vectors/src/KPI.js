@@ -23,7 +23,7 @@ export default class KPI extends Component {
         return <g id="KPI" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
             <image x={-800} y={-800} width={1600} height={1600} href={kpi}></image>
             {/* <rect x={-800} y={-800} width={1600} height={1600} fill="black"></rect> */}
-            <path d={`M -800 -800 l 0 1600 l 1600 0 l 0 -1600 Z M ${-this.ahWidth / 2 + this.ahX} ${-this.ahHeight / 2 + this.ahR + this.ahY} Z`} fill="black"></path>
+            <path d={`M -800 -800 l 0 1600 l 1600 0 l 0 -1600 Z M ${-this.ahWidth / 2 + this.ahX} ${-this.ahHeight / 2 + this.ahR + this.ahY} a ${this.ahR} ${this.ahR} 0 0 1 ${this.ahR} ${-this.ahR} l ${this.ahWidth - 2 * this.ahR} 0 a ${this.ahR} ${this.ahR} 0 0 1 ${this.ahR} ${this.ahR} l 0 ${this.ahHeight - 2 * this.ahR} a ${this.ahR} ${this.ahR} 0 0 1 ${-this.ahR} ${this.ahR} l ${-this.ahWidth + 2 * this.ahR} 0 a ${this.ahR} ${this.ahR} 0 0 1 ${-this.ahR} ${-this.ahR} Z`} fill="black" stroke="yellow" strokeWidth={10} strokeOpacity={0}></path>
             <rect rx={this.ahR} ry={this.ahR} x={-this.ahWidth / 2 + this.ahX} y={-this.ahHeight / 2 + this.ahY}
                 width={this.ahWidth} height={this.ahHeight} fill="rgb(28,161,254)"></rect>
             {/* <rect x={-this.ahWidth / 2} y={-this.ahWidth / 2}
