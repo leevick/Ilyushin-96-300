@@ -1,7 +1,8 @@
 import "./App.css"
 import CentralPanel from "./CentralPanel.js"
+import KPI from "./KPI.js"
 
-const instruments = [new CentralPanel()]
+const instruments = [new CentralPanel(), new KPI()]
 // const instruments = [<CentralPanel/>]
 
 export default function App() {
