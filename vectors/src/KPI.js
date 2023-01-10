@@ -24,12 +24,23 @@ export default class KPI extends Component {
         const topBarSemiWidth = 540
         const topBarHeight = 120
         const sideBarSemiHeight = 400
+        const rollTickColors = ["red", "red", "yellow", "white", "white", "white", "white", "white", "yellow", "red", "red"]
+        const rollTickLenght = [45, 45, 45, 30, 30, 45, 30, 30, 45, 45, 45]
 
         return <g id="KPI" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
             <image x={-800} y={-800} width={1600} height={1600} href={kpi}></image>
+
+            <rect rx={this.ahR} ry={this.ahR} x={-this.ahWidth / 2 + this.ahX} y={-this.ahHeight / 2 + this.ahY}
+                width={this.ahWidth} height={this.ahHeight} fill="rgb(28,161,254)"></rect>
+            <g transform={`translate(${this.ahX},${this.ahY})`}>
+                <circle rx={0} ry={0} r={20} strokeWidth={10} stroke="white" fill="none"></circle>
+                {
+                    [-60, -45, -30, -20, -10, 0, 10, 20, 30, 45, 60].map((a, i) => <line strokeOpacity={1} x1={0} x2={0} y1={380} y2={380 + rollTickLenght[i]} stroke={rollTickColors[i]} strokeWidth={5} transform={`rotate(${a})`}></line>)
+                }
+
+            </g>
+
             <path d={`M -800 -800 l 0 1600 l 1600 0 l 0 -1600 Z M ${-this.ahWidth / 2 + this.ahX} ${-this.ahHeight / 2 + this.ahR + this.ahY} a ${this.ahR} ${this.ahR} 0 0 1 ${this.ahR} ${-this.ahR} l ${this.ahWidth - 2 * this.ahR} 0 a ${this.ahR} ${this.ahR} 0 0 1 ${this.ahR} ${this.ahR} l 0 ${this.ahHeight - 2 * this.ahR} a ${this.ahR} ${this.ahR} 0 0 1 ${-this.ahR} ${this.ahR} l ${-this.ahWidth + 2 * this.ahR} 0 a ${this.ahR} ${this.ahR} 0 0 1 ${-this.ahR} ${-this.ahR} Z`} fill="black" stroke="yellow" strokeWidth={10} strokeOpacity={0}></path>
-            {/* <rect rx={this.ahR} ry={this.ahR} x={-this.ahWidth / 2 + this.ahX} y={-this.ahHeight / 2 + this.ahY}
-                width={this.ahWidth} height={this.ahHeight} fill="rgb(28,161,254)"></rect> */}
             {/* <rect x={-this.ahWidth / 2} y={-this.ahWidth / 2}
                 width={this.ahWidth} height={this.ahWidth} fill="rgb(128,55,43)"></rect> */}
             <g transform={`translate(${this.ahX},${this.ahY})`}>
@@ -49,6 +60,7 @@ export default class KPI extends Component {
                 <rect fillOpacity={1} x={-600} y={-sideBarSemiHeight} height={2 * sideBarSemiHeight} width={180} fill="grey"></rect>
                 <rect fillOpacity={1} x={420} y={-sideBarSemiHeight} height={2 * sideBarSemiHeight} width={210} fill="grey"></rect>
             </g>
+            <path fill="grey" strokeWidth={5} d={`M 800 ${this.ahY - sideBarSemiHeight + 100} l -60 -100 l -105 0 l 0 220 l 70 90 l 0 180 l -70 90 l 0 220 l 105 0 l 60 -100 Z`}></path>
         </g>
     }
 }
