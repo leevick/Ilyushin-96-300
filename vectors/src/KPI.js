@@ -11,11 +11,6 @@ export default class KPI extends Component {
         this.left = -800
         this.top = -800
 
-        this.ahWidth = 730
-        this.ahHeight = 850
-        this.ahY = -145
-        this.ahX = -12
-        this.ahR = 75
 
 
     }
@@ -25,6 +20,11 @@ export default class KPI extends Component {
         const roll = 0
         const pitchY = 750 * Math.sin(pitch / 180 * Math.PI)
 
+        const ahWidth = 730
+        const ahHeight = 850
+        const ahY = -145
+        const ahX = -12
+        const ahR = 75
         const topBarSemiWidth = 540
         const topBarHeight = 120
         const sideBarSemiHeight = 400
@@ -38,7 +38,7 @@ export default class KPI extends Component {
         return <g id="KPI" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
             <image x={-800} y={-800} width={1600} height={1600} href={kpi}></image>
 
-            <g transform={`translate(${this.ahX},${this.ahY})`}>
+            <g transform={`translate(${ahX},${ahY})`}>
                 <g transform={`translate(0,${pitchY}) rotate(${roll},0,${-pitchY})`}>
                     <rect fillOpacity={1} x={-800} y={-800} width={1600} height={800} fill="rgb(28,161,254)"></rect>
                     <rect fillOpacity={1} x={-800} y={0} width={1600} height={800} fill="rgb(128,55,43)"></rect>
@@ -52,14 +52,14 @@ export default class KPI extends Component {
                     }
                 </g>
             </g>
-            <g transform={`translate(${this.ahX},${this.ahY})`}>
+            <g transform={`translate(${ahX},${ahY})`}>
                 <g transform={`rotate(${roll})`}>
-                    <path d="M 0 -420 l 18 36 l -18 36 l -18 -36 Z" stroke="white" strokeWidth={5} fill="none"></path>
+                    <path d="M 0 -420 l 15 30 l -15 30 l -15 -30 Z" stroke="white" strokeWidth={5} fill="none"></path>
                     <path d="M 0 380 l -18 -50 l 36 0 Z" fill="white"></path>
                 </g>
             </g>
 
-            <g transform={`translate(${this.ahX},${this.ahY})`}>
+            <g transform={`translate(${ahX},${ahY})`}>
                 <circle rx={0} ry={0} r={20} strokeWidth={10} stroke="white" fill="none"></circle>
                 {
                     [-60, -45, -30, -20, -10, 0, 10, 20, 30, 45, 60].map((a, i) => <line strokeOpacity={1} x1={0} x2={0} y1={380} y2={380 + rollTickLenght[i]} stroke={rollTickColors[i]} strokeWidth={5} transform={`rotate(${a})`}></line>)
@@ -69,8 +69,8 @@ export default class KPI extends Component {
 
             </g>
 
-            <path d={`M -800 -800 l 0 1600 l 1600 0 l 0 -1600 Z M ${-this.ahWidth / 2 + this.ahX} ${-this.ahHeight / 2 + this.ahR + this.ahY} a ${this.ahR} ${this.ahR} 0 0 1 ${this.ahR} ${-this.ahR} l ${this.ahWidth - 2 * this.ahR} 0 a ${this.ahR} ${this.ahR} 0 0 1 ${this.ahR} ${this.ahR} l 0 ${this.ahHeight - 2 * this.ahR} a ${this.ahR} ${this.ahR} 0 0 1 ${-this.ahR} ${this.ahR} l ${-this.ahWidth + 2 * this.ahR} 0 a ${this.ahR} ${this.ahR} 0 0 1 ${-this.ahR} ${-this.ahR} Z`} fill="black" stroke="yellow" strokeWidth={10} strokeOpacity={0}></path>
-            <g transform={`translate(${this.ahX},${this.ahY})`}>
+            <path d={`M -800 -800 l 0 1600 l 1600 0 l 0 -1600 Z M ${-ahWidth / 2 + ahX} ${-ahHeight / 2 + ahR + ahY} a ${ahR} ${ahR} 0 0 1 ${ahR} ${-ahR} l ${ahWidth - 2 * ahR} 0 a ${ahR} ${ahR} 0 0 1 ${ahR} ${ahR} l 0 ${ahHeight - 2 * ahR} a ${ahR} ${ahR} 0 0 1 ${-ahR} ${ahR} l ${-ahWidth + 2 * ahR} 0 a ${ahR} ${ahR} 0 0 1 ${-ahR} ${-ahR} Z`} fill="black" stroke="yellow" strokeWidth={10} strokeOpacity={0}></path>
+            <g transform={`translate(${ahX},${ahY})`}>
                 <path d="M 0 -425 l -14.433756729740644112728719512549 -25 l 28.867513459481288225457439025098 0 Z" stroke="white" strokeWidth={5} fill="none"></path>
                 <rect fill="grey" x={-topBarSemiWidth} y={-600} width={2 * topBarSemiWidth} height={topBarHeight} fillOpacity={1}></rect>
                 {
@@ -79,6 +79,9 @@ export default class KPI extends Component {
                 {
                     [1, 2].map((i) => <line y1={-600} y2={-600 + topBarHeight} x1={-topBarSemiWidth + i * 360} x2={-topBarSemiWidth + i * 360} stroke="white" strokeWidth={5}></line>)
                 }
+                <g transform="translate(0,446)">
+                    <path fillOpacity={1} fill="rgb(255,0,255)" d="M 0 -15 l 30 15 l -30 15 l -30 -15 Z"></path>
+                </g>
                 {
                     [0, 1, 3, 4].map((i) =>
                         <circle cx={-190 + i * 95} cy={446} r={12} strokeWidth={6} stroke="white" fill="none"></circle>
@@ -91,8 +94,9 @@ export default class KPI extends Component {
                 <line stroke="white" strokeWidth={5} x1={-slideBarSemiWidth} x2={-slideBarSemiWidth} y1={475} y2={525}></line>
                 <line stroke="white" strokeWidth={5} x1={slideBarSemiWidth} x2={slideBarSemiWidth} y1={475} y2={525}></line>
                 <circle fill="rgb(0,255,0)" r={20} strokeWidth={6} cx={0} cy={500}></circle>
+                <line stroke="white" strokeWidth={5} x1={0} x2={0} y1={425} y2={525}></line>
             </g>
-            <path fill="grey" strokeWidth={5} d={`M 800 ${this.ahY - sideBarSemiHeight + 100} l -60 -100 l -105 0 l 0 220 l 70 90 l 0 180 l -70 90 l 0 220 l 105 0 l 60 -100 Z`}></path>
+            <path fill="grey" strokeWidth={5} d={`M 800 ${ahY - sideBarSemiHeight + 100} l -60 -100 l -105 0 l 0 220 l 70 90 l 0 180 l -70 90 l 0 220 l 105 0 l 60 -100 Z`}></path>
         </g>
     }
 }
