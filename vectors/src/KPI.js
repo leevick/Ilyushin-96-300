@@ -19,6 +19,8 @@ export default class KPI extends Component {
         const pitch = 0
         const roll = 0
         const pitchY = 750 * Math.sin(pitch / 180 * Math.PI)
+        const maxAoA = 15
+        const AoA = 4.5
 
         const ahWidth = 730
         const ahHeight = 850
@@ -87,7 +89,26 @@ export default class KPI extends Component {
                         <circle cx={-190 + i * 95} cy={446} r={12} strokeWidth={6} stroke="white" fill="none"></circle>
                     )
                 }
+                {/* Angle of Attack*/}
                 <rect x={-755} y={-sideBarSemiHeight} height={2 * sideBarSemiHeight} width={120} fill="grey"></rect>
+                {
+                    [-5, 0, 5, 10, 15, 20, 25].map((aoa, i) => <line x1={-635} x2={-680} y1={-aoa * 20 + 100} y2={-aoa * 20 + 100} stroke={aoa >= maxAoA ? "red" : "white"} strokeWidth={8}></line>)
+                }
+                <line x1={-635} x2={-615} y1={-maxAoA * 20 + 100} y2={-maxAoA * 20 + 100} stroke={"red"} strokeWidth={8}></line>
+                {
+                    [0, 10, 20].map((aoa, i) => <text dominantBaseline="central" fontFamily="lenya69" x={aoa === 0 ? -725 : -740} y={-aoa * 20 + 100} fontSize={60} fill={aoa >= maxAoA ? "red" : "white"} stroke={aoa >= maxAoA ? "red" : "white"} strokeWidth={2}>{aoa}</text>)
+                }
+                {
+                    [0, 5, 10, 15].map((baseAoA, i) =>
+                        [1, 2, 3, 4].map((aoa, j) => <line x1={-635} x2={-655} y1={-(aoa + baseAoA) * 20 + 100} y2={-(aoa + baseAoA) * 20 + 100} stroke={(aoa + baseAoA) >= maxAoA ? "red" : "white"} strokeWidth={8}></line>)
+                    )
+                }
+                <line x1={-635} x2={-635} y1={-404} y2={-(maxAoA) * 20 + 104} stroke="red" strokeWidth={8}></line>
+                <line x1={-635} x2={-635} y1={400} y2={-(maxAoA) * 20 + 104} stroke="white" strokeWidth={8}></line>
+                <g transform={`translate(${-655},${-AoA * 20 + 100})`}>
+                    <path d="M 0 0 l -40 -20 l 0 40 Z" fill="rgb(0,255,0)"></path>
+                </g>
+                {/* Airspeed */}
                 <rect fillOpacity={1} x={-600} y={-sideBarSemiHeight} height={2 * sideBarSemiHeight} width={180} fill="grey"></rect>
                 <rect fillOpacity={1} x={420} y={-sideBarSemiHeight} height={2 * sideBarSemiHeight} width={210} fill="grey"></rect>
                 <rect fillOpacity={1} x={-slideBarSemiWidth} y={475} height={slideBarHeight} width={2 * slideBarSemiWidth} fill="grey"></rect>
