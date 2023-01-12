@@ -10,14 +10,22 @@ export default class KPI extends Component {
         this.height = 1600
         this.left = -800
         this.top = -800
+        this.state = { roll: 0, pitch: 0 }
 
 
 
     }
+
+    componentDidMount() {
+        setInterval(() => {
+            this.setState(prev => ({ ...prev, roll: prev.roll + (Math.random() - 0.5), pitch: prev.pitch + (Math.random() - 0.5) }))
+        }, 20);
+    }
+
     render() {
 
-        const pitch = 0
-        const roll = 0
+        const pitch = this.state.pitch
+        const roll = this.state.roll
         const pitchY = 750 * Math.sin(pitch / 180 * Math.PI)
         const maxAoA = 15
         const AoA = 4.5
@@ -115,7 +123,9 @@ export default class KPI extends Component {
                 </g>
                 {/* Airspeed */}
                 <rect fillOpacity={1} x={-600} y={-sideBarSemiHeight} height={2 * sideBarSemiHeight} width={180} fill="grey"></rect>
+                <path fillOpacity={1} d="M -420 0 l -30 0 l -30 -40 l -140 0 l 0 80 l 140 0 l 30 -40" stroke="rgb(128,255,128)" strokeWidth={8}></path>
                 <text textAnchor="middle" x={-510} y={-sideBarSemiHeight - 10} fontFamily="lenya69" fontSize={100} fill="rgb(100,100,255)">0.770</text>
+                <text textAnchor="start" dominantBaseline="central" y={0} x={-610} fill="white" fontSize={100} fontFamily="lenya69">505</text>
                 {/* Altitude */}
                 <rect fillOpacity={1} x={420} y={-sideBarSemiHeight} height={2 * sideBarSemiHeight} width={210} fill="grey"></rect>
                 <rect fillOpacity={1} x={-slideBarSemiWidth} y={475} height={slideBarHeight} width={2 * slideBarSemiWidth} fill="grey"></rect>
