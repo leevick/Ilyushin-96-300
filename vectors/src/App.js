@@ -2,11 +2,11 @@ import "./App.css"
 import CentralPanel from "./CentralPanel.js"
 import KPI from "./KPI.js"
 
-const instruments = [new CentralPanel(), new KPI()]
-// const instruments = [<CentralPanel/>]
-
 export default function App() {
-    return instruments.map(i => (<svg width={`${i.width / 10.0}mm`} height={`${i.height / 10.0}mm`} viewBox={`${i.left} ${i.top} ${i.width} ${i.height}`}>{
-        i.render()
-    }</svg>))
+    return [<svg width={"160mm"} height={"160mm"} viewBox="-800 -800 1600 1600">
+        <KPI></KPI>
+    </svg>,
+    <svg width={`${2.2 * 1742 / 10.0}mm`} height={`${2.2 * 918 / 10.0}mm`} viewBox={`0 0 ${2.2 * 1742} ${2.2 * 918}`}>
+        <CentralPanel></CentralPanel>
+    </svg>]
 }
