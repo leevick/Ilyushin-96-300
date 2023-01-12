@@ -10,7 +10,17 @@ export default class KPI extends Component {
         this.height = 1600
         this.left = -800
         this.top = -800
-        this.state = { roll: 0, pitch: 0 }
+        this.state = {
+            roll: 0,
+            pitch: 0,
+            heading: 40,
+            track: 0,
+            mach: 0,
+            ias: 0,
+            mach_tgt: 0,
+            ias_tgt: 0,
+            aoa: 0
+        }
 
 
 
@@ -18,7 +28,12 @@ export default class KPI extends Component {
 
     componentDidMount() {
         setInterval(() => {
-            this.setState(prev => ({ ...prev, roll: prev.roll + (Math.random() - 0.5), pitch: prev.pitch + (Math.random() - 0.5) }))
+            this.setState(prev => ({
+                ...prev,
+                roll: prev.roll + (Math.random() * 2 - 1),
+                pitch: prev.pitch + (Math.random() * 2 - 1),
+                heading: (prev.heading + Math.random() * 2 - 1) % 360
+            }))
         }, 20);
     }
 
@@ -42,8 +57,8 @@ export default class KPI extends Component {
         const rollTickLenght = [45, 45, 45, 30, 30, 45, 30, 30, 45, 45, 45]
         const slideBarSemiWidth = 165
         const slideBarHeight = 50
-        const pitchSemiWidth = [150, 30, 150, 30, 80, 20, 40, 20, 20, 40, 20, 80, 30, 150, 30, 150]
-        const pitchText = ["30", "", "20", "", "10", "", "", "", "", "", "", "10", "", "20", "", "30"]
+        const pitchSemiWidth = [150, 30, 150, 30, 150, 30, 80, 20, 40, 20, 20, 40, 20, 80, 30, 150, 30, 150, 30, 150]
+        const pitchText = ["40", "", "30", "", "20", "", "10", "", "", "", "", "", "", "10", "", "20", "", "30", "", "40"]
 
         return <g id="KPI" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
             <image x={-800} y={-800} width={1600} height={1600} href={kpi}></image>
@@ -53,7 +68,7 @@ export default class KPI extends Component {
                     <rect fillOpacity={1} x={-800} y={-800} width={1600} height={800} fill="rgb(28,161,254)"></rect>
                     <rect fillOpacity={1} x={-800} y={0} width={1600} height={800} fill="rgb(128,55,43)"></rect>
                     {
-                        [-30, -25, -20, -15, -10, -7.5, -5, -2.5, 2.5, 5.0, 7.5, 10, 15, 20, 25, 30].map((a, i) => {
+                        [-40, -35, -30, -25, -20, -15, -10, -7.5, -5, -2.5, 2.5, 5.0, 7.5, 10, 15, 20, 25, 30, 35, 40].map((a, i) => {
                             const tickY = 750 * Math.sin(a / 180 * Math.PI)
                             if (Math.abs(pitchY + tickY) > 350)
                                 return null
@@ -87,13 +102,16 @@ export default class KPI extends Component {
             <path d={`M -800 -800 l 0 1600 l 1600 0 l 0 -1600 Z M ${-ahWidth / 2 + ahX} ${-ahHeight / 2 + ahR + ahY} a ${ahR} ${ahR} 0 0 1 ${ahR} ${-ahR} l ${ahWidth - 2 * ahR} 0 a ${ahR} ${ahR} 0 0 1 ${ahR} ${ahR} l 0 ${ahHeight - 2 * ahR} a ${ahR} ${ahR} 0 0 1 ${-ahR} ${ahR} l ${-ahWidth + 2 * ahR} 0 a ${ahR} ${ahR} 0 0 1 ${-ahR} ${-ahR} Z`} fill="black" stroke="yellow" strokeWidth={10} strokeOpacity={0}></path>
             <g transform={`translate(${ahX},${ahY})`}>
                 <path d="M 0 -425 l -14.433756729740644112728719512549 -25 l 28.867513459481288225457439025098 0 Z" stroke="white" strokeWidth={5} fill="none"></path>
-                <rect fill="grey" x={-topBarSemiWidth} y={-600} width={2 * topBarSemiWidth} height={topBarHeight} fillOpacity={1}></rect>
-                {
-                    [1, 2].map((i) => <line y1={-600} y2={-600 + topBarHeight} x1={-topBarSemiWidth + i * 360} x2={-topBarSemiWidth + i * 360} stroke="white" strokeWidth={5}></line>)
-                }
-                {
-                    [1, 2].map((i) => <line y1={-600} y2={-600 + topBarHeight} x1={-topBarSemiWidth + i * 360} x2={-topBarSemiWidth + i * 360} stroke="white" strokeWidth={5}></line>)
-                }
+                {/* Top bar */}
+                <rect fill="grey" x={-topBarSemiWidth} y={-600} width={2 * topBarSemiWidth + 10} height={topBarHeight} fillOpacity={1}></rect>
+                <text x={-topBarSemiWidth - 15} y={-600 + 10} dominantBaseline={"hanging"} textAnchor="end" fontFamily="lenya69" fill="rgb(0,255,0)" stroke="rgb(0,255,0)" strokeWidth={2} fontSize={60}>AT</text>
+                <text x={-topBarSemiWidth + 50} y={-600 + 10} dominantBaseline={"hanging"} textAnchor="start" fontFamily="lenya69" fill="rgb(0,255,0)" stroke="rgb(0,255,0)" strokeWidth={2} fontSize={60}>ЧИСЛО M</text>
+                <text x={-topBarSemiWidth + 350} y={-600 + 10} dominantBaseline={"hanging"} textAnchor="start" fontFamily="lenya69" fill="rgb(0,255,0)" stroke="rgb(0,255,0)" strokeWidth={2} fontSize={60}>ГОР НАВ</text>
+                <text x={200} y={-600 + 10} dominantBaseline={"hanging"} textAnchor="start" fontFamily="lenya69" fill="rgb(0,255,0)" stroke="rgb(0,255,0)" strokeWidth={2} fontSize={60}>ВЫСОТА</text>
+                <text x={topBarSemiWidth + 40} y={-600 + 10} dominantBaseline={"hanging"} textAnchor="start" fontFamily="lenya69" fill="rgb(0,255,0)" stroke="rgb(0,255,0)" strokeWidth={2} fontSize={60}>AП</text>
+                <line y1={-600} y2={-600 + topBarHeight} x1={-topBarSemiWidth + 1 * 360 - 25} x2={-topBarSemiWidth + 1 * 360 - 25} stroke="white" strokeWidth={5}></line>
+                <line y1={-600} y2={-600 + topBarHeight} x1={-topBarSemiWidth + 2 * 360} x2={-topBarSemiWidth + 2 * 360} stroke="white" strokeWidth={5}></line>
+
                 <g transform="translate(0,446)">
                     <path fillOpacity={1} fill="rgb(255,0,255)" d="M 0 -15 l 30 15 l -30 15 l -30 -15 Z"></path>
                 </g>
@@ -123,9 +141,11 @@ export default class KPI extends Component {
                 </g>
                 {/* Airspeed */}
                 <rect fillOpacity={1} x={-600} y={-sideBarSemiHeight} height={2 * sideBarSemiHeight} width={180} fill="grey"></rect>
-                <path fillOpacity={1} d="M -420 0 l -30 0 l -30 -40 l -140 0 l 0 80 l 140 0 l 30 -40" stroke="rgb(128,255,128)" strokeWidth={8}></path>
-                <text textAnchor="middle" x={-510} y={-sideBarSemiHeight - 10} fontFamily="lenya69" fontSize={100} fill="rgb(100,100,255)">0.770</text>
+                <path fillOpacity={1} d="M -420 0 l -30 0 l -30 -40 l -140 0 l 0 80 l 140 0 l 30 -40" stroke="rgb(0,255,0)" strokeWidth={8}></path>
+                <text textAnchor="middle" x={-510} y={-sideBarSemiHeight - 10} fontFamily="lenya69" fontSize={100} fill="rgb(0,0,255)">0.770</text>
                 <text textAnchor="start" dominantBaseline="central" y={0} x={-610} fill="white" fontSize={100} fontFamily="lenya69">505</text>
+                <text textAnchor="middle" dominantBaseline={"hanging"} x={-510} y={+sideBarSemiHeight + 20} fontFamily="lenya69" fontSize={60} textLength={150} stroke="white" fill="white">0.771</text>
+
                 {/* Altitude */}
                 <rect fillOpacity={1} x={420} y={-sideBarSemiHeight} height={2 * sideBarSemiHeight} width={210} fill="grey"></rect>
                 <rect fillOpacity={1} x={-slideBarSemiWidth} y={475} height={slideBarHeight} width={2 * slideBarSemiWidth} fill="grey"></rect>
@@ -133,7 +153,24 @@ export default class KPI extends Component {
                 <line stroke="white" strokeWidth={5} x1={slideBarSemiWidth} x2={slideBarSemiWidth} y1={475} y2={525}></line>
                 <circle fill="rgb(0,255,0)" r={20} strokeWidth={6} cx={0} cy={500}></circle>
                 <line stroke="white" strokeWidth={5} x1={0} x2={0} y1={425} y2={525}></line>
+
+                {/* Compass */}
+                <g transform="translate(0,1300)">
+                    <g transform={`rotate(${-this.state.heading})`}>
+                        <circle strokeWidth={5} fillOpacity={1} stroke="white" fill="grey" r={600} cy={0}></circle>
+                        {
+                            Array.from(Array(72)).map((_, i) => <g transform={`rotate(${i * 5})`}>
+                                <line x1={0} x2={0} y1={-600} y2={i % 2 ? -575 : -560} stroke="white" strokeWidth={5}></line>
+                                <text fill="white" stroke="white" x={0} y={-560} fontSize={60} fontFamily="lenya69" textAnchor="middle" dominantBaseline="hanging">{i % 6 ? "" : (i * 5 / 10).toFixed(0).padStart(2, "0")}</text>
+                            </g>)
+                        }
+                    </g>
+                    <path d="M 0 -600 l 0 -10 l 30 -30 l 50 0 l 0 -70 l -160 0 l 0 70 l 50 0 l 30 30" stroke="rgb(0,255,0)" strokeWidth={5} ></path>
+                    <text fill="white" stroke="white" x={0} y={-600 - 75} fontSize={80} fontFamily="lenya69" textAnchor="middle" dominantBaseline="central">{Math.round(this.state.heading).toFixed(0).padStart(3, '0')}</text>
+                </g>
             </g>
+            <rect x={-800} y={770} width={1600} height={30} fillOpacity={1} fill="black"></rect>
+
             <path fill="grey" strokeWidth={5} d={`M 800 ${ahY - sideBarSemiHeight + 100} l -60 -100 l -105 0 l 0 220 l 70 90 l 0 180 l -70 90 l 0 220 l 105 0 l 60 -100 Z`}></path>
         </g>
     }
