@@ -45,12 +45,17 @@ export default class KPI extends Component {
                     <rect fillOpacity={1} x={-800} y={-800} width={1600} height={800} fill="rgb(28,161,254)"></rect>
                     <rect fillOpacity={1} x={-800} y={0} width={1600} height={800} fill="rgb(128,55,43)"></rect>
                     {
-                        [-30, -25, -20, -15, -10, -7.5, -5, -2.5, 2.5, 5.0, 7.5, 10, 15, 20, 25, 30].map((a, i) => <g>
-                            <line x1={-pitchSemiWidth[i]} x2={pitchSemiWidth[i]} y1={750 * Math.sin(a / 180 * Math.PI)} y2={750 * Math.sin(a / 180 * Math.PI)} stroke="white" strokeWidth={5}></line>
-                            <text y={750 * Math.sin(a / 180 * Math.PI)} x={pitchSemiWidth[i] + 10} dominantBaseline="central" stroke="white" fill="white" fontSize={50} textLength={50} fontFamily="lenya69">{pitchText[i]}</text>
-                            <text y={750 * Math.sin(a / 180 * Math.PI)} x={-pitchSemiWidth[i] - 60} dominantBaseline="central" stroke="white" fill="white" fontSize={50} textLength={50} fontFamily="lenya69">{pitchText[i]}</text>
+                        [-30, -25, -20, -15, -10, -7.5, -5, -2.5, 2.5, 5.0, 7.5, 10, 15, 20, 25, 30].map((a, i) => {
+                            const tickY = 750 * Math.sin(a / 180 * Math.PI)
+                            if (Math.abs(pitchY + tickY) > 350)
+                                return null
+                            else return <g>
+                                <line x1={-pitchSemiWidth[i]} x2={pitchSemiWidth[i]} y1={tickY} y2={tickY} stroke="white" strokeWidth={5}></line>
+                                <text y={750 * Math.sin(a / 180 * Math.PI)} x={pitchSemiWidth[i] + 10} dominantBaseline="central" stroke="white" fill="white" fontSize={50} textLength={50} fontFamily="lenya69">{pitchText[i]}</text>
+                                <text y={750 * Math.sin(a / 180 * Math.PI)} x={-pitchSemiWidth[i] - 60} dominantBaseline="central" stroke="white" fill="white" fontSize={50} textLength={50} fontFamily="lenya69">{pitchText[i]}</text>
 
-                        </g>)
+                            </g>
+                        })
                     }
                 </g>
             </g>
