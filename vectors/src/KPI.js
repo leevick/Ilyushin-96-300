@@ -96,7 +96,7 @@ export default class KPI extends Component {
                 }
                 <line x1={-635} x2={-615} y1={-maxAoA * 20 + 100} y2={-maxAoA * 20 + 100} stroke={"red"} strokeWidth={8}></line>
                 {
-                    [0, 10, 20].map((aoa, i) => <text dominantBaseline="central" fontFamily="lenya69" x={aoa === 0 ? -725 : -740} y={-aoa * 20 + 100} fontSize={60} fill={aoa >= maxAoA ? "red" : "white"} stroke={aoa >= maxAoA ? "red" : "white"} strokeWidth={2}>{aoa}</text>)
+                    [0, 10, 20].map((aoa, i) => <text textAnchor="end" dominantBaseline="central" fontFamily="lenya69" x={-695} y={-aoa * 20 + 100} fontSize={60} fill={aoa >= maxAoA ? "red" : "white"} stroke={aoa >= maxAoA ? "red" : "white"} strokeWidth={2}>{aoa}</text>)
                 }
                 {
                     [0, 5, 10, 15].map((baseAoA, i) =>
