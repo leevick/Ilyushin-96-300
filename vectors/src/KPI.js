@@ -110,6 +110,8 @@ export default class KPI extends Component {
                 </g>
                 {/* Airspeed */}
                 <rect fillOpacity={1} x={-600} y={-sideBarSemiHeight} height={2 * sideBarSemiHeight} width={180} fill="grey"></rect>
+                <text textAnchor="middle" x={-510} y={-sideBarSemiHeight - 10} fontFamily="lenya69" fontSize={100} fill="rgb(100,100,255)">0.770</text>
+                {/* Altitude */}
                 <rect fillOpacity={1} x={420} y={-sideBarSemiHeight} height={2 * sideBarSemiHeight} width={210} fill="grey"></rect>
                 <rect fillOpacity={1} x={-slideBarSemiWidth} y={475} height={slideBarHeight} width={2 * slideBarSemiWidth} fill="grey"></rect>
                 <line stroke="white" strokeWidth={5} x1={-slideBarSemiWidth} x2={-slideBarSemiWidth} y1={475} y2={525}></line>
