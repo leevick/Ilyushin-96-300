@@ -157,6 +157,7 @@ export default class KPI extends Component {
                 {/* Altitude */}
                 <rect fillOpacity={1} x={420} y={-sideBarSemiHeight} height={2 * sideBarSemiHeight} width={210} fill="grey"></rect>
                 <path fillOpacity={1} d="M 420 0 l 30 0 l 30 -40 l 220 0 l 0 80 l -220 0 l -30 -40" stroke="rgb(0,255,0)" strokeWidth={5}></path>
+                <text x={475} y={0} dominantBaseline="central" fontFamily="lenya69" fontSize={100} fill="white">10090</text>
 
                 {/* Slide */}
                 <rect fillOpacity={1} x={-slideBarSemiWidth} y={475} height={slideBarHeight} width={2 * slideBarSemiWidth} fill="grey"></rect>
