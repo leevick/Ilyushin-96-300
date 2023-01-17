@@ -50,6 +50,10 @@ export default class KPI extends Component {
         const ias = this.state.ias < 0 ? 0 : this.state.ias > 999 ? 999 : this.state.ias
         const mach = ias / 3.6 / 340
 
+        const maxIAS = 550
+        const minIAS = 420
+        const IASScale = 800 / 210.0
+
         const ahWidth = 730
         const ahHeight = 850
         const ahY = -145
@@ -64,6 +68,9 @@ export default class KPI extends Component {
         const slideBarHeight = 50
         const pitchSemiWidth = [150, 30, 150, 30, 150, 30, 150, 30, 150, 30, 80, 20, 40, 20, 20, 40, 20, 80, 30, 150, 30, 150, 30, 150, 30, 150, 30, 150]
         const pitchText = ["60", "", "50", "", "40", "", "30", "", "20", "", "10", "", "", "", "", "", "", "10", "", "20", "", "30", "", "40", "", "50", "", "60"]
+
+        const minLoc = -(minIAS - ias) * IASScale
+        const maxLoc = -(maxIAS - ias) * IASScale
 
         return <g id="KPI" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
             <image x={-800} y={-800} width={1600} height={1600} href={kpi}></image>
@@ -126,6 +133,40 @@ export default class KPI extends Component {
                         <circle cx={-190 + i * 95} cy={446} r={12} strokeWidth={6} stroke="white" fill="none"></circle>
                     )
                 }
+                {/* Airspeed */}
+                <rect fillOpacity={1} x={-600} y={-sideBarSemiHeight} height={2 * sideBarSemiHeight} width={180} fill="grey"></rect>
+                <g transform={`translate(-420,0)`}>
+                    {
+                        Array.from(Array(10)).map((_, i) =>
+                            i * 100 <= ias + 105 && i * 100 >= ias - 105 ?
+                                <text fill={i * 100 >= maxIAS ? "red" : 100 * i <= minIAS ? "yellow" : "white"} x={-80} y={- (i * 100 - ias) * IASScale} fontSize={60} fontFamily={"lenya69"} dominantBaseline="central" textAnchor="end">{i * 100}</text> : null)
+                    }
+                    {
+                        Array.from(Array(100)).map((_, i) => 10 * i >= ias - 105 && 10 * i <= ias + 105 ? <line y2={- (i * 10 - ias) * IASScale} y1={- (i * 10 - ias) * IASScale} x1={0} x2={i % 5 ? -30 : -50} strokeWidth={5} stroke={10 * i > maxIAS ? "red" : 10 * i < minIAS ? "yellow" : "white"}></line> : null)
+                    }
+                    <line y1={minLoc > 400 ? 400 : minLoc < -400 ? -400 : minLoc} y2={maxLoc < -400 ? -400 : maxLoc > 400 ? 400 : maxLoc} strokeWidth={5} stroke="white"></line>
+                    <rect x={-180} y={sideBarSemiHeight} width={180} height={50}></rect>
+                    <rect x={-180} y={-sideBarSemiHeight - 50} width={180} height={50}></rect>
+                    {maxIAS <= ias + 105 && maxIAS >= ias - 105 ?
+                        <g>
+                            <line x1={-30} x2={20} y1={(ias - maxIAS) * IASScale} y2={(ias - maxIAS) * IASScale} strokeWidth="10" stroke="red"></line>
+                            <line y1={-sideBarSemiHeight} y2={(ias - maxIAS) * IASScale} stroke="red" strokeWidth={5}></line>
+                        </g> : maxIAS < ias - 105 ? <line y1={-sideBarSemiHeight} y2={sideBarSemiHeight} stroke="red" strokeWidth={5}></line> : null
+                    }
+                    {minIAS <= ias + 105 && minIAS >= ias - 105 ?
+                        <g>
+                            <line x1={-30} x2={20} y1={(ias - minIAS) * IASScale} y2={(ias - minIAS) * IASScale} strokeWidth="10" stroke="yellow"></line>
+                            <line y1={sideBarSemiHeight} y2={(ias - minIAS) * IASScale} stroke="yellow" strokeWidth={5}></line>
+                        </g> : minIAS > ias + 105 ? <line y1={-sideBarSemiHeight} y2={sideBarSemiHeight} stroke="yellow" strokeWidth={5}></line> : null
+                    }
+                </g>
+
+                <path fillOpacity={1} d="M -420 0 l -30 0 l -30 -40 l -140 0 l 0 80 l 140 0 l 30 -40" stroke="rgb(0,255,0)" strokeWidth={5}></path>
+                <text textAnchor="middle" x={-510} y={-sideBarSemiHeight - 10} fontFamily="lenya69" fontSize={100} fill="rgb(128,128,255)">0.770</text>
+                <text textAnchor="start" dominantBaseline="central" y={0} x={-610} fill="white" fontSize={100} fontFamily="lenya69">{Math.round(ias).toFixed(0).padStart(3, '0')}</text>
+                <text textAnchor="middle" dominantBaseline={"hanging"} x={-510} y={+sideBarSemiHeight + 20} fontFamily="lenya69" fontSize={60} textLength={150} stroke="white" fill="white">{mach.toFixed(3)}</text>
+                <rect x={-590} y={+sideBarSemiHeight + 75} height={60} width={180} fill="rgb(0,0,128)"></rect>
+                <text textAnchor="start" dominantBaseline={"hanging"} x={-570} y={+sideBarSemiHeight + 80} fontFamily="lenya69" fontSize={60} textLength={150} stroke="rgb(0,255,0)" fill="rgb(0,255,0)">{`${(ias / 1.852).toFixed(0).padStart(3, '0')}kt`}</text>
                 {/* Angle of Attack*/}
                 <rect x={-755} y={-sideBarSemiHeight} height={2 * sideBarSemiHeight} width={120} fill="grey"></rect>
                 {
@@ -145,14 +186,7 @@ export default class KPI extends Component {
                 <g transform={`translate(${-655},${-AoA * 20 + 100})`}>
                     <path d="M 0 0 l -40 -20 l 0 40 Z" fill="rgb(0,255,0)"></path>
                 </g>
-                {/* Airspeed */}
-                <rect fillOpacity={1} x={-600} y={-sideBarSemiHeight} height={2 * sideBarSemiHeight} width={180} fill="grey"></rect>
-                <path fillOpacity={1} d="M -420 0 l -30 0 l -30 -40 l -140 0 l 0 80 l 140 0 l 30 -40" stroke="rgb(0,255,0)" strokeWidth={5}></path>
-                <text textAnchor="middle" x={-510} y={-sideBarSemiHeight - 10} fontFamily="lenya69" fontSize={100} fill="rgb(128,128,255)">0.770</text>
-                <text textAnchor="start" dominantBaseline="central" y={0} x={-610} fill="white" fontSize={100} fontFamily="lenya69">{Math.round(ias).toFixed(0).padStart(3, '0')}</text>
-                <text textAnchor="middle" dominantBaseline={"hanging"} x={-510} y={+sideBarSemiHeight + 20} fontFamily="lenya69" fontSize={60} textLength={150} stroke="white" fill="white">{mach.toFixed(3)}</text>
-                <rect x={-590} y={+sideBarSemiHeight + 75} height={60} width={180} fill="rgb(0,0,128)"></rect>
-                <text textAnchor="start" dominantBaseline={"hanging"} x={-570} y={+sideBarSemiHeight + 80} fontFamily="lenya69" fontSize={60} textLength={150} stroke="rgb(0,255,0)" fill="rgb(0,255,0)">{`${(ias / 1.852).toFixed(0).padStart(3, '0')}kt`}</text>
+
 
                 {/* Altitude */}
                 <rect fillOpacity={1} x={420} y={-sideBarSemiHeight} height={2 * sideBarSemiHeight} width={210} fill="grey"></rect>
