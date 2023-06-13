@@ -27,6 +27,7 @@ export default class KPI extends Component {
     }
 
     componentDidMount() {
+        /*
         setInterval(() => {
             this.setState(prev => ({
                 ...prev,
@@ -37,6 +38,7 @@ export default class KPI extends Component {
                 ias: prev.ias > 999 ? 999 : prev.ias < 0 ? 0 : prev.ias + Math.random() * 10 - 4.9
             }))
         }, 50);
+        */
     }
 
     render() {

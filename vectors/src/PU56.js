@@ -55,6 +55,34 @@ export default class PU56 extends Component {
                 {/* <circle r={110} fillOpacity={0.2}></circle> */}
             </g>
 
+            <g transform="translate(3040,130)">
+                <rect rx={20} x={0} y={0} width={180} height={180}></rect>
+                <rect rx={20} x={0} y={200} width={180} height={180}></rect>
+                <rect rx={20} x={0} y={400} width={180} height={180}></rect>
+                <rect rx={20} x={200} y={200} width={180} height={180}></rect>
+                <rect rx={20} x={200} y={400} width={180} height={180}></rect>
+            </g>
+            <g transform="translate(1600,130)">
+                <rect rx={20} x={0} y={400} width={180} height={180}></rect>
+                <rect rx={20} x={200} y={400} width={180} height={180}></rect>
+            </g>
+            <g transform="translate(990,130)">
+                <rect rx={20} x={0} y={400} width={180} height={180}></rect>
+            </g>
+            <g transform="translate(2500,130)">
+                <rect rx={20} x={0} y={400} width={180} height={180}></rect>
+            </g>
+            <g transform="translate(4200,130)">
+                <rect rx={20} x={0} y={200} width={180} height={180}></rect>
+                <rect rx={20} x={0} y={400} width={180} height={180}></rect>
+            </g>
+            <g transform="translate(150,130)">
+                <rect rx={20} x={0} y={0} width={180} height={180}></rect>
+                <rect rx={20} x={0} y={200} width={180} height={180}></rect>
+                <rect rx={20} x={0} y={400} width={180} height={180}></rect>
+                <rect rx={20} x={200} y={400} width={180} height={180}></rect>
+            </g>
+
         </g>
     }
 }
