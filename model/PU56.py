@@ -18,7 +18,7 @@ from utils import add_plane, add_cube, bevel, moveOrigin, digHoleObj, bevelWeigh
 
 class PU56(BlenderModel):
 
-    width: float = 460e-3
+    width: float = 470e-3
     height: float = 80e-3
 
     def __init__(self) -> None:
@@ -26,4 +26,5 @@ class PU56(BlenderModel):
 
     def create(self) -> bpy.types.Object:
         mcp = add_plane((self.width, self.height))
+        mcp.data.materials.append(generateClockFace('PU56'))
         return mcp

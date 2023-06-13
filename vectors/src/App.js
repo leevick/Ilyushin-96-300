@@ -10,7 +10,7 @@ export default function App() {
     <svg width={`${2.2 * 1742 / 10.0}mm`} height={`${2.2 * 918 / 10.0}mm`} viewBox={`0 0 ${2.2 * 1742} ${2.2 * 918}`}>
         <CentralPanel></CentralPanel>
     </svg>,
-    <svg width={"460mm"} height={"80mm"} viewBox="0 0 4600 800">
+    <svg width={"470mm"} height={"80mm"} viewBox="0 0 4700 800">
         <PU56></PU56>
     </svg>
     ]
