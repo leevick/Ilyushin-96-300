@@ -1,5 +1,6 @@
 import { Component } from "react";
 import pu56 from "./pu56.png"
+import pu56_full from "./pu56.jpg"
 
 
 export default class PU56 extends Component {
@@ -12,7 +13,25 @@ export default class PU56 extends Component {
     }
 
     render() {
+        const r = 175
+        const ca = 60
+        const dr = 15
+
+        var str = `M ${-r * Math.sin(Math.PI / 180 * ca)} ${-r * Math.cos(Math.PI / 180 * ca)} `
+
+        for (var i = 1; i < 2 * ca - 4; i = i + 1) {
+            str += `L ${(r - (i * dr / (2 * ca))) * Math.sin(Math.PI / 180 * (-ca + i))} ${-(r - (i * dr / (2 * ca))) * Math.cos(Math.PI / 180 * (-ca + i))} `
+        }
+
+        str += `A ${dr} ${dr} 0 0 0 ${(r + ((2 * ca - 5) * dr / (2 * ca))) * Math.sin(Math.PI / 180 * (-ca + (2 * ca - 5)))} ${-(r + ((2 * ca - 5) * dr / (2 * ca))) * Math.cos(Math.PI / 180 * (-ca + (2 * ca - 5)))} `
+
+        for (var i = 2 * ca - 5; i >= 1; i = i - 1) {
+            str += `L ${(r + (i * dr / (2 * ca))) * Math.sin(Math.PI / 180 * (-ca + i))} ${-(r + (i * dr / (2 * ca))) * Math.cos(Math.PI / 180 * (-ca + i))} `
+        }
+
+
         return <g id="PU56" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
+            <image x={0} y={0} width={4700} height={800} href={pu56_full} />
             <image x={316} y={0} width={4384} height={800} href={pu56} />
             <rect rx={30} ry={30} x={0} y={0} width={this.width} height={this.height} fill="rgb(101,139,148)" fillOpacity={1}></rect>
             <g transform="translate(100,0)">
@@ -93,6 +112,18 @@ export default class PU56 extends Component {
             </g>
             <rect fillOpacity={1} x={2210} y={150} width={80} height={500}></rect>
             <text x={40} y={470} letterSpacing={-3} textLength={120} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">ДИР</text>
+            <text x={40} y={160} letterSpacing={-3} textLength={120} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">ЯРК</text>
+            <circle cx={100} cy={300} r={80}></circle>
+            <g transform="translate(1500,640)">
+                <path d="M -210 30 l 100 -40" stroke="white" strokeWidth={5} fill="none"></path>
+                <path fill="white" stroke="white" strokeWidth={1} d={str}></path>
+                <circle fillOpacity={1} r={120}></circle>
+            </g>
+            <g transform="translate(870,640)">
+                <path d="M -210 30 l 100 -40" stroke="white" strokeWidth={5} fill="none"></path>
+                <path fill="white" stroke="white" strokeWidth={1} d={str}></path>
+                <circle fillOpacity={1} r={120}></circle>
+            </g>
         </g>
     }
 }
