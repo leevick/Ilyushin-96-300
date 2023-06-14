@@ -6,7 +6,7 @@ from pathlib import Path
 import os
 import platform
 
-instruments = ['CentralPanel', 'Monitor', 'PU56']
+instruments = ['CentralPanel', 'Monitor', 'PU56', 'PU56Button']
 
 
 def configure(ctx):
