@@ -74,14 +74,15 @@ export default class PU56 extends Component {
                 <g transform="translate(765,640)">
                     {/* <circle r={110} fillOpacity={0.2}></circle> */}
                 </g>
-
+                {/* 
                 <g transform="translate(3040,130)">
                     <rect rx={10} x={0} y={0} width={180} height={180}></rect>
                     <rect rx={10} x={0} y={200} width={180} height={180}></rect>
                     <rect rx={10} x={0} y={400} width={180} height={180}></rect>
                     <rect rx={10} x={200} y={200} width={180} height={180}></rect>
                     <rect rx={10} x={200} y={400} width={180} height={180}></rect>
-                </g>
+                </g> 
+                */}
                 <g transform="translate(1600,130)">
                     <rect rx={10} x={0} y={400} width={180} height={180}></rect>
                     <rect rx={10} x={200} y={400} width={180} height={180}></rect>
@@ -104,12 +105,12 @@ export default class PU56 extends Component {
                 </g>
 
             </g>
-            <g transform="translate(720,170)">
+            {/* <g transform="translate(720,170)">
                 <rect ry={20} x={0} y={0} width={565} height={200} rx={20}></rect>
                 <rect ry={20} x={740} y={0} width={565} height={200} rx={20}></rect>
                 <rect ry={20} x={1700} y={0} width={565} height={200} rx={20}></rect>
                 <rect ry={20} x={2870} y={0} width={565} height={200} rx={20}></rect>
-            </g>
+            </g> */}
             <rect fillOpacity={1} x={2210} y={150} width={80} height={500}></rect>
             <text x={40} y={470} letterSpacing={-3} textLength={120} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">ДИР</text>
             <text x={40} y={160} letterSpacing={-3} textLength={120} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">ЯРК</text>
