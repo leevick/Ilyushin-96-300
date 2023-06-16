@@ -33,7 +33,7 @@ export default class PU56 extends Component {
         return <g id="PU56" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
             {/* <image x={0} y={0} width={4700} height={800} href={pu56_full} />
             <image x={316} y={0} width={4384} height={800} href={pu56} /> */}
-            <rect rx={30} ry={30} x={0} y={0} width={this.width} height={this.height} fill="rgb(101,139,148)" fillOpacity={1}></rect>
+            <rect x={0} y={0} width={this.width} height={this.height} fill="rgb(101,139,148)" fillOpacity={1}></rect>
             <g transform="translate(100,0)">
                 <text x={850} y={75} letterSpacing={-3} textLength={110} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">V/M</text>
                 <text x={385} y={300} letterSpacing={-3} textLength={110} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">V/M</text>
@@ -84,24 +84,28 @@ export default class PU56 extends Component {
                 </g> 
                 */}
                 <g transform="translate(1600,130)">
+                    {/* 
                     <rect rx={10} x={0} y={400} width={180} height={180}></rect>
                     <rect rx={10} x={200} y={400} width={180} height={180}></rect>
+                     */}
                 </g>
                 <g transform="translate(990,130)">
-                    <rect rx={10} x={0} y={400} width={180} height={180}></rect>
+                    {/* <rect rx={10} x={0} y={400} width={180} height={180}></rect> */}
                 </g>
                 <g transform="translate(2500,130)">
-                    <rect rx={10} x={0} y={400} width={180} height={180}></rect>
+                    {/* <rect rx={10} x={0} y={400} width={180} height={180}></rect> */}
                 </g>
                 <g transform="translate(4200,130)">
-                    <rect rx={10} x={0} y={200} width={180} height={180}></rect>
-                    <rect rx={10} x={0} y={400} width={180} height={180}></rect>
+                    {/* <rect rx={10} x={0} y={200} width={180} height={180}></rect>
+                    <rect rx={10} x={0} y={400} width={180} height={180}></rect> */}
                 </g>
                 <g transform="translate(150,130)">
+                    {/*
                     <rect rx={10} x={0} y={0} width={180} height={180}></rect>
                     <rect rx={10} x={0} y={200} width={180} height={180}></rect>
                     <rect rx={10} x={0} y={400} width={180} height={180}></rect>
-                    <rect rx={10} x={200} y={400} width={180} height={180}></rect>
+                    <rect rx={10} x={200} y={400} width={180} height={180}></rect> 
+                    */}
                 </g>
 
             </g>
@@ -125,12 +129,14 @@ export default class PU56 extends Component {
                 <path fill="white" stroke="white" strokeWidth={1} d={str}></path>
                 <circle fillOpacity={1} r={120}></circle>
             </g>
+            {/*
             <g transform="translate(4600,560)">
                 <path d="M -35 0 a 35 35 0 0 1 70 0 l 0 70 a 35 35 0 0 1 -70 0"></path>
             </g>
             <g transform="translate(100,560)">
                 <path d="M -35 0 a 35 35 0 0 1 70 0 l 0 70 a 35 35 0 0 1 -70 0"></path>
             </g>
+            */}
         </g>
     }
 }
