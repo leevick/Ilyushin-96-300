@@ -56,7 +56,7 @@ export default class PU56 extends Component {
                 <text x={3000} y={75} textLength={250} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">ОБР ЛУЧ</text>
                 <text x={4440} y={470} letterSpacing={-3} textLength={120} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">ДИР</text>
                 <g transform="translate(3785,640)">
-                    <circle r={140}></circle>
+                    {/* <circle r={140}></circle> */}
                     <path d="M -330 20 l 135 0 l 50 -20" stroke="white" strokeWidth={5} fill="none"></path>
                     <text x={-315} y={-30} textLength={110} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">АВТ</text>
                     <path d="M -330 20 l 135 0 l 50 -20" stroke="white" strokeWidth={5} fill="none"></path>
@@ -115,19 +115,19 @@ export default class PU56 extends Component {
                 <rect ry={20} x={1700} y={0} width={565} height={200} rx={20}></rect>
                 <rect ry={20} x={2870} y={0} width={565} height={200} rx={20}></rect>
             </g> */}
-            <rect fillOpacity={1} x={2210} y={150} width={80} height={500}></rect>
+            {/* <rect fillOpacity={1} x={2210} y={150} width={80} height={500}></rect> */}
             <text x={40} y={470} letterSpacing={-3} textLength={120} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">ДИР</text>
             <text x={40} y={160} letterSpacing={-3} textLength={120} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">ЯРК</text>
-            <circle cx={100} cy={300} r={80}></circle>
+            {/* <circle cx={100} cy={300} r={80}></circle> */}
             <g transform="translate(1500,640)">
                 <path d="M -210 30 l 100 -40" stroke="white" strokeWidth={5} fill="none"></path>
                 <path fill="white" stroke="white" strokeWidth={1} d={str}></path>
-                <circle fillOpacity={1} r={120}></circle>
+                {/* <circle fillOpacity={1} r={120}></circle> */}
             </g>
             <g transform="translate(870,640)">
                 <path d="M -210 30 l 100 -40" stroke="white" strokeWidth={5} fill="none"></path>
                 <path fill="white" stroke="white" strokeWidth={1} d={str}></path>
-                <circle fillOpacity={1} r={120}></circle>
+                {/* <circle fillOpacity={1} r={120}></circle> */}
             </g>
             {/*
             <g transform="translate(4600,560)">
