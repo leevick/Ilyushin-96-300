@@ -4,8 +4,12 @@ from glob import glob
 import platform
 
 
-def configure(ctx):
+def options(opt):
+    opt.add_option('--render', action='store', default=False)
 
+
+def configure(ctx):
+    ctx.env.RENDER = ctx.options.render
     if platform.system() == "Darwin":
         ctx.env.BL = "/Applications/Blender.app/Contents/MacOS/Blender"
         ctx.env.INK = "/Applications/Inkscape.app/Contents/MacOS/inkscape"
