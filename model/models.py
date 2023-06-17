@@ -906,7 +906,7 @@ class Nut(BlenderModel):
 
     def create(self) -> bpy.types.Object:
         bpy.ops.mesh.primitive_uv_sphere_add(
-            radius=self.r, location=(0, 0, self.height - self.r), ring_count=8, segments=16)
+            radius=self.r, location=(0, 0, self.height - self.r), ring_count=32, segments=64)
         nuts = bpy.context.active_object
 
         bpy.ops.mesh.primitive_cube_add(location=(0, 0, -1))
@@ -931,7 +931,7 @@ class Nut(BlenderModel):
         bpy.ops.uv.cube_project()
         bpy.ops.object.editmode_toggle()
 
-        bpy.ops.object.shade_smooth()
+        # bpy.ops.object.shade_smooth()
 
         moveOrigin((0.0, 0.0, 0.0))
 
