@@ -33,7 +33,7 @@ export default class PU56 extends Component {
         return <g id="PU56" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
             {/* <image x={0} y={0} width={4700} height={800} href={pu56_full} />
             <image x={316} y={0} width={4384} height={800} href={pu56} /> */}
-            <rect x={0} y={0} width={this.width} height={this.height} fill="rgb(101,139,148)" fillOpacity={1}></rect>
+            <rect x={0} y={0} width={this.width} height={this.height} fill="rgb(101,139,148)" fillOpacity={0}></rect>
             <g transform="translate(100,0)">
                 <text x={850} y={75} letterSpacing={-3} textLength={110} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">V/M</text>
                 <text x={385} y={300} letterSpacing={-3} textLength={110} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">V/M</text>
