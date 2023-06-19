@@ -29,11 +29,11 @@ def moveOrigin(org):
     bpy.context.scene.cursor.location.xyz = saved_location
 
 
-def bevel(obj: bpy.types.Object, width: float, segments: int = 1) -> None:
+def bevel(obj: bpy.types.Object, width: float, segments: int = 1, mode="VERTICES") -> None:
     bpy.context.view_layer.objects.active = obj
     bevel: bpy.types.BevelModifier = obj.modifiers.new(
         type="BEVEL", name="bevel")
-    bevel.affect = "VERTICES"
+    bevel.affect = mode
     bevel.offset_type = "OFFSET"
     bevel.width = width
     bevel.segments = segments
