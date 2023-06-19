@@ -44,6 +44,21 @@ textures = [
     "VBMFaceShape",
     "VBMLongNeedle",
     "VBMLongNeedleShape",
+    "PU56POS",
+    "PU56ZPU",
+    "PU56GNAV",
+    "PU56KZONA",
+    "PU56AP",
+    "PU56OTKLAP",
+    "PU56AT",
+    "PU56STAB",
+    "PU56OTKLAT",
+    "PU56SKOR",
+    "PU56ESHEL",
+    "PU56VEIS",
+    "PU56VNAV",
+    "PU56VSKOR",
+
 
 ]
 

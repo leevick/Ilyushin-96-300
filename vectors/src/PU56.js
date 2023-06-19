@@ -74,30 +74,92 @@ export default class PU56 extends Component {
                 <g transform="translate(765,640)">
                     {/* <circle r={110} fillOpacity={0.2}></circle> */}
                 </g>
-                {/* 
+
                 <g transform="translate(3040,130)">
+                    {/*
                     <rect rx={10} x={0} y={0} width={180} height={180}></rect>
                     <rect rx={10} x={0} y={200} width={180} height={180}></rect>
                     <rect rx={10} x={0} y={400} width={180} height={180}></rect>
                     <rect rx={10} x={200} y={200} width={180} height={180}></rect>
                     <rect rx={10} x={200} y={400} width={180} height={180}></rect>
-                </g> 
-                */}
+                    */}
+                    <g width={180} height={180} transform="translate(0,0)">
+
+
+                    </g>
+                    <g transform="translate(0,200)">
+                        <g id="PU56KZONA" viewBox="0 0 180 180">
+                            <text x={10} y={45} textLength={160} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">КЗОНА</text>
+                        </g>
+                    </g>
+
+                    <g transform="translate(0,400)">
+                        <g id="PU56POS" viewBox="0 0 180 180">
+                            <text x={40} y={45} textLength={100} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">ПОС</text>
+                        </g>
+                    </g>
+
+                    <g transform="translate(200,200)">
+                        <g id="PU56GNAV" viewBox="0 0 180 180" >
+                            <text x={30} y={45} textLength={120} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">ГНАВ</text>
+                        </g>
+                    </g>
+                    <g transform="translate(200,400)">
+                        <g id="PU56ZPU" viewBox="0 0 180 180">
+                            <text x={40} y={45} textLength={100} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">ЗПУ</text>
+                        </g>
+                    </g>
+                </g>
+
                 <g transform="translate(1600,130)">
                     {/* 
                     <rect rx={10} x={0} y={400} width={180} height={180}></rect>
                     <rect rx={10} x={200} y={400} width={180} height={180}></rect>
                      */}
+
+                    <g transform="translate(200,400)">
+                        <g id="PU56VNAV" viewBox="0 0 180 180">
+                            <text x={30} y={45} textLength={120} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">ВНАВ</text>
+                        </g>
+                    </g>
+                    <g transform="translate(0,400)">
+                        <g id="PU56VEIS" viewBox="0 0 180 180">
+                            <text x={45} y={45} textLength={90} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">ВЫС</text>
+                        </g>
+                    </g>
+
                 </g>
                 <g transform="translate(990,130)">
+                    <g transform="translate(0,400)">
+                        <g id="PU56ESHEL" viewBox="0 0 180 180">
+                            <text x={30} y={45} textLength={120} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">ЭШЕЛ</text>
+                        </g>
+                    </g>
                     {/* <rect rx={10} x={0} y={400} width={180} height={180}></rect> */}
                 </g>
                 <g transform="translate(2500,130)">
                     {/* <rect rx={10} x={0} y={400} width={180} height={180}></rect> */}
+                    <g transform="translate(0,400)">
+                        <g id="PU56VSKOR" viewBox="0 0 180 180">
+                            <text x={15} y={45} textLength={150} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">ВСКОР</text>
+                        </g>
+                    </g>
                 </g>
                 <g transform="translate(4200,130)">
                     {/* <rect rx={10} x={0} y={200} width={180} height={180}></rect>
                     <rect rx={10} x={0} y={400} width={180} height={180}></rect> */}
+
+                    <g transform="translate(0,200)">
+                        <g id="PU56AP" viewBox="0 0 180 180">
+                            <text x={60} y={45} textLength={60} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">АП</text>
+                        </g>
+                    </g>
+                    <g transform="translate(0,400)">
+                        <g id="PU56OTKLAP" viewBox="0 0 180 180">
+                            <text x={30} y={60} textLength={120} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">ОТКЛ</text>
+                            <text x={60} y={120} textLength={60} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">АП</text>
+                        </g>
+                    </g>
                 </g>
                 <g transform="translate(150,130)">
                     {/*
@@ -106,6 +168,28 @@ export default class PU56 extends Component {
                     <rect rx={10} x={0} y={400} width={180} height={180}></rect>
                     <rect rx={10} x={200} y={400} width={180} height={180}></rect> 
                     */}
+
+                    <g transform="translate(0,0)">
+                        <g id="PU56AT" viewBox="0 0 180 180">
+                            <text x={60} y={45} textLength={60} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">АТ</text>
+                        </g>
+                    </g>
+                    <g transform="translate(0,200)">
+                        <g id="PU56STAB" viewBox="0 0 180 180">
+                            <text x={30} y={45} textLength={120} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">СТАБ</text>
+                        </g>
+                    </g>
+                    <g transform="translate(0,400)">
+                        <g id="PU56OTKLAT" viewBox="0 0 180 180">
+                            <text x={30} y={60} textLength={120} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">ОТКЛ</text>
+                            <text x={60} y={120} textLength={60} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">АТ</text>
+                        </g>
+                    </g>
+                    <g transform="translate(200,400)">
+                        <g id="PU56SKOR" viewBox="0 0 180 180">
+                            <text x={30} y={45} textLength={120} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">СКОР</text>
+                        </g>
+                    </g>
                 </g>
 
             </g>
@@ -114,7 +198,7 @@ export default class PU56 extends Component {
                 <rect ry={20} x={740} y={0} width={565} height={200} rx={20}></rect>
                 <rect ry={20} x={1700} y={0} width={565} height={200} rx={20}></rect>
                 <rect ry={20} x={2870} y={0} width={565} height={200} rx={20}></rect>
-            </g> */}
+            </g> 
             {/* <rect fillOpacity={1} x={2210} y={150} width={80} height={500}></rect> */}
             <text x={40} y={470} letterSpacing={-3} textLength={120} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">ДИР</text>
             <text x={40} y={160} letterSpacing={-3} textLength={120} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">ЯРК</text>
