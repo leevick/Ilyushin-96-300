@@ -165,8 +165,8 @@ class PU56(BlenderModel):
                 value=(hole[0] + hole[2] / 2, hole[1] - hole[3] / 2, 0.5))
             digHoleObj(mcp, cut)
             if hole[5] != "":
-                bu = PU56Button(hole[5]).create()
-                bpy.ops.transform.translate(
-                    value=(hole[0] + hole[2] / 2, hole[1] - hole[3] / 2, 0))
+                bu: bpy.types.Object = PU56Button(hole[5]).create()
+                bu.location = (hole[0] + hole[2] / 2, hole[1] - hole[3] / 2, 0)
+                bu.parent = mcp
 
         return mcp
