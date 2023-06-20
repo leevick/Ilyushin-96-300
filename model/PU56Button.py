@@ -17,27 +17,30 @@ from utils import add_plane, add_cube, bevel, moveOrigin, digHoleObj, bevelWeigh
 
 
 class PU56Button(BlenderModel):
-    name = []
+    name = ""
+    windows = 1
     depth: float = 2e-3
 
-    def __init__(self, name=["", ""]) -> None:
+    def __init__(self, name="PU56OTKLAP", windows=1) -> None:
         super().__init__()
         self.name = name
+        self.windows = windows
 
     def create(self) -> bpy.types.Object:
         button = add_plane((18e-3, 18e-3))
+        button.data.materials.append(generateClockFace(self.name))
         bevel(button, 5e-4, 3)
         extrudeFace(button, depth=self.depth)
         bpy.ops.transform.translate(value=(0, 0, self.depth))
         moveOrigin((0, 0, 0))
 
-        if len(self.name) == 1:
+        if self.windows == 1:
             cut = add_plane((17e-3, 17e-3))
             bevel(cut, 1e-3, 6)
             extrudeFace(cut, depth=2e-3)
             bpy.ops.transform.translate(value=(0, 0, self.depth + 1.8e-3))
             digHoleObj(button, cut)
-        elif len(self.name) == 2:
+        elif self.windows == 2:
             cut = add_plane((17e-3, 8e-3))
             bevel(cut, 1e-4)
             extrudeFace(cut, depth=2e-3)
