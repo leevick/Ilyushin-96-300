@@ -747,7 +747,7 @@ class AGB(BlenderModel):
 
 def importSvg(name: str) -> bpy.types.Object:
     bpy.ops.import_curve.svg(
-        filepath=f"{os.getcwd()}/vectors/{name}.svg")
+        filepath=f"{os.getcwd()}/../vectors/{name}.svg")
 
     collection = bpy.data.collections[1]
     curve = collection.objects[0]

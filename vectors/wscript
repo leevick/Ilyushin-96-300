@@ -68,27 +68,12 @@ def configure(ctx):
 
 
 def build(ctx: Context):
-    # Web generation -> index.html
-    sources = ctx.path.ant_glob("public/*", recursive=True)
-    sources += ctx.path.ant_glob("src/*", recursive=True)
-    sources += ctx.path.ant_glob("yarn.lock")
-    sources += ctx.path.ant_glob("package.json")
-    sources += ctx.path.ant_glob("export_svg.js")
-    targets = []
-    for t in textures:
-        targets.append(f"{t}.svg")
-
-    ctx(rule="cd ../vectors && yarn && yarn build && cp -rvf build/index.html ../build/vectors/",
-        source=sources, target="index.html")
-    ctx.add_group()
-
-    ctx(rule="node ../vectors/export_svg.js vectors/index.html vectors/", target=targets)
-    ctx.add_group()
 
     sources = []
     targets = []
+
     for p in textures:
-        sources.append(f"vectors/{p}.svg")
+        sources.append(f"../vectors/{p}.svg")
         targets.append(f"{p}.png")
 
     for i in range(len(sources)):

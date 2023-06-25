@@ -13,3 +13,4 @@ texture
 **/model/**.gltf
 **/model/**.png
 **/model/*.xml
+.waf*
