@@ -22,6 +22,33 @@ def add_plane(dimension=(1, 1), location=(0, 0, 0)) -> bpy.types.Object:
     return bpy.context.active_object
 
 
+def add_cylinder(h: float = 1.0, r1: float = 1.0, r2: float = 1.0, segments: int = 32) -> bpy.types.Object:
+    bpy.ops.mesh.primitive_cylinder_add(
+        vertices=segments, radius=r1, depth=h)
+    obj = bpy.context.active_object
+
+    bpy.ops.object.mode_set(mode='EDIT')
+    bpy.ops.mesh.select_mode(type='FACE')
+    bpy.ops.mesh.select_all(action='DESELECT')
+
+    bm = bmesh.from_edit_mesh(obj.data)
+
+    for f in bm.faces:
+        if f.normal.z < 0:
+            f.select_set(True)
+            break
+
+    x, y, z = bpy.context.active_object.dimensions
+    bpy.ops.transform.resize(
+        value=(r2/r1, r2/r1, z))
+
+    bmesh.update_edit_mesh(obj.data)
+    bm.free()
+
+    bpy.ops.object.editmode_toggle()
+    return bpy.context.active_object
+
+
 def moveOrigin(org):
     saved_location = bpy.context.scene.cursor.location.xyz
     bpy.context.scene.cursor.location = org
