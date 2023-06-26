@@ -1,3 +1,8 @@
+from utils import add_plane, add_cube, bevel, moveOrigin, digHoleObj, bevelWeight, add_cylinder
+from PU56Button import PU56Button
+from SignalBoard import SignalBoard
+from models import generateClockFace, extrudeFace, US2, digHole, digHoleObj, RMI, AGB, VBM, moveOrigin
+from blender_model import BlenderModel
 import bpy
 import bmesh
 import sys
@@ -9,12 +14,6 @@ import random
 dir = pathlib.Path(__file__).parent.as_posix()
 if not dir in sys.path:
     sys.path.append(dir)
-
-from blender_model import BlenderModel
-from models import generateClockFace, extrudeFace, US2, digHole, digHoleObj, RMI, AGB, VBM, moveOrigin
-from SignalBoard import SignalBoard
-from utils import add_plane, add_cube, bevel, moveOrigin, digHoleObj, bevelWeight
-from PU56Button import PU56Button
 
 
 rectHoleList = [
@@ -154,6 +153,12 @@ class PU56(BlenderModel):
     def create(self) -> bpy.types.Object:
         mcp = add_plane((self.width, self.height))
         mcp.data.materials.append(self.createPanelBackground())
+
+        knob: bpy.types.Object = add_cylinder(1e-2, 9e-3, 11e-3, 6)
+        bevel(knob, 1e-3, 3, "EDGES")
+        moveOrigin((0, 0, -5e-3))
+        knob.location = (-148.5e-3, -24e-3, 0)
+        knob.parent = mcp
 
         bevel(mcp, 3e-3, 6)
         for hole in rectHoleList:
