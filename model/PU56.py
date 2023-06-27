@@ -154,11 +154,16 @@ class PU56(BlenderModel):
         mcp = add_plane((self.width, self.height))
         mcp.data.materials.append(self.createPanelBackground())
 
-        knob: bpy.types.Object = add_cylinder(1e-2, 9e-3, 11e-3, 6)
+        knob: bpy.types.Object = add_cylinder(1e-2, 10e-3, 10e-3, 6)
         bevel(knob, 1e-3, 3, "EDGES")
         moveOrigin((0, 0, -5e-3))
         knob.location = (-148.5e-3, -24e-3, 0)
         knob.parent = mcp
+
+        knobBase: bpy.types.Object = add_cylinder(1e-3, 11e-3, 11e-3, 36)
+        moveOrigin((0, 0, -5e-4))
+        knobBase.location = (-148.5e-3, -24e-3, 0)
+        knobBase.parent = mcp
 
         bevel(mcp, 3e-3, 6)
         for hole in rectHoleList:
