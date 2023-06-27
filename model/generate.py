@@ -13,6 +13,7 @@ from models import BlenderModel
 from Monitor import Monitor
 from PU56 import PU56
 from PU56Button import PU56Button
+from PU56SpeedKnob import PU56SpeedKnob
 
 
 argv = sys.argv
