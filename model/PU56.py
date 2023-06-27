@@ -1,5 +1,6 @@
 from utils import add_plane, add_cube, bevel, moveOrigin, digHoleObj, bevelWeight, add_cylinder
 from PU56Button import PU56Button
+from PU56SpeedKnob import PU56SpeedKnob
 from SignalBoard import SignalBoard
 from models import generateClockFace, extrudeFace, US2, digHole, digHoleObj, RMI, AGB, VBM, moveOrigin
 from blender_model import BlenderModel
@@ -154,16 +155,9 @@ class PU56(BlenderModel):
         mcp = add_plane((self.width, self.height))
         mcp.data.materials.append(self.createPanelBackground())
 
-        knob: bpy.types.Object = add_cylinder(1e-2, 10e-3, 10e-3, 6)
-        bevel(knob, 1e-3, 3, "EDGES")
-        moveOrigin((0, 0, -5e-3))
+        knob = PU56SpeedKnob().create()
         knob.location = (-148.5e-3, -24e-3, 0)
         knob.parent = mcp
-
-        knobBase: bpy.types.Object = add_cylinder(1e-3, 11e-3, 11e-3, 36)
-        moveOrigin((0, 0, -5e-4))
-        knobBase.location = (-148.5e-3, -24e-3, 0)
-        knobBase.parent = mcp
 
         bevel(mcp, 3e-3, 6)
         for hole in rectHoleList:
