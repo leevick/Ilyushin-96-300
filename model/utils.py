@@ -105,6 +105,21 @@ def digHoleObj(obj: bpy.types.Object, obj2: bpy.types.Object) -> None:
     return
 
 
+def union(obj: bpy.types.Object, obj2: bpy.types.Object) -> bpy.types.Object:
+    # Create cut object
+    bpy.context.view_layer.objects.active = obj
+    cut = obj2
+    # Apply boolean
+    boolean = obj.modifiers.new(type="BOOLEAN", name="union_ops")
+    boolean.object = cut
+    boolean.solver = "FAST"
+    boolean.operation = "UNION"
+    cut.hide_set(True)
+    bpy.ops.object.modifier_apply(modifier="union_ops")
+    bpy.data.objects.remove(cut)
+    return obj
+
+
 def bevelWeight(obj: bpy.types.Object, width: float, segs: int = 6) -> bpy.types.Object:
     bpy.ops.object.mode_set(mode='OBJECT')
     bpy.context.view_layer.objects.active = obj
