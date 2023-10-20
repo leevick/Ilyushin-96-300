@@ -14,3 +14,4 @@ texture
 **/model/**.png
 **/model/*.xml
 .waf*
+waf*

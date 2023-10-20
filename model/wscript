@@ -7,7 +7,7 @@ import os
 import platform
 
 instruments = ['CentralPanel', 'Monitor',
-               'PU56', 'PU56Button', 'PU56SpeedKnob', 'PU56HKnob']
+               'PU56', 'PU56Button', 'PU56SpeedKnob', 'PU56HKnob', 'SPSH4']
 
 
 def configure(ctx):
