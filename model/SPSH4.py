@@ -17,4 +17,5 @@ class SPSH4(BlenderModel):
     width: float = 470e-3
     height: float = 80e-3
 
-    
+    def create(self) -> bpy.types.Object:
+        return super().create()
