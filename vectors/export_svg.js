@@ -35,6 +35,13 @@ function export_svg(t, src, dst) {
 
     const fd = fs.openSync(`${dst}/${t}.svg`, "w+")
     var svg = root.querySelector(`#${t}`)
+    var images = svg.querySelectorAll('image');
+    var i = 0;
+    for (i = 0; i < images.length; i = i + 1) {
+        images[i].setAttribute('xlink:href', images[i].getAttribute('href').substring(1))
+        images[i].removeAttribute('href')
+    }
+
     removeChildHasId(svg)
     const vb = svg.getAttribute("viewBox")
 
@@ -43,7 +50,7 @@ function export_svg(t, src, dst) {
 
 
     fs.writeSync(fd, '<?xml version="1.0" encoding="UTF-8"?>')
-    fs.writeSync(fd, `<svg width="${width / 10}mm" height="${height / 10}mm" viewBox="${vb}">`)
+    fs.writeSync(fd, `<svg version="1.1" xml:space="preserve" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" width="${width / 10}mm" height="${height / 10}mm" viewBox="${vb}">`)
     fs.writeSync(fd, svg.toString())
     fs.writeSync(fd, "</svg>")
     fs.close(fd)

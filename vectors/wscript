@@ -84,6 +84,8 @@ def build(ctx: Context):
 
     ctx(rule="node ../vectors/export_svg.js vectors/index.html vectors/", target=targets)
     ctx.add_group()
+    ctx(rule="cp -rvf ../vectors/build/static vectors/")
+    ctx.add_group()
 
     sources = []
     targets = []
