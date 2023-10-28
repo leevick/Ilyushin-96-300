@@ -58,6 +58,8 @@ textures = [
     "PU56VEIS",
     "PU56VNAV",
     "PU56VSKOR",
+    "SPSH4",
+    "SPSH4NUTS"
 
 
 ]

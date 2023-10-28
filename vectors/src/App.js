@@ -15,7 +15,13 @@ export default function App() {
                     <image opacity={1} href={CentralUpper}></image>
                 </g>
             </g>
+            <g transform="translate(-3100,2000)">
+                <KPI></KPI>
+            </g>
             <CentralPanel></CentralPanel>
+            <g transform="translate(400,-900)">
+                <PU56></PU56>
+            </g>
             <g transform="translate(3842,0)">
                 <CentralRightPanel></CentralRightPanel>
             </g>

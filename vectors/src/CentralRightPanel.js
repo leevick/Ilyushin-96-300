@@ -8,7 +8,7 @@ export class CentralRightPanel extends Component {
     }
 
     render() {
-        return <g id="CentralRightPanel">
+        return <g id="CentralRightPanel" viewBox="0 0 1350 4300">
             <rect opacity={0.3} width={1350} height={4300} fill="white"></rect>
             <g transform="translate(40,515)">
                 <SPSH4></SPSH4>
