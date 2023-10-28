@@ -1,5 +1,6 @@
 import bpy
 import os
+import hashlib
 from io_scene_gltf2_msfs.blender.msfs_material_prop_update import MSFS_Material_Property_Update
 from io_scene_gltf2_msfs.blender.msfs_material_function import MSFS_Material
 
@@ -34,6 +35,49 @@ def generateSignalBoardFrameMaterial() -> bpy.types.Material:
         nodes[0].inputs["Base Color"].default_value = (0, 0, 0, 1)
 
         return sigFrame
+
+
+def generatePureSignalLight(color=(1.0, 1.0, 1.0, 1.0)) -> bpy.types.Material:
+    sha = hashlib.sha256()
+    sha.update(str(color).encode())
+    index = bpy.data.materials.find(f"pureBordLight_{sha.hexdigest()}")
+    if index != -1:
+        return bpy.data.materials[index]
+    else:
+        sigLight = bpy.data.materials.new(
+            name=f"pureBordLight_{sha.hexdigest()}")
+        sigLight.use_nodes = True
+
+        nodes = sigLight.node_tree.nodes
+        links = sigLight.node_tree.links
+
+        # Geometry Node
+        geo: bpy.types.ShaderNodeNewGeometry = nodes.new(
+            "ShaderNodeNewGeometry")
+
+        # White Noise Node
+        noise: bpy.types.ShaderNodeTexWhiteNoise = nodes.new(
+            "ShaderNodeTexWhiteNoise")
+
+        links.new(geo.outputs["Position"], noise.inputs["Vector"])
+
+        # Gamma Node
+        gamma: bpy.types.ShaderNodeGamma = nodes.new("ShaderNodeGamma")
+        gamma.inputs["Gamma"].default_value = 5.0
+        links.new(noise.outputs["Value"], gamma.inputs["Color"])
+
+        # Map Range
+        mapRange: bpy.types.ShaderNodeMapRange = nodes.new(
+            "ShaderNodeMapRange")
+        mapRange.inputs["To Max"].default_value = 0.1
+        links.new(gamma.outputs["Color"], mapRange.inputs["Value"])
+        links.new(mapRange.outputs["Result"], nodes[0].inputs["Base Color"])
+
+        # Emission
+        nodes[0].inputs["Emission"].default_value = color
+        nodes[0].inputs["Emission Strength"].default_value = 1.0
+
+        return sigLight
 
 
 def generateSignalBoardLightMaterial(name: str) -> bpy.types.Material:
