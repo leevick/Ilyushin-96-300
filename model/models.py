@@ -12,7 +12,7 @@ if not dir in sys.path:
 
 from blender_model import BlenderModel
 from utils import add_plane
-from Materials import generateClockGlass
+from Materials import generateClockGlass, generatePanelWithPaints
 
 
 def generatePanelBackgroud(name: str) -> bpy.types.Material:
@@ -388,7 +388,7 @@ class RMI(BlenderModel):
 
         panel = bpy.context.active_object
         panel.data.materials.append(
-            generateClockFace(__class__.__name__))
+            generatePanelWithPaints(__class__.__name__))
 
         bevel(panel, 15e-3)
 

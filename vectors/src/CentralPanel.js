@@ -220,7 +220,7 @@ export class RMI extends Component {
 
     render() {
         return <g id="RMI" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
-            <rect x={-this.width / 2} y={-this.height / 2 - 100} width={this.width} height={this.height} fill="rgb(101,139,148)" fillOpacity={1}></rect>
+            {/* <rect x={-this.width / 2} y={-this.height / 2 - 100} width={this.width} height={this.height} fill="rgb(101,139,148)" fillOpacity={1}></rect> */}
             <text stroke="white" fill="white" x={-190} y={410} fontSize={70} letterSpacing={-3} textLength={130} lengthAdjust="spacingAndGlyphs" fontWeight={"bold"} fontFamily="lenya69">APK</text>
             <text stroke="white" fill="white" x={190 - 130} y={410} fontSize={70} letterSpacing={-3} textLength={130} lengthAdjust="spacingAndGlyphs" fontWeight={"bold"} fontFamily="lenya69">APK</text>
             <text stroke="white" fill="white" x={- 395} y={135} fontSize={70} fontWeight={"bold"} fontFamily="lenya69">V</text>
@@ -406,7 +406,7 @@ export class CentralPanelBackgroud extends Component {
 
     render() {
         return <g id="CentralPanelBackgroud" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
-            <rect x={0} y={0} width={this.width} height={this.height} fill="rgb(101,139,148)" fillOpacity={1}></rect>
+            {/* <rect x={0} y={0} width={this.width} height={this.height} fill="rgb(101,139,148)" fillOpacity={1}></rect> */}
             <g transform="translate(0,0)">
                 <text stroke="white" fill="white" x={70} y={1150} fontSize={60} letterSpacing={-3} lengthAdjust="spacingAndGlyphs" fontFamily="lenya69">ПЕРЕСТАБЬ</text>
                 <text stroke="white" fill="white" x={85} y={1210} fontSize={60} letterSpacing={-3} lengthAdjust="spacingAndGlyphs" fontFamily="lenya69">СТАБ</text>

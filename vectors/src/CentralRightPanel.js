@@ -9,11 +9,15 @@ export class CentralRightPanel extends Component {
     }
 
     render() {
-        return <g id="CentralRightPanel" viewBox="0 0 1350 4300">
-            <rect opacity={0.3} width={1350} height={4300} fill="white"></rect>
+        return <g viewBox="0 0 1350 4300">
+            <g id="CentralRightPanel" viewBox="0 0 1350 4300">
+                <g transform="translate(947.5,880)">
+                    <text x={-90} y={-300} textLength={180} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">УБОРКА</text>
+                    <text x={-90} y={300} textLength={180} fontSize={60} lengthAdjust="spacingAndGlyphs" dominantBaseline="central" stroke="white" fill="white" fontFamily="lenya69">ВЫПУСК</text>
+                </g>
+            </g>
             <g transform="translate(40,515)">
                 <SPSH4></SPSH4>
-
             </g>
             <g transform={`translate(210,240)`}>
                 <g transform="translate(147.5,82.5)">

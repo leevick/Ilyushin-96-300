@@ -14,6 +14,8 @@ from blender_model import BlenderModel
 from models import generateClockFace, extrudeFace, US2, digHole, digHoleObj, RMI, AGB, VBM, moveOrigin
 from SignalBoard import SignalBoard
 from utils import add_plane, add_cube
+from CentralRightPanel import CentralRightPanel
+from Materials import generatePanelWithPaints
 
 
 class CentralPanel(BlenderModel):
@@ -36,7 +38,8 @@ class CentralPanel(BlenderModel):
         bpy.ops.object.editmode_toggle()
 
         panel = bpy.context.active_object
-        panel.data.materials.append(generateClockFace("CentralPanelBackgroud"))
+        panel.data.materials.append(
+            generatePanelWithPaints("CentralPanelBackgroud"))
 
         extrudeFace(panel, 0.001)
 
@@ -116,6 +119,12 @@ class CentralPanel(BlenderModel):
         rmiModel.parent = panel
         agb.parent = panel
         vbm.parent = panel
+
+        # CENTRAL RIGHT
+        cr = CentralRightPanel().create()
+        cr.location = (width * scale / 10000.0 / 2.0 + 1e-3,
+                       height * scale / 10000.0 / 2.0, 0)
+        cr.parent = panel
 
         panel.select_set(True)
 

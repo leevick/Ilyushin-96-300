@@ -62,7 +62,8 @@ textures = [
     "SPSH4NUTS",
     "GearOnPower",
     "SteerDevice1",
-    "SteerDevice2"
+    "SteerDevice2",
+    "CentralRightPanel",
 
 
 ]
