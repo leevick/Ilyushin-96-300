@@ -59,7 +59,10 @@ textures = [
     "PU56VNAV",
     "PU56VSKOR",
     "SPSH4",
-    "SPSH4NUTS"
+    "SPSH4NUTS",
+    "GearOnPower",
+    "SteerDevice1",
+    "SteerDevice2"
 
 
 ]
