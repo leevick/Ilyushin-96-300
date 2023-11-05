@@ -19,8 +19,8 @@ from Materials import generateColorBump, generateClockGlass, generateScreenGauge
 
 class Monitor(BlenderModel):
 
-    width: float = 2000e-4
-    height: float = 2200e-4
+    width: float = 2050e-4
+    height: float = 2300e-4
     depth: float = 500e-4
     screenWidth: float = 16e-2
     screenHeight: float = 16e-2

@@ -227,7 +227,7 @@ def ironWithPaints(name: str, texture: str | None) -> bpy.types.Material:
             "ShaderNodeValToRGB")
         paintRamp.color_ramp.elements[0].color = (0.005, 0.003, 0.003, 1)
         paintRamp.color_ramp.elements[0].position = (0.427)
-        paintRamp.color_ramp.elements[1].color = (0.021, 0.011, 0.011, 1)
+        paintRamp.color_ramp.elements[1].color = (0.01, 0.006, 0.006, 1)
         paintRamp.color_ramp.elements[1].position = (0.615)
         links.new(paintNoise.outputs["Fac"], paintRamp.inputs["Fac"])
 

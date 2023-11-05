@@ -16,6 +16,7 @@ from SignalBoard import SignalBoard
 from utils import add_plane, add_cube
 from CentralRightPanel import CentralRightPanel
 from Materials import panelWithPaints
+from Monitor import Monitor
 
 
 class CentralPanel(BlenderModel):
@@ -125,6 +126,16 @@ class CentralPanel(BlenderModel):
         cr.location = (width * scale / 10000.0 / 2.0 + 1e-3,
                        height * scale / 10000.0 / 2.0, 0)
         cr.parent = panel
+
+        # Monitors
+        m1 = Monitor().create()
+        m1.parent = panel
+        m1.location = (- width * scale / 10000 / 2 +
+                       1025e-4 + 10e-4, - height * scale / 10000 / 2 - 1160e-4, 0)
+        m2 = Monitor().create()
+        m2.parent = panel
+        m2.location = (- width * scale / 10000 / 2 +
+                       3075e-4 + 30e-4, - height * scale / 10000 / 2 - 1160e-4, 0)
 
         panel.select_set(True)
 
