@@ -180,6 +180,110 @@ def generateScreenGauge(name: str) -> bpy.types.Material:
         return matGlass
 
 
+def ironWithPaints(name: str, texture: str | None) -> bpy.types.Material:
+    index = bpy.data.materials.find(name)
+    if index != -1:
+        return bpy.data.materials[index]
+    else:
+        mat: bpy.types.Material = bpy.data.materials.new(name=name)
+        mat.use_nodes = True
+
+        nodes = mat.node_tree.nodes
+        links = mat.node_tree.links
+
+        texCoord: bpy.types.ShaderNodeTexCoord = nodes.new(
+            "ShaderNodeTexCoord")
+        paintNoise: bpy.types.ShaderNodeTexNoise = nodes.new(
+            "ShaderNodeTexNoise")
+        mixtureNoise: bpy.types.ShaderNodeTexNoise = nodes.new(
+            "ShaderNodeTexNoise")
+        bumpNoise: bpy.types.ShaderNodeTexNoise = nodes.new(
+            "ShaderNodeTexNoise")
+
+        paintNoise.noise_dimensions = "2D"
+        mixtureNoise.noise_dimensions = "2D"
+        bumpNoise.noise_dimensions = "2D"
+
+        links.new(texCoord.outputs["Object"],
+                  paintNoise.inputs["Vector"])
+        links.new(texCoord.outputs["Object"],
+                  mixtureNoise.inputs["Vector"])
+        links.new(texCoord.outputs["Object"],
+                  bumpNoise.inputs["Vector"])
+
+        paintNoise.inputs["Scale"].default_value = 4.0
+        paintNoise.inputs["Detail"].default_value = 16.0
+        paintNoise.inputs["Roughness"].default_value = 0.7
+
+        bumpNoise.inputs["Scale"].default_value = 7
+        bumpNoise.inputs["Detail"].default_value = 4.2
+        bumpNoise.inputs["Roughness"].default_value = 0.728
+
+        mixtureNoise.inputs["Scale"].default_value = 999.70
+        mixtureNoise.inputs["Detail"].default_value = 15.0
+        mixtureNoise.inputs["Roughness"].default_value = 1
+
+        paintRamp: bpy.types.ShaderNodeValToRGB = nodes.new(
+            "ShaderNodeValToRGB")
+        paintRamp.color_ramp.elements[0].color = (0.005, 0.003, 0.003, 1)
+        paintRamp.color_ramp.elements[0].position = (0.427)
+        paintRamp.color_ramp.elements[1].color = (0.021, 0.011, 0.011, 1)
+        paintRamp.color_ramp.elements[1].position = (0.615)
+        links.new(paintNoise.outputs["Fac"], paintRamp.inputs["Fac"])
+
+        roughtRamp: bpy.types.ShaderNodeValToRGB = nodes.new(
+            "ShaderNodeValToRGB")
+        roughtRamp.color_ramp.elements[0].color = (0.108, 0.108, 0.108, 1)
+        roughtRamp.color_ramp.elements[0].position = (0)
+        roughtRamp.color_ramp.elements[1].color = (1, 1, 1, 1)
+        roughtRamp.color_ramp.elements[1].position = (0.018)
+        links.new(paintRamp.outputs["Color"], roughtRamp.inputs["Fac"])
+        links.new(roughtRamp.outputs["Color"],
+                  nodes[0].inputs["Roughness"])
+
+        metalRamp: bpy.types.ShaderNodeValToRGB = nodes.new(
+            "ShaderNodeValToRGB")
+        metalRamp.color_ramp.elements[0].color = (0, 0, 0, 1)
+        metalRamp.color_ramp.elements[0].position = (0)
+        metalRamp.color_ramp.elements[1].color = (0.296, 0.296, 0.296, 1)
+        metalRamp.color_ramp.elements[1].position = (0.167)
+        links.new(paintRamp.outputs["Color"], metalRamp.inputs["Fac"])
+        links.new(metalRamp.outputs["Color"], nodes[0].inputs["Metallic"])
+
+        bump: bpy.types.ShaderNodeBump = nodes.new("ShaderNodeBump")
+        bump.inputs["Strength"].default_value = 0.539
+        bump.inputs["Distance"].default_value = 0.005
+        links.new(bumpNoise.outputs["Fac"], bump.inputs["Height"])
+        links.new(bump.outputs["Normal"], nodes[0].inputs["Normal"])
+
+        lessThan: bpy.types.ShaderNodeMath = nodes.new("ShaderNodeMath")
+        lessThan.operation = "LESS_THAN"
+        lessThan.inputs[1].default_value = 0.500
+        links.new(mixtureNoise.outputs["Fac"], lessThan.inputs["Value"])
+
+        if texture != None:
+            image = nodes.new("ShaderNodeTexImage")
+            image.image = bpy.data.images.load(
+                f"{os.getcwd()}/texture/{texture}.png", check_existing=False)
+
+            markMix: bpy.types.ShaderNodeMixRGB = nodes.new("ShaderNodeMixRGB")
+            markMix.inputs["Color1"].default_value = (0, 0, 0, 1)
+            links.new(image.outputs["Alpha"], markMix.inputs["Color2"])
+            links.new(lessThan.outputs["Value"], markMix.inputs["Fac"])
+
+            paintMix: bpy.types.ShaderNodeMixRGB = nodes.new(
+                "ShaderNodeMixRGB")
+            paintMix.inputs["Fac"].default_value = 0.5
+            links.new(paintRamp.outputs["Color"], paintMix.inputs["Color1"])
+            links.new(markMix.outputs["Color"], paintMix.inputs["Color2"])
+            links.new(paintMix.outputs["Color"], nodes[0].inputs["Base Color"])
+        else:
+            links.new(paintRamp.outputs["Color"],
+                      nodes[0].inputs["Base Color"])
+
+        return mat
+
+
 def generatePanelWithPaints(name: str) -> bpy.types.Material:
     index = bpy.data.materials.find(name)
     if index != -1:
