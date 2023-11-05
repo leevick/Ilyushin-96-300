@@ -11,10 +11,10 @@ if not dir in sys.path:
     sys.path.append(dir)
 
 from blender_model import BlenderModel
-from models import generateClockFace, extrudeFace, US2, digHole, digHoleObj, RMI, AGB, VBM, moveOrigin
+from models import generateClockFace, extrudeFace, US2, digHole, digHoleObj, RMI, AGB, VBM, moveOrigin, importSvg
 from SignalBoard import SignalBoard
 from utils import add_plane, add_cube
-from Materials import generatePanelWithPaints
+from Materials import panelWithPaints
 from utils import bevel
 from SPSH4 import SPSH4
 
@@ -31,10 +31,15 @@ class CentralRightPanel(BlenderModel):
         panel = add_plane((135e-3, 430e-3), (135e-3 / 2, -430e-3 / 2, 0))
         moveOrigin((0, 0, 0))
         panel.data.materials.append(
-            generatePanelWithPaints("CentralRightPanel"))
+            panelWithPaints("CentralRightPanel", "CentralRightPanel"))
 
         extrudeFace(panel, 0.001)
 
+        # screen
+        cut = add_plane((1, 1), (-4700e-4, -7019.6e-4, 0.5))
+        bevel(cut, 4e-3, 3)
+        extrudeFace(cut, 1)
+        digHoleObj(panel, cut)
         # Signals
         cut = add_cube((295e-4 * 3, 165e-4, 1), (652.5e-4, -322.5e-4, 0))
         digHoleObj(panel, cut)
@@ -50,8 +55,8 @@ class CentralRightPanel(BlenderModel):
         cut = add_plane((65e-3, 65e-3))
         bevel(cut, 0.01625)
         bevel(cut, 1e-3, 3)
-        extrudeFace(cut, 2e-3)
-        cut.location = (365e-4, -840e-4, 1e-3)
+        extrudeFace(cut, 1)
+        cut.location = (365e-4, -840e-4, 0.5)
 
         digHoleObj(panel, cut)
 

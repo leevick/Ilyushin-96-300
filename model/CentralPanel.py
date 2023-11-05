@@ -15,7 +15,7 @@ from models import generateClockFace, extrudeFace, US2, digHole, digHoleObj, RMI
 from SignalBoard import SignalBoard
 from utils import add_plane, add_cube
 from CentralRightPanel import CentralRightPanel
-from Materials import generatePanelWithPaints
+from Materials import panelWithPaints
 
 
 class CentralPanel(BlenderModel):
@@ -39,7 +39,7 @@ class CentralPanel(BlenderModel):
 
         panel = bpy.context.active_object
         panel.data.materials.append(
-            generatePanelWithPaints("CentralPanelBackgroud"))
+            panelWithPaints("CentralPanelBackgroud", "CentralPanelBackgroud"))
 
         extrudeFace(panel, 0.001)
 

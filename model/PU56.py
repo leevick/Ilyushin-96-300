@@ -5,7 +5,7 @@ from PU56HKnob import PU56HKnob
 from SignalBoard import SignalBoard
 from models import generateClockFace, extrudeFace, US2, digHole, digHoleObj, RMI, AGB, VBM, moveOrigin
 from blender_model import BlenderModel
-from Materials import generatePanelWithPaints
+from Materials import panelWithPaints
 import bpy
 import bmesh
 import sys
@@ -56,7 +56,7 @@ class PU56(BlenderModel):
 
     def create(self) -> bpy.types.Object:
         mcp = add_plane((self.width, self.height))
-        mcp.data.materials.append(generatePanelWithPaints("PU56"))
+        mcp.data.materials.append(panelWithPaints("PU56"))
 
         knob = PU56SpeedKnob().create()
         knob.location = (-148.5e-3, -24e-3, 0)

@@ -12,7 +12,7 @@ if not dir in sys.path:
 
 from blender_model import BlenderModel
 from utils import add_plane
-from Materials import generateClockGlass, generatePanelWithPaints
+from Materials import generateClockGlass, panelWithPaints
 
 
 def generatePanelBackgroud(name: str) -> bpy.types.Material:
@@ -251,8 +251,8 @@ class US2(BlenderModel):
                 nails[2 * i +
                       j].location = (375e-4 if i == 1 else -375e-4, 365e-4 if j == 1 else -365e-4, self.depth / 2)
                 nails[2 * i + j].rotation_euler[2] = random.uniform(0, math.pi)
-                nails[2 * i + j].data.materials.append(
-                    generateColorBump((0.13, 0.258, 0.296, 1)))
+                nails[2 * i +
+                      j].data.materials.append(panelWithPaints("panelPure", None))
 
         face.parent = base
         needle.parent = base
@@ -388,7 +388,7 @@ class RMI(BlenderModel):
 
         panel = bpy.context.active_object
         panel.data.materials.append(
-            generatePanelWithPaints(__class__.__name__))
+            panelWithPaints(__class__.__name__, __class__.__name__))
 
         bevel(panel, 15e-3)
 
@@ -521,7 +521,7 @@ class RMI(BlenderModel):
                       j].location = (355e-4 if i == 1 else -355e-4, (440e-4 + 20e-3) if j == 1 else (-640e-4 + 20e-3), 0)
                 nails[2 * i + j].rotation_euler[2] = random.uniform(0, math.pi)
                 nails[2 * i + j].data.materials.append(
-                    generateColorBump((0.13, 0.258, 0.296, 1)))
+                    panelWithPaints("panelPure", None))
 
         bpy.ops.object.select_all(action="DESELECT")
         rmi_compass.parent = panel
@@ -695,7 +695,7 @@ class AGB(BlenderModel):
                       j].location = (470e-4 if i == 1 else -470e-4, 460e-4 if j == 1 else -460e-4, 0)
                 nails[2 * i + j].rotation_euler[2] = random.uniform(0, math.pi)
                 nails[2 * i + j].data.materials.append(
-                    generateColorBump((0.13, 0.258, 0.296, 1)))
+                    panelWithPaints("panelPure", None))
 
         bpy.ops.object.select_all(action="DESELECT")
         container.parent = shield
@@ -824,7 +824,7 @@ class VBM(BlenderModel):
         bpy.ops.mesh.select_all(action='SELECT')
         bpy.ops.uv.cube_project(scale_to_bounds=True)
         bpy.ops.object.mode_set(mode='OBJECT')
-        base.data.materials.append(generateColorBump((0.13, 0.258, 0.296, 1)))
+        base.data.materials.append(panelWithPaints("panelPure", None))
 
         base = bpy.context.active_object
         digHole(base, 355e-4, 1, (0, 0, 0))
@@ -875,7 +875,7 @@ class VBM(BlenderModel):
                       j].location = (370e-4 if i == 1 else -370e-4, 370e-4 if j == 1 else -370e-4, 0)
                 nails[2 * i + j].rotation_euler[2] = random.uniform(0, math.pi)
                 nails[2 * i + j].data.materials.append(
-                    generateColorBump((0.13, 0.258, 0.296, 1)))
+                    panelWithPaints("panelPure", None))
 
         for n in nails:
             n.parent = base

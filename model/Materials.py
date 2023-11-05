@@ -118,7 +118,7 @@ def generateSignalBoardLightMaterial(name: str) -> bpy.types.Material:
         nodeImage.image = bpy.data.images.load(
             f"{os.getcwd()}/texture/{name}.png", check_existing=False)
         links.new(nodeImage.outputs["Color"], nodes[0].inputs["Emission"])
-        nodes[0].inputs["Emission Strength"].default_value = 10.0
+        nodes[0].inputs["Emission Strength"].default_value = 1.0
 
         return sigLight
 
@@ -271,20 +271,20 @@ def ironWithPaints(name: str, texture: str | None) -> bpy.types.Material:
             links.new(image.outputs["Alpha"], markMix.inputs["Color2"])
             links.new(lessThan.outputs["Value"], markMix.inputs["Fac"])
 
-            paintMix: bpy.types.ShaderNodeMixRGB = nodes.new(
-                "ShaderNodeMixRGB")
-            paintMix.inputs["Fac"].default_value = 0.5
-            links.new(paintRamp.outputs["Color"], paintMix.inputs["Color1"])
+        paintMix: bpy.types.ShaderNodeMixRGB = nodes.new(
+            "ShaderNodeMixRGB")
+        paintMix.inputs["Fac"].default_value = 0.5
+        links.new(paintRamp.outputs["Color"], paintMix.inputs["Color1"])
+        if texture != None:
             links.new(markMix.outputs["Color"], paintMix.inputs["Color2"])
-            links.new(paintMix.outputs["Color"], nodes[0].inputs["Base Color"])
         else:
-            links.new(paintRamp.outputs["Color"],
-                      nodes[0].inputs["Base Color"])
+            paintMix.inputs["Color2"].default_value = (0, 0, 0, 1)
+        links.new(paintMix.outputs["Color"], nodes[0].inputs["Base Color"])
 
         return mat
 
 
-def generatePanelWithPaints(name: str) -> bpy.types.Material:
+def panelWithPaints(name: str, texture: str | None) -> bpy.types.Material:
     index = bpy.data.materials.find(name)
     if index != -1:
         return bpy.data.materials[index]
@@ -365,20 +365,24 @@ def generatePanelWithPaints(name: str) -> bpy.types.Material:
         lessThan.inputs[1].default_value = 0.500
         links.new(mixtureNoise.outputs["Fac"], lessThan.inputs["Value"])
 
-        image = nodes.new("ShaderNodeTexImage")
-        image.image = bpy.data.images.load(
-            f"{os.getcwd()}/texture/{name}.png", check_existing=False)
+        if texture != None:
+            image = nodes.new("ShaderNodeTexImage")
+            image.image = bpy.data.images.load(
+                f"{os.getcwd()}/texture/{texture}.png", check_existing=False)
 
-        markMix: bpy.types.ShaderNodeMixRGB = nodes.new("ShaderNodeMixRGB")
-        markMix.inputs["Color1"].default_value = (0, 0, 0, 1)
-        links.new(image.outputs["Alpha"], markMix.inputs["Color2"])
-        links.new(lessThan.outputs["Value"], markMix.inputs["Fac"])
+            markMix: bpy.types.ShaderNodeMixRGB = nodes.new("ShaderNodeMixRGB")
+            markMix.inputs["Color1"].default_value = (0, 0, 0, 1)
+            links.new(image.outputs["Alpha"], markMix.inputs["Color2"])
+            links.new(lessThan.outputs["Value"], markMix.inputs["Fac"])
 
         paintMix: bpy.types.ShaderNodeMixRGB = nodes.new(
             "ShaderNodeMixRGB")
         paintMix.inputs["Fac"].default_value = 0.5
         links.new(paintRamp.outputs["Color"], paintMix.inputs["Color1"])
-        links.new(markMix.outputs["Color"], paintMix.inputs["Color2"])
+        if texture != None:
+            links.new(markMix.outputs["Color"], paintMix.inputs["Color2"])
+        else:
+            paintMix.inputs["Color2"].default_value = (0, 0, 0, 1)
         links.new(paintMix.outputs["Color"], nodes[0].inputs["Base Color"])
 
         return mat
