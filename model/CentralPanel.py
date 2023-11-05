@@ -137,6 +137,26 @@ class CentralPanel(BlenderModel):
         m2.location = (- width * scale / 10000 / 2 +
                        3075e-4 + 30e-4, - height * scale / 10000 / 2 - 1160e-4, 0)
 
+        leftND = Monitor().create()
+        leftND.parent = panel
+        leftND.location = (-width * scale / 10000 / 2 - 1025e-4 -
+                           10e-4, - height * scale / 10000 / 2, 0)
+
+        leftPFD = Monitor().create()
+        leftPFD.parent = panel
+        leftPFD.location = (-width * scale / 10000 / 2 - 1025e-4 -
+                            30e-4 - 2050e-4, - height * scale / 10000 / 2, 0)
+
+        rightND = Monitor().create()
+        rightND.parent = panel
+        rightND.location = (width * scale / 10000 / 2 + 1025e-4 +
+                            10e-4 + 1350e-4, - height * scale / 10000 / 2, 0)
+
+        rightPFD = Monitor().create()
+        rightPFD.parent = panel
+        rightPFD.location = (width * scale / 10000 / 2 + 1025e-4 +
+                             30e-4 + 2050e-4 + 1350e-4, - height * scale / 10000 / 2, 0)
+
         panel.select_set(True)
 
         moveOrigin((0.0, 0.0, 0.0))
@@ -150,7 +170,7 @@ class CentralPanel(BlenderModel):
     def render(self, name: str) -> None:
         # Add render camera
 
-        bpy.ops.object.camera_add(location=(0, -0.2, 0.6),
+        bpy.ops.object.camera_add(location=(0, -0.5, 1.5),
                                   rotation=(math.atan(1 / 3), 0, 0))
         bpy.context.scene.camera = bpy.context.object
 
@@ -159,8 +179,8 @@ class CentralPanel(BlenderModel):
         bpy.ops.object.light_add(
             location=(0, 1, 0.5), rotation=(-math.pi / 2 + math.atan(0.5), 0, 0), type="AREA")
         light = bpy.data.lights[0]
-        light.energy = 10
-        light.color = (1, 1, 1)
+        light.energy = 3
+        light.color = (1, 1, 0.5)
 
         # Set GPU render
 

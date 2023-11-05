@@ -14,7 +14,7 @@ from blender_model import BlenderModel
 from models import generateClockFace, extrudeFace, US2, digHole, digHoleObj, RMI, AGB, VBM, moveOrigin
 from SignalBoard import SignalBoard
 from utils import add_plane, add_cube, bevel, moveOrigin, digHoleObj, bevelWeight
-from Materials import generateColorBump, generateClockGlass, generateScreenGauge
+from Materials import generateColorBump, generateClockGlass, generateScreenGauge, panelWithPaints
 
 
 class Monitor(BlenderModel):
@@ -96,8 +96,9 @@ class Monitor(BlenderModel):
         bpy.ops.uv.cube_project()
 
         bpy.ops.object.mode_set(mode='OBJECT')
+
         monitor.data.materials.append(
-            generateColorBump((0.13, 0.258, 0.296, 1)))
+            panelWithPaints("panelPure", None))
 
         glass = add_plane((self.screenWidth, self.screenHeight),
                           (0, 0, -self.glassDepth))
