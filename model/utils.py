@@ -1,5 +1,6 @@
 import bpy
 import bmesh
+from typing import Callable
 
 
 def add_cube(dimension=(1, 1, 1), location=(0, 0, 0)) -> bpy.types.Object:
@@ -40,7 +41,7 @@ def add_cylinder(h: float = 1.0, r1: float = 1.0, r2: float = 1.0, segments: int
 
     x, y, z = bpy.context.active_object.dimensions
     bpy.ops.transform.resize(
-        value=(r2/r1, r2/r1, z))
+        value=(r2 / r1, r2 / r1, z))
 
     bmesh.update_edit_mesh(obj.data)
     bm.free()
@@ -132,3 +133,14 @@ def bevelWeight(obj: bpy.types.Object, width: float, segs: int = 6) -> bpy.types
     bv.segments = segs
     bpy.ops.object.modifier_apply(modifier="bevel")
     return obj
+
+
+def removeFaces(obj: bpy.types.Object, callback: Callable[[bmesh.types.BMFace], bool]) -> bpy.types.Object:
+    bpy.ops.object.mode_set(mode='EDIT')
+    bpy.ops.mesh.select_mode(type='FACE')
+    bpy.ops.mesh.select_all(action="DESELECT")
+    bm = bmesh.from_edit_mesh(obj.data)
+    for f in bm.faces:
+        if callback(f):
+            bm.faces.remove(f)
+    bpy.ops.object.mode_set(mode='OBJECT')

@@ -572,8 +572,11 @@ export default class CentralPanel extends Component {
             <g name="rmi" transform="translate(3335,950)">
                 <RMI></RMI>
             </g>
-            <g name="stab_disp" transform="translate(553,1545)">
-                <rect width={this.stab_w} height={this.stab_h} x={-this.stab_w / 2} y={-this.stab_h / 2}></rect>
+            <g name="stab_disp" transform="translate(553,1545)" viewBox={`${-this.stab_w / 2} ${-this.stab_h / 2} ${this.stab_w} ${this.stab_h}`}>
+                {/* <rect width={this.stab_w} height={this.stab_h} x={-this.stab_w / 2} y={-this.stab_h / 2} fillOpacity={.5}></rect>
+                <rect width={200} height={500} x={-100} y={-250} fillOpacity={.5}></rect> */}
+                {/* <rect width={160} height={420} x={-70} y={-210} fillOpacity={.5}></rect> */}
+
             </g>
             <g name="stab_sig" transform="translate(205,1545)">
                 <rect width={this.sig_w} height={2 * this.sig_h} x={-this.sig_w / 2} y={-this.sig_h}></rect>

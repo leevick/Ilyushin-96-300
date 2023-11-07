@@ -17,6 +17,7 @@ from PU56SpeedKnob import PU56SpeedKnob
 from PU56HKnob import PU56HKnob
 from SPSH4 import SPSH4
 from CentralRightPanel import CentralRightPanel
+from StabIndicator import StabIndicator
 
 
 argv = sys.argv
