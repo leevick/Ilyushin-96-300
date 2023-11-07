@@ -576,6 +576,38 @@ export default class CentralPanel extends Component {
                 {/* <rect width={this.stab_w} height={this.stab_h} x={-this.stab_w / 2} y={-this.stab_h / 2} fillOpacity={.5}></rect>
                 <rect width={200} height={500} x={-100} y={-250} fillOpacity={.5}></rect> */}
                 {/* <rect width={160} height={420} x={-70} y={-210} fillOpacity={.5}></rect> */}
+                <g transform="translate(30,0)">
+                    <g transform="rotate(90)">
+                        <rect x={-Math.PI * 330} y={-50} height={100} width={Math.PI * 330 * 2} opacity={1} fill="black"></rect>
+                        <line x1={-Math.PI / 180 * 35 * 330 - 2.5} x2={Math.PI / 180 * 35 * 330 + 4} y1={0} y2={0} stroke="white" strokeWidth={5}></line>
+                        {
+                            Array.from({ length: 15 }, (_, i) => {
+                                return <line stroke="white" strokeWidth={5}
+                                    x1={-Math.PI / 180 * 35 * 330 + Math.PI / 180 * 5 * 330 * i}
+                                    x2={-Math.PI / 180 * 35 * 330 + Math.PI / 180 * 5 * 330 * i}
+                                    y1={0}
+                                    y2={25} />
+                            })
+                        }
+                        {
+                            Array.from({ length: 3 }, (_, i) => {
+                                return [<line stroke="white" strokeWidth={8}
+                                    x1={-Math.PI / 180 * 5 * 330 + Math.PI / 180 * 20 * 330 * i}
+                                    x2={-Math.PI / 180 * 5 * 330 + Math.PI / 180 * 20 * 330 * i}
+                                    y1={0}
+                                    y2={40} />,
+                                <text y={-5} x={-Math.PI / 180 * 5 * 330 + Math.PI / 180 * 20 * 330 * i} fill="white" rotate={-90} fontSize={30} letterSpacing={0} textLength={i === 2 ? 30 : 15} lengthAdjust="spacingAndGlyphs" fontFamily="lenya69">{`${i * 4 + 4}`}</text>]
+                            })
+                        }
+
+                        <line stroke="white" strokeWidth={8}
+                            x1={-Math.PI / 180 * 25 * 330}
+                            x2={-Math.PI / 180 * 25 * 330}
+                            y1={-10}
+                            y2={40} />
+
+                    </g>
+                </g>
 
             </g>
             <g name="stab_sig" transform="translate(205,1545)">
