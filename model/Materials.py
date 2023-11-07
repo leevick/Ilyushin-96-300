@@ -5,36 +5,81 @@ from io_scene_gltf2_msfs.blender.msfs_material_prop_update import MSFS_Material_
 from io_scene_gltf2_msfs.blender.msfs_material_function import MSFS_Material
 
 
-def generateSignalBoardFrameMaterial() -> bpy.types.Material:
-    index = bpy.data.materials.find("signalBoardFrame")
+def generateSignalBoardFrameMaterial(texture: str | None = None) -> bpy.types.Material:
+
+    if texture == None:
+        index = bpy.data.materials.find("signalBoardFrame")
+    else:
+        index = bpy.data.materials.find("signalBoardFrame" + texture)
+
     if index != -1:
         return bpy.data.materials[index]
-    else:
+
+    if texture == None:
         sigFrame = bpy.data.materials.new(name="signalBoardFrame")
-        sigFrame.use_nodes = True
+    else:
+        sigFrame = bpy.data.materials.new(name="signalBoardFrame" + texture)
 
-        nodes = sigFrame.node_tree.nodes
-        links = sigFrame.node_tree.links
+    sigFrame.use_nodes = True
 
-        geometry: bpy.types.ShaderNodeNewGeometry = nodes.new(
-            "ShaderNodeNewGeometry")
-        noise: bpy.types.ShaderNodeTexNoise = nodes.new("ShaderNodeTexNoise")
-        noise.inputs["Scale"].default_value = 892.1
-        noise.inputs["Detail"].default_value = 15.0
-        noise.inputs['Roughness'].default_value = 0.822
+    nodes = sigFrame.node_tree.nodes
+    links = sigFrame.node_tree.links
 
-        links.new(geometry.outputs["Position"], noise.inputs["Vector"])
+    geometry: bpy.types.ShaderNodeNewGeometry = nodes.new(
+        "ShaderNodeNewGeometry")
 
-        invert: bpy.types.ShaderNodeInvert = nodes.new("ShaderNodeInvert")
-        invert.inputs["Color"].default_value = (1, 1, 1, 1)
+    texCoord: bpy.types.ShaderNodeTexCoord = nodes.new(
+        "ShaderNodeTexCoord")
 
-        links.new(noise.outputs["Fac"], invert.inputs["Fac"])
-        links.new(noise.outputs["Fac"], nodes[0].inputs["Metallic"])
-        links.new(invert.outputs["Color"], nodes[0].inputs["Roughness"])
+    mixtureNoise: bpy.types.ShaderNodeTexNoise = nodes.new(
+        "ShaderNodeTexNoise")
+    mixtureNoise.noise_dimensions = "3D"
+    mixtureNoise.inputs["Scale"].default_value = 999.70
+    mixtureNoise.inputs["Detail"].default_value = 15.0
+    mixtureNoise.inputs["Roughness"].default_value = 1
+    links.new(texCoord.outputs["Object"],
+              mixtureNoise.inputs["Vector"])
 
-        nodes[0].inputs["Base Color"].default_value = (0, 0, 0, 1)
+    lessThan: bpy.types.ShaderNodeMath = nodes.new("ShaderNodeMath")
+    lessThan.operation = "LESS_THAN"
+    lessThan.inputs[1].default_value = 0.500
+    links.new(mixtureNoise.outputs["Fac"], lessThan.inputs["Value"])
+    if texture != None:
+        image = nodes.new("ShaderNodeTexImage")
+        image.image = bpy.data.images.load(
+            f"{os.getcwd()}/texture/{texture}.png", check_existing=False)
 
-        return sigFrame
+        markMix: bpy.types.ShaderNodeMixRGB = nodes.new("ShaderNodeMixRGB")
+        markMix.inputs["Color1"].default_value = (0, 0, 0, 1)
+        links.new(image.outputs["Color"], markMix.inputs["Color2"])
+        links.new(lessThan.outputs["Value"], markMix.inputs["Fac"])
+
+    noise: bpy.types.ShaderNodeTexNoise = nodes.new("ShaderNodeTexNoise")
+    noise.inputs["Scale"].default_value = 892.1
+    noise.inputs["Detail"].default_value = 15.0
+    noise.inputs['Roughness'].default_value = 0.822
+    noise.noise_dimensions = "3D"
+
+    links.new(geometry.outputs["Position"], noise.inputs["Vector"])
+
+    invert: bpy.types.ShaderNodeInvert = nodes.new("ShaderNodeInvert")
+    invert.inputs["Color"].default_value = (1, 1, 1, 1)
+
+    links.new(noise.outputs["Fac"], invert.inputs["Fac"])
+    links.new(noise.outputs["Fac"], nodes[0].inputs["Metallic"])
+    links.new(invert.outputs["Color"], nodes[0].inputs["Roughness"])
+
+    paintMix: bpy.types.ShaderNodeMixRGB = nodes.new(
+        "ShaderNodeMixRGB")
+    paintMix.inputs["Fac"].default_value = 0.5
+    paintMix.inputs["Color1"].default_value = (0, 0, 0, 1)
+    if texture != None:
+        links.new(markMix.outputs["Color"], paintMix.inputs["Color2"])
+    else:
+        paintMix.inputs["Color2"].default_value = (0, 0, 0, 1)
+    links.new(paintMix.outputs["Color"], nodes[0].inputs["Base Color"])
+
+    return sigFrame
 
 
 def generatePureSignalLight(color=(1.0, 1.0, 1.0, 1.0)) -> bpy.types.Material:
@@ -191,6 +236,9 @@ def ironWithPaints(name: str, texture: str | None) -> bpy.types.Material:
         nodes = mat.node_tree.nodes
         links = mat.node_tree.links
 
+        geometry: bpy.types.ShaderNodeNewGeometry = nodes.new(
+            "ShaderNodeNewGeometry")
+
         texCoord: bpy.types.ShaderNodeTexCoord = nodes.new(
             "ShaderNodeTexCoord")
         paintNoise: bpy.types.ShaderNodeTexNoise = nodes.new(
@@ -200,15 +248,15 @@ def ironWithPaints(name: str, texture: str | None) -> bpy.types.Material:
         bumpNoise: bpy.types.ShaderNodeTexNoise = nodes.new(
             "ShaderNodeTexNoise")
 
-        paintNoise.noise_dimensions = "2D"
-        mixtureNoise.noise_dimensions = "2D"
-        bumpNoise.noise_dimensions = "2D"
+        paintNoise.noise_dimensions = "3D"
+        mixtureNoise.noise_dimensions = "3D"
+        bumpNoise.noise_dimensions = "3D"
 
-        links.new(texCoord.outputs["Object"],
+        links.new(geometry.outputs["Position"],
                   paintNoise.inputs["Vector"])
         links.new(texCoord.outputs["Object"],
                   mixtureNoise.inputs["Vector"])
-        links.new(texCoord.outputs["Object"],
+        links.new(geometry.outputs["Position"],
                   bumpNoise.inputs["Vector"])
 
         paintNoise.inputs["Scale"].default_value = 4.0
@@ -268,7 +316,7 @@ def ironWithPaints(name: str, texture: str | None) -> bpy.types.Material:
 
             markMix: bpy.types.ShaderNodeMixRGB = nodes.new("ShaderNodeMixRGB")
             markMix.inputs["Color1"].default_value = (0, 0, 0, 1)
-            links.new(image.outputs["Alpha"], markMix.inputs["Color2"])
+            links.new(image.outputs["Color"], markMix.inputs["Color2"])
             links.new(lessThan.outputs["Value"], markMix.inputs["Fac"])
 
         paintMix: bpy.types.ShaderNodeMixRGB = nodes.new(
@@ -295,6 +343,9 @@ def panelWithPaints(name: str, texture: str | None) -> bpy.types.Material:
         nodes = mat.node_tree.nodes
         links = mat.node_tree.links
 
+        geometry: bpy.types.ShaderNodeNewGeometry = nodes.new(
+            "ShaderNodeNewGeometry")
+
         texCoord: bpy.types.ShaderNodeTexCoord = nodes.new(
             "ShaderNodeTexCoord")
         paintNoise: bpy.types.ShaderNodeTexNoise = nodes.new(
@@ -304,15 +355,15 @@ def panelWithPaints(name: str, texture: str | None) -> bpy.types.Material:
         bumpNoise: bpy.types.ShaderNodeTexNoise = nodes.new(
             "ShaderNodeTexNoise")
 
-        paintNoise.noise_dimensions = "2D"
-        mixtureNoise.noise_dimensions = "2D"
-        bumpNoise.noise_dimensions = "2D"
+        paintNoise.noise_dimensions = "3D"
+        mixtureNoise.noise_dimensions = "3D"
+        bumpNoise.noise_dimensions = "3D"
 
-        links.new(texCoord.outputs["Object"],
+        links.new(geometry.outputs["Position"],
                   paintNoise.inputs["Vector"])
         links.new(texCoord.outputs["Object"],
                   mixtureNoise.inputs["Vector"])
-        links.new(texCoord.outputs["Object"],
+        links.new(geometry.outputs["Position"],
                   bumpNoise.inputs["Vector"])
 
         paintNoise.inputs["Scale"].default_value = 4.0
@@ -372,7 +423,7 @@ def panelWithPaints(name: str, texture: str | None) -> bpy.types.Material:
 
             markMix: bpy.types.ShaderNodeMixRGB = nodes.new("ShaderNodeMixRGB")
             markMix.inputs["Color1"].default_value = (0, 0, 0, 1)
-            links.new(image.outputs["Alpha"], markMix.inputs["Color2"])
+            links.new(image.outputs["Color"], markMix.inputs["Color2"])
             links.new(lessThan.outputs["Value"], markMix.inputs["Fac"])
 
         paintMix: bpy.types.ShaderNodeMixRGB = nodes.new(
