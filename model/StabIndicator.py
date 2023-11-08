@@ -6,8 +6,9 @@ import bpy
 import bmesh
 import math
 from blender_model import BlenderModel
-from utils import add_cube, add_cylinder, add_plane, bevel, extrudeFace, digHoleObj, removeFaces
-
+from utils import add_cube, add_cylinder, add_plane, bevel, extrudeFace, digHoleObj, removeFaces, moveOrigin
+from Materials import ironWithPaints, generateSignalBoardFrameMaterial
+from models import generateClockFace
 dir = pathlib.Path(__file__).parent.as_posix()
 if not dir in sys.path:
     sys.path.append(dir)
@@ -53,6 +54,8 @@ class StabIndicator(BlenderModel):
         cut = add_cube((self.holeWidth, self.holeHeight, 1),
                        (self.holeOffset, 0, 0))
         digHoleObj(box, cut)
+        moveOrigin((0, 0, 0))
+        box.data.materials.append(generateSignalBoardFrameMaterial())
 
         # Cylinder
 
@@ -62,5 +65,10 @@ class StabIndicator(BlenderModel):
                        self.wheelDepth - self.wheelRadius)
 
         cl.rotation_euler[1] = math.pi / 2
+
+        cl.data.materials.append(
+            generateSignalBoardFrameMaterial("StabDispWheel"))
+        bpy.ops.object.shade_smooth()
+        cl.parent = box
 
         return box
