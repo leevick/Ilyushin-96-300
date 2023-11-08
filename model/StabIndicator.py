@@ -30,7 +30,7 @@ class StabIndicator(BlenderModel):
     holeOffset: float = 10e-4
 
     wheelRadius: float = 330e-4
-    wheelHeight: float = 120e-4
+    wheelHeight: float = 100e-4
     wheelDepth: float = 10e-4
 
     def isBackCover(self, obj: bmesh.types.BMFace) -> bool:
@@ -59,12 +59,18 @@ class StabIndicator(BlenderModel):
 
         # Cylinder
 
-        cl = add_cylinder(h=self.wheelHeight,
-                          r1=self.wheelRadius, r2=self.wheelRadius, segments=36)
-        cl.location = (self.holeOffset + 2e-3, 0, -
-                       self.wheelDepth - self.wheelRadius)
+        bpy.ops.mesh.primitive_cylinder_add(
+            vertices=36, radius=self.wheelRadius, depth=self.wheelHeight)
 
-        cl.rotation_euler[1] = math.pi / 2
+        cl = bpy.context.active_object
+
+        ov = bpy.context.copy()
+        ov['area'] = [a for a in bpy.context.screen.areas if a.type == "VIEW_3D"][0]
+        bpy.ops.transform.rotate(ov, value=math.radians(-90), orient_axis='Y')
+        bpy.ops.transform.rotate(ov, value=math.radians(90), orient_axis='X')
+
+        cl.location = (self.holeOffset + 2e-3, 0, -
+                       self.wheelDepth - self.wheelRadius + self.depth / 2)
 
         cl.data.materials.append(
             generateSignalBoardFrameMaterial("StabDispWheel"))
