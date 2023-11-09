@@ -18,6 +18,7 @@ from CentralRightPanel import CentralRightPanel
 from Materials import panelWithPaints
 from Monitor import Monitor
 from VR30BP import VR30BP
+from StabIndicator import StabIndicator
 
 
 class CentralPanel(BlenderModel):
@@ -45,6 +46,15 @@ class CentralPanel(BlenderModel):
 
         extrudeFace(panel, 0.001)
 
+        stab_x = 55.3e-3 - width * scale / 10000.0 / 2
+        stab_y = height * scale / 10000.0 / 2 - 154.5e-3
+
+        stab = StabIndicator().create()
+        cut = add_cube((300e-4, 670e-4, 1), (stab_x, stab_y, 0))
+        digHoleObj(panel, cut)
+        stab.location = (stab_x, stab_y, 0)
+        stab.parent = panel
+
         us2_x = 51.25e-3 - width * scale / 10000.0 / 2
         us2_y = height * scale / 10000.0 / 2 - 66.25e-3
 
@@ -60,6 +70,7 @@ class CentralPanel(BlenderModel):
         digHole(panel, us2.radius, 1, (vr30bp_x, vr30bp_y, 0))
         vr30bp.create()
         vr30bp.model.location = (vr30bp_x, vr30bp_y, 0)
+        vr30bp.model.parent = panel
 
         # RMI Outline
         rmi = RMI()
