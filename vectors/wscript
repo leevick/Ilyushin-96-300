@@ -65,6 +65,7 @@ textures = [
     "SteerDevice2",
     "CentralRightPanel",
     "StabDispWheel",
+    "VR30BPTicks",
 
 ]
 

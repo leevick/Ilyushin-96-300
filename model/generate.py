@@ -18,6 +18,7 @@ from PU56HKnob import PU56HKnob
 from SPSH4 import SPSH4
 from CentralRightPanel import CentralRightPanel
 from StabIndicator import StabIndicator
+from VR30BP import VR30BP
 
 
 argv = sys.argv

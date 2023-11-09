@@ -524,6 +524,11 @@ export default class CentralPanel extends Component {
     }
 
     render() {
+
+        const VR_30BP = [[0, 40], [40, 40], [80, 60], [140, 40]]
+
+
+
         return <g id="CentralPanel" viewBox={`${this.left} ${this.top} ${this.width} ${this.height}`}>
             <image x={0} y={0} width={1742 * this.scale} height={918 * this.scale} href={center_upper_texture} />
             {/* <circle name="us2" cx={512.5} cy={662.5} r={400} fill={"white"} fillOpacity={0.5} ></circle> */}
@@ -534,8 +539,150 @@ export default class CentralPanel extends Component {
             </g>
 
 
-            <g name="vp">
-                <circle name="" cx={2465} cy={1500} r={400} fill={"white"} fillOpacity={1.0} ></circle>
+            <g transform="translate(2456,1500)">
+                <g id="VR30BPTicks" viewBox="-400 -400 800 800">
+                    {/* <circle name="" cx={0} cy={0} r={360} fill={"black"} fillOpacity={1.0} ></circle> */}
+                    {
+                        VR_30BP.map((t, _) =>
+                            Array.from({ length: 6 }, (_, i) => <line
+                                x1={-335 * Math.cos(Math.PI / 180.0 * (t[1] / 5 * i + t[0]))}
+                                x2={-290 * Math.cos(Math.PI / 180.0 * (t[1] / 5 * i + t[0]))}
+                                y1={-335 * Math.sin(Math.PI / 180.0 * (t[1] / 5 * i + t[0]))}
+                                y2={-290 * Math.sin(Math.PI / 180.0 * (t[1] / 5 * i + t[0]))} stroke="white" strokeWidth={5}></line>)
+                        )
+                    }
+                    {
+                        VR_30BP.map((t, _) =>
+                            Array.from({ length: 6 }, (_, i) => <line
+                                x1={-335 * Math.cos(Math.PI / 180.0 * (t[1] / 5 * i + t[0]))}
+                                x2={-290 * Math.cos(Math.PI / 180.0 * (t[1] / 5 * i + t[0]))}
+                                y1={335 * Math.sin(Math.PI / 180.0 * (t[1] / 5 * i + t[0]))}
+                                y2={290 * Math.sin(Math.PI / 180.0 * (t[1] / 5 * i + t[0]))} stroke="white" strokeWidth={5}></line>)
+                        )
+                    }
+                    {
+                        VR_30BP.map((t, _) =>
+                            <line
+                                x1={-335 * Math.cos(Math.PI / 180.0 * (t[0]))}
+                                x2={-280 * Math.cos(Math.PI / 180.0 * (t[0]))}
+                                y1={-335 * Math.sin(Math.PI / 180.0 * (t[0]))}
+                                y2={-280 * Math.sin(Math.PI / 180.0 * (t[0]))} stroke="white" strokeLinecap="round" strokeWidth={10}></line>)
+
+                    }
+                    {
+                        VR_30BP.map((t, _) =>
+                            <line
+                                x1={-335 * Math.cos(Math.PI / 180.0 * (t[0]))}
+                                x2={-280 * Math.cos(Math.PI / 180.0 * (t[0]))}
+                                y1={335 * Math.sin(Math.PI / 180.0 * (t[0]))}
+                                y2={280 * Math.sin(Math.PI / 180.0 * (t[0]))} stroke="white" strokeLinecap="round" strokeWidth={10}></line>)
+
+                    }
+                    <line
+                        x1={-335 * Math.cos(Math.PI)}
+                        x2={-280 * Math.cos(Math.PI)}
+                        y1={335 * Math.sin(Math.PI)}
+                        y2={280 * Math.sin(Math.PI)} stroke="white" strokeLinecap="round" strokeWidth={10}></line>
+
+                    <text
+                        letterSpacing={-3}
+                        textLength={60}
+                        fontSize={120}
+                        fontFamily="lenya69"
+                        lengthAdjust="spacingAndGlyphs"
+                        dominantBaseline="central"
+                        x={-270 * Math.cos(Math.PI / 180.0 * 0)}
+                        y={270 * Math.sin(Math.PI / 180.0 * 0)} fill="white">0</text>
+
+                    <text
+                        letterSpacing={-3}
+                        textLength={60}
+                        fontSize={120}
+                        fontFamily="lenya69"
+                        lengthAdjust="spacingAndGlyphs"
+                        dominantBaseline="central"
+                        x={-250 * Math.cos(Math.PI / 180.0 * 40)}
+                        y={250 * Math.sin(Math.PI / 180.0 * 40) - 30} fill="white">5</text>
+                    <text
+                        letterSpacing={-3}
+                        textLength={60}
+                        fontSize={120}
+                        fontFamily="lenya69"
+                        lengthAdjust="spacingAndGlyphs"
+                        dominantBaseline="central"
+                        x={-250 * Math.cos(Math.PI / 180.0 * 40)}
+                        y={-250 * Math.sin(Math.PI / 180.0 * 40) + 20} fill="white">5</text>
+
+                    <text
+                        letterSpacing={-20}
+                        textLength={60}
+                        fontSize={120}
+                        fontFamily="lenya69"
+                        lengthAdjust="spacingAndGlyphs"
+                        dominantBaseline="central"
+                        x={-250 * Math.cos(Math.PI / 180.0 * 80) - 30}
+                        y={250 * Math.sin(Math.PI / 180.0 * 80) - 30} fill="white">10</text>
+                    <text
+                        letterSpacing={-20}
+                        textLength={60}
+                        fontSize={120}
+                        fontFamily="lenya69"
+                        lengthAdjust="spacingAndGlyphs"
+                        dominantBaseline="central"
+                        x={-250 * Math.cos(Math.PI / 180.0 * 80) - 30}
+                        y={-250 * Math.sin(Math.PI / 180.0 * 80) + 20} fill="white">10</text>
+
+                    <text
+                        letterSpacing={-3}
+                        textLength={120}
+                        fontSize={120}
+                        fontFamily="lenya69"
+                        lengthAdjust="spacingAndGlyphs"
+                        dominantBaseline="central"
+                        x={-250 * Math.cos(Math.PI / 180.0 * 140) - 100}
+                        y={250 * Math.sin(Math.PI / 180.0 * 140) - 30} fill="white">20</text>
+
+                    <text
+                        letterSpacing={-3}
+                        textLength={120}
+                        fontSize={120}
+                        fontFamily="lenya69"
+                        lengthAdjust="spacingAndGlyphs"
+                        dominantBaseline="central"
+                        x={-250 * Math.cos(Math.PI / 180.0 * 140) - 100}
+                        y={-250 * Math.sin(Math.PI / 180.0 * 140) + 20} fill="white">20</text>
+
+
+                    <text
+                        letterSpacing={-3}
+                        textLength={150}
+                        fontSize={50}
+                        fontFamily="lenya69"
+                        lengthAdjust="spacingAndGlyphs"
+                        dominantBaseline="central"
+                        x={-200}
+                        y={60} fill="white">СПУСК</text>
+
+                    <text
+                        letterSpacing={-3}
+                        textLength={180}
+                        fontSize={50}
+                        fontFamily="lenya69"
+                        lengthAdjust="spacingAndGlyphs"
+                        dominantBaseline="central"
+                        x={-200}
+                        y={-60} fill="white">ПОДЕЬМ</text>
+
+                    <text
+                        letterSpacing={-3}
+                        textLength={120}
+                        fontSize={120}
+                        fontFamily="lenya69"
+                        lengthAdjust="spacingAndGlyphs"
+                        dominantBaseline="central"
+                        x={140}
+                        y={0} fill="white">30</text>
+                </g>
             </g>
             <g transform={`translate(${this.width / 2},${this.height / 2})`}>
                 <rect x={-1096.2} y={320.2} width={this.sig_w * 4} height={this.sig_h * 4} fillOpacity={1.0}></rect>
@@ -564,7 +711,7 @@ export default class CentralPanel extends Component {
                 </g>
             </g>
             <rect x={3225} y={1500} width={this.sig_w * 2} height={this.sig_h * 3} fillOpacity={1.0}></rect>
-            <circle cx={2465} cy={1500} r={400} fill={"white"} fillOpacity={1.0} ></circle>
+            {/* <circle cx={2465} cy={1500} r={400} fill={"white"} fillOpacity={1.0} ></circle> */}
 
             <g transform="translate(2065,250)">
                 <VBM></VBM>
@@ -579,7 +726,7 @@ export default class CentralPanel extends Component {
                 <g transform="translate(30,0)">
                     <g transform="rotate(90)">
                         <g id="StabDispWheel" viewBox={`${-Math.PI * 330} ${-50} ${Math.PI * 330 * 2} ${200}`}>
-                            <rect x={-Math.PI * 330} y={-50} height={100} width={Math.PI * 330 * 2} opacity={0} fill="black"></rect>
+                            <rect x={-Math.PI * 330} y={-50} height={100} width={Math.PI * 330 * 2} opacity={1} fill="black"></rect>
                             <line x1={-Math.PI / 180 * 35 * 330 - 2.5} x2={Math.PI / 180 * 35 * 330 + 4} y1={0} y2={0} stroke="white" strokeWidth={5}></line>
                             {
                                 Array.from({ length: 15 }, (_, i) => {

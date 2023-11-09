@@ -17,6 +17,7 @@ from utils import add_plane, add_cube
 from CentralRightPanel import CentralRightPanel
 from Materials import panelWithPaints
 from Monitor import Monitor
+from VR30BP import VR30BP
 
 
 class CentralPanel(BlenderModel):
@@ -51,6 +52,14 @@ class CentralPanel(BlenderModel):
         digHole(panel, us2.radius, 1, (us2_x, us2_y, 0))
         us2.create()
         us2.model.location = (us2_x, us2_y, 0)
+
+        vr30bp_x = 245.6e-3 - width * scale / 10000.0 / 2
+        vr30bp_y = height * scale / 10000.0 / 2 - 150.0e-3
+
+        vr30bp: VR30BP = VR30BP()
+        digHole(panel, us2.radius, 1, (vr30bp_x, vr30bp_y, 0))
+        vr30bp.create()
+        vr30bp.model.location = (vr30bp_x, vr30bp_y, 0)
 
         # RMI Outline
         rmi = RMI()
