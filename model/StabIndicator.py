@@ -37,8 +37,13 @@ class StabIndicator(BlenderModel):
         return obj.normal.z < 0 and math.fabs(obj.calc_area() - self.width * self.heigh) < 1e-6
 
     def create(self) -> bpy.types.Object:
-        box = add_cube((self.width, self.heigh, self.depth),
-                       (0, 0, -self.depth / 2))
+        # box = add_cube((self.width, self.heigh, self.depth),
+        #                (0, 0, -self.depth / 2))
+
+        box = add_plane((self.width, self.heigh))
+
+        extrudeFace(box, self.depth)
+        moveOrigin((0, 0, 0))
 
         # Cut covering glass
         cut = add_plane((self.glassWidth, self.glassHeight),
@@ -47,15 +52,16 @@ class StabIndicator(BlenderModel):
         extrudeFace(cut, 2 * self.glassDepth)
         digHoleObj(box, cut)
 
-        # Remove Back Cover
+        # # Remove Back Cover
         removeFaces(box, self.isBackCover)
 
-        # Cut covering glass
+        # # Cut covering glass
         cut = add_cube((self.holeWidth, self.holeHeight, 1),
                        (self.holeOffset, 0, 0))
         digHoleObj(box, cut)
-        moveOrigin((0, 0, 0))
-        box.data.materials.append(generateSignalBoardFrameMaterial())
+
+        box.data.materials.append(
+            generateSignalBoardFrameMaterial("StabDispFrame"))
 
         # Cylinder
 
@@ -70,7 +76,7 @@ class StabIndicator(BlenderModel):
         bpy.ops.transform.rotate(ov, value=math.radians(90), orient_axis='X')
 
         cl.location = (self.holeOffset + 2e-3, 0, -
-                       self.wheelDepth - self.wheelRadius + self.depth / 2)
+                       self.wheelDepth - self.wheelRadius)
 
         cl.data.materials.append(
             generateSignalBoardFrameMaterial("StabDispWheel"))

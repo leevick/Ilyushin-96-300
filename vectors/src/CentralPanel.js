@@ -720,13 +720,29 @@ export default class CentralPanel extends Component {
                 <RMI></RMI>
             </g>
             <g name="stab_disp" transform="translate(553,1545)" viewBox={`${-this.stab_w / 2} ${-this.stab_h / 2} ${this.stab_w} ${this.stab_h}`}>
+                <rect width={this.stab_w} height={this.stab_h} x={-this.stab_w / 2} y={-this.stab_h / 2} fillOpacity={1}></rect>
+                <g id="StabDispFrame" viewBox={`${-this.stab_w / 2} ${-this.stab_h / 2} ${this.stab_w} ${this.stab_h}`}>
+                    <text x={-50} y={-270} fill="white" fontSize={50} letterSpacing={-3} textLength={100} lengthAdjust="spacingAndGlyphs" fontFamily="lenya69">СТАБ</text>
+                    <text x={-135} y={-140} fill="white" fontSize={30} letterSpacing={-3} textLength={15} lengthAdjust="spacingAndGlyphs" fontFamily="lenya69">П</text>
+                    <text x={-135} y={-90} fill="white" fontSize={30} letterSpacing={-3} textLength={15} lengthAdjust="spacingAndGlyphs" fontFamily="lenya69">К</text>
+                    <line x1={-this.stab_w / 2 + 10} x2={-this.stab_w / 2 + 45} y1={-125} y2={-125} stroke="white" strokeLinecap="round" strokeWidth={10}></line>
+                    <g transform="translate(-127.5,-170)">
+                        <path d="M 0 0 l 0 -30 l -10 0 l 10 -20 l 10 20 l -10 0 z" stroke="white" fill="white" strokeWidth={2}></path>
+                    </g>
+                    <g transform="translate(-127.5,-80)">
+                        <g transform="rotate(180)">
+                            <path d="M 0 0 l 0 -30 l -10 0 l 10 -20 l 10 20 l -10 0 z" stroke="white" fill="white" strokeWidth={2}></path>
+                        </g>
+                    </g>
+
+                </g>
                 {/* <rect width={this.stab_w} height={this.stab_h} x={-this.stab_w / 2} y={-this.stab_h / 2} fillOpacity={.5}></rect>
                 <rect width={200} height={500} x={-100} y={-250} fillOpacity={.5}></rect> */}
                 {/* <rect width={160} height={420} x={-70} y={-210} fillOpacity={.5}></rect> */}
                 <g transform="translate(30,0)">
                     <g transform="rotate(90)">
                         <g id="StabDispWheel" viewBox={`${-Math.PI * 330} ${-50} ${Math.PI * 330 * 2} ${200}`}>
-                            <rect x={-Math.PI * 330} y={-50} height={100} width={Math.PI * 330 * 2} opacity={1} fill="black"></rect>
+                            {/* <rect x={-Math.PI * 330} y={-50} height={100} width={Math.PI * 330 * 2} opacity={1} fill="black"></rect> */}
                             <line x1={-Math.PI / 180 * 35 * 330 - 2.5} x2={Math.PI / 180 * 35 * 330 + 4} y1={0} y2={0} stroke="white" strokeWidth={5}></line>
                             {
                                 Array.from({ length: 15 }, (_, i) => {
