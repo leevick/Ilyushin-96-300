@@ -19,6 +19,8 @@ from SPSH4 import SPSH4
 from CentralRightPanel import CentralRightPanel
 from StabIndicator import StabIndicator
 from VR30BP import VR30BP
+from LeftLower import LeftLower
+from RightLower import RightLower
 
 
 argv = sys.argv

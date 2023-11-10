@@ -19,17 +19,19 @@ from Materials import panelWithPaints
 from Monitor import Monitor
 from VR30BP import VR30BP
 from StabIndicator import StabIndicator
+from LeftLower import LeftLower
+from RightLower import RightLower
 
 
 class CentralPanel(BlenderModel):
+
+    width: float = 1742 * 2.2 * 1e-4
+    height: float = 918 * 2.2 * 1e-4
 
     def __init__(self) -> None:
         super().__init__()
 
     def create(self) -> bpy.types.Object:
-        width = 1742
-        height = 918
-        scale = 2.2
 
         # Create cut object
         bpy.ops.mesh.primitive_plane_add()
@@ -37,7 +39,7 @@ class CentralPanel(BlenderModel):
         bpy.ops.object.editmode_toggle()
         x, y, z = bpy.context.active_object.dimensions
         bpy.ops.transform.resize(
-            value=(width * scale / 10000.0 / 2.0, height * scale / 10000.0 / 2.0, z), center_override=(0, 0, 0))
+            value=(self.width / 2.0, self.height / 2.0, z), center_override=(0, 0, 0))
         bpy.ops.object.editmode_toggle()
 
         panel = bpy.context.active_object
@@ -46,8 +48,8 @@ class CentralPanel(BlenderModel):
 
         extrudeFace(panel, 0.001)
 
-        stab_x = 55.3e-3 - width * scale / 10000.0 / 2
-        stab_y = height * scale / 10000.0 / 2 - 154.5e-3
+        stab_x = 55.3e-3 - self.width / 2
+        stab_y = self.height / 2 - 154.5e-3
 
         stab = StabIndicator().create()
         cut = add_cube((300e-4, 670e-4, 1), (stab_x, stab_y, 0))
@@ -55,16 +57,16 @@ class CentralPanel(BlenderModel):
         stab.location = (stab_x, stab_y, 0)
         stab.parent = panel
 
-        us2_x = 51.25e-3 - width * scale / 10000.0 / 2
-        us2_y = height * scale / 10000.0 / 2 - 66.25e-3
+        us2_x = 51.25e-3 - self.width / 2
+        us2_y = self.height / 2 - 66.25e-3
 
         us2: US2 = US2()
         digHole(panel, us2.radius, 1, (us2_x, us2_y, 0))
         us2.create()
         us2.model.location = (us2_x, us2_y, 0)
 
-        vr30bp_x = 245.6e-3 - width * scale / 10000.0 / 2
-        vr30bp_y = height * scale / 10000.0 / 2 - 150.0e-3
+        vr30bp_x = 245.6e-3 - self.width / 2
+        vr30bp_y = self.height / 2 - 150.0e-3
 
         vr30bp: VR30BP = VR30BP()
         digHole(panel, us2.radius, 1, (vr30bp_x, vr30bp_y, 0))
@@ -93,26 +95,26 @@ class CentralPanel(BlenderModel):
         # vbm : bpy.types.Object = VBM().create()
         vbm_outline: bpy.types.Object = VBM().createOutline()
         vbm_outline.location = (
-            2465e-4 - width * 1.1 / 10000, height * 1.1 / 10000 - 650e-4, 0)
+            2465e-4 - self.width / 2, self.height / 2 - 650e-4, 0)
         digHoleObj(panel, vbm_outline)
 
         vbm: bpy.types.Object = VBM().create()
         vbm.location = (
-            2465e-4 - width * 1.1 / 10000, height * 1.1 / 10000 - 650e-4, 0)
+            2465e-4 - self.width / 2, self.height / 2 - 650e-4, 0)
 
         # Stab Trims
-        cut = add_cube((295e-4, 2 * 165e-4, 1), (205e-4 - width * 1.1 / 10000,
-                       height * 1.1 / 10000 - 1545e-4, 0))
+        cut = add_cube((295e-4, 2 * 165e-4, 1), (205e-4 - self.width / 2,
+                       self.height / 2 - 1545e-4, 0))
         digHoleObj(panel, cut)
 
         sigTrimUp = SignalBoard("StabTrimUp").create()
-        sigTrimUp.location = (205e-4 - width * 1.1 / 10000,
-                              height * 1.1 / 10000 - (1545e-4 - 165e-4 / 2), 0)
+        sigTrimUp.location = (205e-4 - self.width / 2,
+                              self.height / 2 - (1545e-4 - 165e-4 / 2), 0)
         sigTrimUp.parent = panel
 
         sigTrimDown = SignalBoard("StabTrimDown").create()
-        sigTrimDown.location = (205e-4 - width * 1.1 / 10000,
-                                height * 1.1 / 10000 - (1545e-4 + 165e-4 / 2), 0)
+        sigTrimDown.location = (205e-4 - self.width / 2,
+                                self.height / 2 - (1545e-4 + 165e-4 / 2), 0)
         sigTrimDown.parent = panel
 
         # Engine Signals
@@ -142,46 +144,64 @@ class CentralPanel(BlenderModel):
         vbm.parent = panel
 
         # CENTRAL RIGHT
-        cr = CentralRightPanel().create()
-        cr.location = (width * scale / 10000.0 / 2.0 + 1e-3,
-                       height * scale / 10000.0 / 2.0, 0)
-        cr.parent = panel
+        cr: CentralRightPanel = CentralRightPanel()
+        cr.model = cr.create()
+        cr.model.location = (self.width / 2.0 + 1e-3,
+                             self.height / 2.0, 0)
+        cr.model.parent = panel
 
         # Monitors
         m1 = Monitor().create()
         m1.parent = panel
-        m1.location = (- width * scale / 10000 / 2 +
-                       1025e-4 + 10e-4, - height * scale / 10000 / 2 - 1160e-4, 0)
+        m1.location = (- self.width / 2 +
+                       1025e-4 + 10e-4, - self.height / 2 - 1160e-4, 0)
         m2 = Monitor().create()
         m2.parent = panel
-        m2.location = (- width * scale / 10000 / 2 +
-                       3075e-4 + 30e-4, - height * scale / 10000 / 2 - 1160e-4, 0)
+        m2.location = (- self.width / 2 +
+                       3075e-4 + 30e-4, - self.height / 2 - 1160e-4, 0)
 
-        leftND = Monitor().create()
-        leftND.parent = panel
-        leftND.location = (-width * scale / 10000 / 2 - 1025e-4 -
-                           10e-4, - height * scale / 10000 / 2, 0)
+        leftND: Monitor = Monitor()
+        leftND.model = leftND.create()
+        leftND.model.parent = panel
+        leftND.model.location = (-self.width / 2 - 1025e-4 -
+                                 10e-4, - self.height / 2, 0)
 
         leftPFD = Monitor().create()
         leftPFD.parent = panel
-        leftPFD.location = (-width * scale / 10000 / 2 - 1025e-4 -
-                            30e-4 - 2050e-4, - height * scale / 10000 / 2, 0)
+        leftPFD.location = (-self.width / 2 - 1025e-4 -
+                            30e-4 - 2050e-4, - self.height / 2, 0)
 
-        rightND = Monitor().create()
-        rightND.parent = panel
-        rightND.location = (width * scale / 10000 / 2 + 1025e-4 +
-                            10e-4 + 1350e-4, - height * scale / 10000 / 2, 0)
+        rightND: Monitor = Monitor()
+        rightND.model = rightND.create()
+        rightND.model.parent = panel
+        rightND.model.location = (self.width / 2 + rightND.width / 2 +
+                                  30e-4 + cr.width, - self.height / 2, 0)
 
-        rightPFD = Monitor().create()
-        rightPFD.parent = panel
-        rightPFD.location = (width * scale / 10000 / 2 + 1025e-4 +
-                             30e-4 + 2050e-4 + 1350e-4, - height * scale / 10000 / 2, 0)
+        rightPFD: Monitor = Monitor()
+        rightPFD.model = rightPFD.create()
+        rightPFD.model.parent = panel
+        rightPFD.model.location = (self.width / 2 + rightND.width +
+                                   50e-4 + rightPFD.width / 2 + cr.width, - self.height / 2, 0)
+
+        llp: LeftLower = LeftLower()
+        llp.model = llp.create()
+        llp.model.location = (-self.width / 2 -
+                              llp.width / 2, -self.height / 2 - llp.height / 2 - leftND.height / 2, 0)
+        llp.model.parent = panel
+
+        rlp: RightLower = RightLower()
+        rlp.model = rlp.create()
+        rlp.model.location = (self.width / 2 +
+                              rlp.width / 2 + cr.width + 30e-4,
+                              -self.height / 2 - rlp.height / 2 - leftND.height / 2, 0)
+        rlp.model.parent = panel
+
+        panel.location = (-cr.width / 2 - 5e-4, 0, 0)
 
         panel.select_set(True)
-
         moveOrigin((0.0, 0.0, 0.0))
 
-        # panel.rotation_euler[0] = math.radians(90)
+        panel.rotation_euler[0] = math.radians(75)
         # panel.rotation_euler[2] = math.radians(180)
         # panel.location = (0, -0.5, 0.7)
 

@@ -23,12 +23,15 @@ class CentralRightPanel(BlenderModel):
 
     sigTextures = ["GearOnPower", "SteerDevice1", "SteerDevice2"]
     sigBaseLocation = (357.5e-4, -322.5e-4, 0)
+    width: float = 135e-3
+    height: float = 430e-3
 
     def __init__(self) -> None:
         super().__init__()
 
     def create(self) -> bpy.types.Object:
-        panel = add_plane((135e-3, 430e-3), (135e-3 / 2, -430e-3 / 2, 0))
+        panel = add_plane((self.width, self.height),
+                          (self.width / 2, -self.height / 2, 0))
         moveOrigin((0, 0, 0))
         panel.data.materials.append(
             panelWithPaints("CentralRightPanel", "CentralRightPanel"))
