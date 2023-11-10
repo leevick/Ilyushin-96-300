@@ -1,11 +1,11 @@
-from utils import add_plane, add_cube, bevel, moveOrigin, digHoleObj, bevelWeight, add_cylinder
+from utils import add_plane, add_cube, bevel, moveOrigin, digHoleObj, bevelWeight, add_cylinder, removeFaces
 from PU56Button import PU56Button
 from PU56SpeedKnob import PU56SpeedKnob
 from PU56HKnob import PU56HKnob
 from SignalBoard import SignalBoard
 from models import generateClockFace, extrudeFace, US2, digHole, digHoleObj, RMI, AGB, VBM, moveOrigin
 from blender_model import BlenderModel
-from Materials import panelWithPaints
+from Materials import panelWithPaints, ironWithPaints
 import bpy
 import bmesh
 import sys
@@ -50,13 +50,24 @@ class PU56(BlenderModel):
 
     width: float = 470e-3
     height: float = 80e-3
+    depth: float = 130e-3
 
     def __init__(self) -> None:
         super().__init__()
 
+    def isFrontCover(self, f: bmesh.types.BMFace) -> bool:
+        return math.fabs(f.calc_center_median().z) < 1e-3
+
     def create(self) -> bpy.types.Object:
         mcp = add_plane((self.width, self.height))
-        mcp.data.materials.append(panelWithPaints("PU56"))
+        mcp.data.materials.append(panelWithPaints("PU56", "PU56"))
+
+        box = add_plane((self.width, self.height))
+        bevel(box, 3e-3, 6)
+        extrudeFace(box, self.depth)
+        removeFaces(box, self.isFrontCover)
+        box.data.materials.append(ironWithPaints("mcpBox", None))
+        box.parent = mcp
 
         knob = PU56SpeedKnob().create()
         knob.location = (-148.5e-3, -24e-3, 0)

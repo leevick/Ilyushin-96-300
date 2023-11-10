@@ -21,6 +21,7 @@ from VR30BP import VR30BP
 from StabIndicator import StabIndicator
 from LeftLower import LeftLower
 from RightLower import RightLower
+from PU56 import PU56
 
 
 class CentralPanel(BlenderModel):
@@ -200,6 +201,12 @@ class CentralPanel(BlenderModel):
 
         panel.select_set(True)
         moveOrigin((0.0, 0.0, 0.0))
+
+        pu56: PU56 = PU56()
+        pu56.model = pu56.create()
+        pu56.model.location = (0, self.height / 2 +
+                               pu56.height / 2, pu56.depth)
+        pu56.model.parent = panel
 
         panel.rotation_euler[0] = math.radians(75)
         # panel.rotation_euler[2] = math.radians(180)

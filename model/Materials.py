@@ -332,7 +332,7 @@ def ironWithPaints(name: str, texture: str | None) -> bpy.types.Material:
         return mat
 
 
-def panelWithPaints(name: str, texture: str | None) -> bpy.types.Material:
+def panelWithPaints(name: str, texture: str | None = None) -> bpy.types.Material:
     index = bpy.data.materials.find(name)
     if index != -1:
         return bpy.data.materials[index]
