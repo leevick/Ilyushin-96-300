@@ -1,4 +1,4 @@
-from utils import add_plane, add_cube, bevel, moveOrigin, digHoleObj, bevelWeight, add_cylinder, removeFaces
+from utils import add_plane, add_cube, bevel, moveOrigin, digHoleObj, bevelWeight, add_cylinder, removeFaces, bevelEdges, removeEdges, extrudeAlongNorm, bevelVertices
 from PU56Button import PU56Button
 from PU56SpeedKnob import PU56SpeedKnob
 from PU56HKnob import PU56HKnob
@@ -48,25 +48,62 @@ rectHoleList = [
 
 class PU56(BlenderModel):
 
-    width: float = 470e-3
-    height: float = 80e-3
+    panelWidth: float = 470e-3
+    panelHeight: float = 80e-3
+
+    width: float = panelWidth + 2e-3
+    height: float = panelHeight + 2e-3
     depth: float = 130e-3
+
+    shadeDepth: float = 2e-2
+    distToWindow: float = 525e-3
+    upperDepth: float = distToWindow / math.cos(math.radians(distToWindow))
 
     def __init__(self) -> None:
         super().__init__()
 
-    def isFrontCover(self, f: bmesh.types.BMFace) -> bool:
-        return math.fabs(f.calc_center_median().z) < 1e-3
-
     def create(self) -> bpy.types.Object:
-        mcp = add_plane((self.width, self.height))
+        mcp = add_plane((self.panelWidth, self.panelHeight))
         mcp.data.materials.append(panelWithPaints("PU56", "PU56"))
 
-        box = add_plane((self.width, self.height))
-        bevel(box, 3e-3, 6)
-        extrudeFace(box, self.depth)
-        removeFaces(box, self.isFrontCover)
+        box = add_cube(
+            (self.panelWidth, self.panelHeight / 2, self.depth), (0, 0, -self.depth / 2))
+
+        removeEdges(box, lambda e: e.verts[0].co.y > 0 and e.verts[1].co.y >
+                    0 and e.verts[0].co.x * e.verts[1].co.x < 0)
+
+        bevelEdges(
+            box, 3e-3, 6, lambda a:
+            a.verts[0].co.y < 0
+            and a.verts[1].co.y < 0
+            and a.verts[0].co.z != a.verts[1].co.z)
+
+        extrudeAlongNorm(box, 1e-3, lambda f: True)
+        bpy.ops.object.shade_smooth()
+
         box.data.materials.append(ironWithPaints("mcpBox", None))
+        box.location.y = - self.panelHeight / 4
+        box.parent = mcp
+
+        box = add_cube(
+            (self.panelWidth, self.panelHeight / 2, self.shadeDepth + self.upperDepth), (0, 0, -(self.shadeDepth + self.upperDepth) / 2 + self.shadeDepth))
+
+        removeEdges(box, lambda e: e.verts[0].co.y < 0 and e.verts[1].co.y <
+                    0 and e.verts[0].co.x * e.verts[1].co.x < 0)
+
+        bevelEdges(
+            box, 3e-3, 6, lambda a:
+            a.verts[0].co.y > 0
+            and a.verts[1].co.y > 0
+            and a.verts[0].co.z != a.verts[1].co.z)
+
+        bevelVertices(box, 5e-3, 6, lambda a: a.co.y < 0 and a.co.z > 0)
+
+        extrudeAlongNorm(box, 1e-3, lambda f: True)
+        bpy.ops.object.shade_smooth()
+
+        box.data.materials.append(ironWithPaints("mcpBox", None))
+        box.location.y = self.panelHeight / 4
         box.parent = mcp
 
         knob = PU56SpeedKnob().create()

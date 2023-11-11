@@ -135,6 +135,40 @@ def bevelWeight(obj: bpy.types.Object, width: float, segs: int = 6) -> bpy.types
     return obj
 
 
+def bevelEdges(object: bpy.types.Object,
+               offset: float, segments: int,
+               callback: Callable[[bmesh.types.BMEdge], bool]) -> None:
+    bpy.ops.object.mode_set(mode='EDIT')
+    bpy.ops.mesh.select_mode(type='EDGE')
+    bpy.ops.mesh.select_all(action="DESELECT")
+    bm = bmesh.from_edit_mesh(object.data)
+    for e in bm.edges:
+        if callback(e):
+            e.select_set(True)
+    bpy.ops.mesh.bevel(offset=offset,
+                       offset_pct=0,
+                       affect='EDGES',
+                       segments=segments)
+    bpy.ops.object.mode_set(mode='OBJECT')
+
+
+def bevelVertices(object: bpy.types.Object,
+                  offset: float, segments: int,
+                  callback: Callable[[bmesh.types.BMVert], bool]) -> None:
+    bpy.ops.object.mode_set(mode='EDIT')
+    bpy.ops.mesh.select_mode(type='VERT')
+    bpy.ops.mesh.select_all(action="DESELECT")
+    bm = bmesh.from_edit_mesh(object.data)
+    for v in bm.verts:
+        if callback(v):
+            v.select_set(True)
+    bpy.ops.mesh.bevel(offset=offset,
+                       offset_pct=0,
+                       affect='VERTICES',
+                       segments=segments)
+    bpy.ops.object.mode_set(mode='OBJECT')
+
+
 def removeFaces(obj: bpy.types.Object, callback: Callable[[bmesh.types.BMFace], bool]) -> bpy.types.Object:
     bpy.ops.object.mode_set(mode='EDIT')
     bpy.ops.mesh.select_mode(type='FACE')
@@ -143,4 +177,30 @@ def removeFaces(obj: bpy.types.Object, callback: Callable[[bmesh.types.BMFace], 
     for f in bm.faces:
         if callback(f):
             bm.faces.remove(f)
+    bpy.ops.object.mode_set(mode='OBJECT')
+
+
+def removeEdges(obj: bpy.types.Object, callback: Callable[[bmesh.types.BMEdge], bool]) -> bpy.types.Object:
+    bpy.ops.object.mode_set(mode='EDIT')
+    bpy.ops.mesh.select_mode(type='EDGE')
+    bpy.ops.mesh.select_all(action="DESELECT")
+    bm = bmesh.from_edit_mesh(obj.data)
+    for e in bm.edges:
+        if callback(e):
+            e.select_set(True)
+    bpy.ops.mesh.delete(type='EDGE_FACE')
+    bpy.ops.object.mode_set(mode='OBJECT')
+
+
+def extrudeAlongNorm(obj: bpy.types.Object, depth: float, callback: Callable[[bmesh.types.BMFace], bool]) -> None:
+    bpy.ops.object.mode_set(mode='EDIT')
+    bpy.ops.mesh.select_mode(type='FACE')
+    bpy.ops.mesh.select_all(action="DESELECT")
+    bm = bmesh.from_edit_mesh(obj.data)
+    for f in bm.faces:
+        if callback(f):
+            f.select_set(True)
+    bpy.ops.mesh.extrude_region_shrink_fatten(MESH_OT_extrude_region={"use_normal_flip": False, "use_dissolve_ortho_edges": False, "mirror": False},
+                                              TRANSFORM_OT_shrink_fatten={"value": depth, "use_even_offset": False, "mirror": False, "use_proportional_edit": False, "proportional_edit_falloff": 'SMOOTH',
+                                              "proportional_size": 1, "use_proportional_connected": False, "use_proportional_projected": False, "snap": False, "snap_target": 'CLOSEST', "snap_point": (0, 0, 0), "snap_align": False, "snap_normal": (0, 0, 0), "release_confirm": False, "use_accurate": False})
     bpy.ops.object.mode_set(mode='OBJECT')
