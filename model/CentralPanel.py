@@ -22,6 +22,7 @@ from StabIndicator import StabIndicator
 from LeftLower import LeftLower
 from RightLower import RightLower
 from PU56 import PU56
+from LeftGlareshield import LeftGlareshield
 
 
 class CentralPanel(BlenderModel):
@@ -207,6 +208,16 @@ class CentralPanel(BlenderModel):
         pu56.model.location = (0, self.height / 2 +
                                pu56.height / 2, pu56.depth)
         pu56.model.parent = panel
+
+        # Left Glareshield
+        lgs: LeftGlareshield = LeftGlareshield(
+            width=60e-2 - (self.width +
+                           cr.width - pu56.width) / 2.0,
+            depth=pu56.depth)
+        lgs.model = lgs.create()
+        lgs.model.location = (-pu56.width / 2 - lgs.width /
+                              2 - 1e-3, self.height / 2 + lgs.height / 2 - 5e-3, lgs.depth / 2)
+        lgs.model.parent = panel
 
         panel.rotation_euler[0] = math.radians(75)
         # panel.rotation_euler[2] = math.radians(180)
