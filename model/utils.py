@@ -204,3 +204,15 @@ def extrudeAlongNorm(obj: bpy.types.Object, depth: float, callback: Callable[[bm
                                               TRANSFORM_OT_shrink_fatten={"value": depth, "use_even_offset": False, "mirror": False, "use_proportional_edit": False, "proportional_edit_falloff": 'SMOOTH',
                                               "proportional_size": 1, "use_proportional_connected": False, "use_proportional_projected": False, "snap": False, "snap_target": 'CLOSEST', "snap_point": (0, 0, 0), "snap_align": False, "snap_normal": (0, 0, 0), "release_confirm": False, "use_accurate": False})
     bpy.ops.object.mode_set(mode='OBJECT')
+
+
+def subdivideEdges(obj: bpy.types.Object, callback: Callable[[bmesh.types.BMEdge], bool]) -> bpy.types.Object:
+    bpy.ops.object.mode_set(mode='EDIT')
+    bpy.ops.mesh.select_mode(type='EDGE')
+    bpy.ops.mesh.select_all(action="DESELECT")
+    bm = bmesh.from_edit_mesh(obj.data)
+    for e in bm.edges:
+        if callback(e):
+            e.select_set(True)
+    bpy.ops.mesh.subdivide()
+    bpy.ops.object.mode_set(mode='OBJECT')
