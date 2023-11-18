@@ -213,7 +213,7 @@ class CentralPanel(BlenderModel):
         lgs: LeftGlareshield = LeftGlareshield(
             width=60e-2 - (self.width +
                            cr.width - pu56.width) / 2.0,
-            depth=pu56.depth)
+            depth=pu56.depth, toPU56=(self.width + 1e-3 + cr.width - pu56.width) / 2)
         lgs.model = lgs.create()
         lgs.model.location = (-pu56.width / 2 - lgs.width /
                               2 - 1e-3, self.height / 2 + lgs.height / 2 - 5e-3, lgs.depth / 2)
