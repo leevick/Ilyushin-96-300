@@ -1,6 +1,7 @@
 import bpy
 import bmesh
 from typing import Callable
+from mathutils import Vector
 
 
 def add_cube(dimension=(1, 1, 1), location=(0, 0, 0)) -> bpy.types.Object:
@@ -192,6 +193,30 @@ def removeEdges(obj: bpy.types.Object, callback: Callable[[bmesh.types.BMEdge], 
     bpy.ops.object.mode_set(mode='OBJECT')
 
 
+def removeVertice(obj: bpy.types.Object, callback: Callable[[bmesh.types.BMVert], bool]) -> bpy.types.Object:
+    bpy.ops.object.mode_set(mode='EDIT')
+    bpy.ops.mesh.select_mode(type='VERT')
+    bpy.ops.mesh.select_all(action="DESELECT")
+    bm = bmesh.from_edit_mesh(obj.data)
+    for v in bm.verts:
+        if callback(v):
+            v.select_set(True)
+    bpy.ops.mesh.delete(type='VERT')
+    bpy.ops.object.mode_set(mode='OBJECT')
+
+
+def moveVertice(obj: bpy.types.Object, direction: Vector, callback: Callable[[bmesh.types.BMVert], bool]) -> bpy.types.Object:
+    bpy.ops.object.mode_set(mode='EDIT')
+    bpy.ops.mesh.select_mode(type='VERT')
+    bpy.ops.mesh.select_all(action="DESELECT")
+    bm = bmesh.from_edit_mesh(obj.data)
+    for v in bm.verts:
+        if callback(v):
+            v.select_set(True)
+    bpy.ops.transform.translate(value=direction)
+    bpy.ops.object.mode_set(mode='OBJECT')
+
+
 def extrudeAlongNorm(obj: bpy.types.Object, depth: float, callback: Callable[[bmesh.types.BMFace], bool]) -> None:
     bpy.ops.object.mode_set(mode='EDIT')
     bpy.ops.mesh.select_mode(type='FACE')
@@ -206,7 +231,7 @@ def extrudeAlongNorm(obj: bpy.types.Object, depth: float, callback: Callable[[bm
     bpy.ops.object.mode_set(mode='OBJECT')
 
 
-def subdivideEdges(obj: bpy.types.Object, callback: Callable[[bmesh.types.BMEdge], bool]) -> bpy.types.Object:
+def subdivideEdges(obj: bpy.types.Object, callback: Callable[[bmesh.types.BMEdge], bool], slices: int = 1) -> bpy.types.Object:
     bpy.ops.object.mode_set(mode='EDIT')
     bpy.ops.mesh.select_mode(type='EDGE')
     bpy.ops.mesh.select_all(action="DESELECT")
@@ -214,5 +239,57 @@ def subdivideEdges(obj: bpy.types.Object, callback: Callable[[bmesh.types.BMEdge
     for e in bm.edges:
         if callback(e):
             e.select_set(True)
-    bpy.ops.mesh.subdivide()
+    bpy.ops.mesh.subdivide(number_cuts=slices)
+    bpy.ops.object.mode_set(mode='OBJECT')
+
+
+def moveEdges(obj: bpy.types.Object | bmesh.types.BMFace, direction: Vector, callback: Callable[[bmesh.types.BMEdge], bool]) -> bpy.types.Object:
+    bpy.ops.object.mode_set(mode='EDIT')
+    bpy.ops.mesh.select_mode(type='EDGE')
+    bpy.ops.mesh.select_all(action="DESELECT")
+
+    if isinstance(obj, bpy.types.Object):
+        bm = bmesh.from_edit_mesh(obj.data)
+        for e in bm.edges:
+            if callback(e):
+                e.select_set(True)
+    elif isinstance(obj, bmesh.types.BMFace):
+        for e in obj.edges:
+            if callback(e):
+                e.select_set(True)
+
+    bpy.ops.transform.translate(value=direction)
+
+    bpy.ops.object.mode_set(mode='OBJECT')
+
+
+def extrudeEdges(obj: bpy.types.Object | bmesh.types.BMFace, direction: Vector, callback: Callable[[bmesh.types.BMEdge], bool]) -> bpy.types.Object:
+    bpy.ops.object.mode_set(mode='EDIT')
+    bpy.ops.mesh.select_mode(type='EDGE')
+    bpy.ops.mesh.select_all(action="DESELECT")
+
+    if isinstance(obj, bpy.types.Object):
+        bm = bmesh.from_edit_mesh(obj.data)
+        for e in bm.edges:
+            if callback(e):
+                e.select_set(True)
+    elif isinstance(obj, bmesh.types.BMFace):
+        for e in obj.edges:
+            if callback(e):
+                e.select_set(True)
+
+    bpy.ops.mesh.extrude_edges_move(MESH_OT_extrude_edges_indiv={"use_normal_flip": False, "mirror": False}, TRANSFORM_OT_translate={"value": direction, "orient_axis_ortho": 'X', "orient_type": 'GLOBAL', "orient_matrix": ((1, 0, 0), (0, 1, 0), (0, 0, 1)), "orient_matrix_type": 'GLOBAL', "constraint_axis": (False, False, False), "mirror": False, "use_proportional_edit": False, "proportional_edit_falloff": 'SMOOTH',
+                                    "proportional_size": 1, "use_proportional_connected": False, "use_proportional_projected": False, "snap": False, "snap_target": 'CLOSEST', "snap_point": (0, 0, 0), "snap_align": False, "snap_normal": (0, 0, 0), "gpencil_strokes": False, "cursor_transform": False, "texture_space": False, "remove_on_cancel": False, "view2d_edge_pan": False, "release_confirm": False, "use_accurate": False, "use_automerge_and_split": False})
+    bpy.ops.object.mode_set(mode='OBJECT')
+
+
+def moveFaces(obj: bpy.types.Object, direction: Vector, callback: Callable[[bmesh.types.BMFace], bool]) -> bpy.types.Object:
+    bpy.ops.object.mode_set(mode='EDIT')
+    bpy.ops.mesh.select_mode(type='FACE')
+    bpy.ops.mesh.select_all(action="DESELECT")
+    bm = bmesh.from_edit_mesh(obj.data)
+    for f in bm.faces:
+        if callback(f):
+            f.select_set(True)
+    bpy.ops.transform.translate(value=direction)
     bpy.ops.object.mode_set(mode='OBJECT')
