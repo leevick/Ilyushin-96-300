@@ -55,7 +55,7 @@ class SPSH4(BlenderModel):
         spsh4.data.materials.append(generatePureSignalLight((1, 1, 0, 1)))
 
         for h in signalHoles:
-            cut = add_cylinder(2e-3, 3e-3, 3e-3)
+            cut = add_cylinder(2e-3, 2e-3, 2e-3)
             x = (h[0] - 325) * 1e-4
             y = (h[1] - 325) * -1e-4
             cut.location = (x, y, 1.5e-3)
@@ -67,7 +67,7 @@ class SPSH4(BlenderModel):
 
             bm = bmesh.from_edit_mesh(spsh4.data)
             for f in bm.faces:
-                if math.fabs(f.calc_area() - (math.pi * 3e-3 * 3e-3)) < 1e-6:
+                if math.fabs(f.calc_area() - (math.pi * 2e-3 * 2e-3)) < 1e-6:
                     centr = f.calc_center_median()
                     if math.fabs(centr.x - x) < 1e-6 and math.fabs(centr.y - y) < 1e-6:
                         f.select_set(True)
