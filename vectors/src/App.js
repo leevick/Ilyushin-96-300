@@ -2,6 +2,7 @@ import "./App.css"
 import CentralPanel from "./CentralPanel.js"
 import { CentralRightPanel } from "./CentralRightPanel.js"
 import KPI from "./KPI.js"
+import LeftLower from "./LeftLower.js"
 import { MainPanel } from "./MainPanel.js"
 import PU56 from "./PU56.js"
 import CentralUpper from "./center_upper.jpg"
@@ -25,6 +26,9 @@ export default function App() {
             <g transform="translate(3842,0)">
                 <CentralRightPanel></CentralRightPanel>
             </g>
+        </g>
+        <g transform="translate(1850,4050)">
+            <LeftLower></LeftLower>
         </g>
     </svg>
 }

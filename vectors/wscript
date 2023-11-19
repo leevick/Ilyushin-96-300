@@ -67,6 +67,7 @@ textures = [
     "StabDispWheel",
     "VR30BPTicks",
     "StabDispFrame",
+    "LeftLower",
 
 ]
 

@@ -11,5 +11,6 @@ class LeftLower(BlenderModel):
 
     def create(self) -> bpy.types.Object:
         panel = add_plane((self.width, self.height))
-        panel.data.materials.append(panelWithPaints("LeftLower", texture=None))
+        panel.data.materials.append(
+            panelWithPaints("LeftLower", texture="LeftLower"))
         return panel
