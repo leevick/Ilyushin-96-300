@@ -55,7 +55,7 @@ class PU56(BlenderModel):
     height: float = panelHeight + 2e-3
     depth: float = 130e-3
 
-    shadeDepth: float = 2e-2
+    shadeDepth: float = 3e-2
     distToWindow: float = 525e-3
     upperDepth: float = distToWindow / math.cos(math.radians(distToWindow))
 

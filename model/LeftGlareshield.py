@@ -21,7 +21,7 @@ class LeftGlareshield(BlenderModel):
     horizontalTotal: float = 414.0
     distToPU56: float
 
-    shadeDepth: float = 2e-2
+    shadeDepth: float = 3e-2
     distToWindow: float = 525e-3
     upperDepth: float = distToWindow / math.cos(math.radians(distToWindow))
 
