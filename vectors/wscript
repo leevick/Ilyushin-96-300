@@ -68,6 +68,7 @@ textures = [
     "VR30BPTicks",
     "StabDispFrame",
     "LeftLower",
+    "CabinAlt",
 
 ]
 
@@ -105,7 +106,7 @@ def build(ctx: Context):
     for i in range(len(sources)):
         ctx(rule=f"{ctx.env.INK} --export-png-color-mode=RGBA_16 -o ${{TGT}} -d 300 {sources[i]}",
             target=f"../texture/{targets[i]}")
-    # ctx.add_group()
+        ctx.add_group()
     # for i in textures:
     #     ctx(
     #         rule=f"python ../vectors/resize.py ./texture/{i}_resize.png ${{TGT}}", target=f"../texture/{i}.png")
