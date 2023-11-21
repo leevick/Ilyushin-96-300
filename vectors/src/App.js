@@ -5,6 +5,7 @@ import KPI from "./KPI.js"
 import LeftLower from "./LeftLower.js"
 import { MainPanel } from "./MainPanel.js"
 import PU56 from "./PU56.js"
+import RightLower from "./RightLower.js"
 import CentralUpper from "./center_upper.jpg"
 
 export default function App() {
@@ -29,6 +30,9 @@ export default function App() {
         </g>
         <g transform="translate(1850,4050)">
             <LeftLower></LeftLower>
+        </g>
+        <g transform="translate(11420,4050)">
+            <RightLower></RightLower>
         </g>
     </svg>
 }
