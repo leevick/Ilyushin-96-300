@@ -16,8 +16,8 @@
 			<Flags>
 				<FSXCompatibility>false</FSXCompatibility>
 			</Flags>
-			<AssetDir>PackageDefinitions\uac-il-96-300\ContentInfo</AssetDir>
-			<OutputDir>ContentInfo\uac-il-96-300</OutputDir>
+			<AssetDir>PackageDefinitions\uac-il-96-300\ContentInfo\</AssetDir>
+			<OutputDir>ContentInfo\uac-il-96-300\</OutputDir>
 		</AssetGroup>
 		<AssetGroup Name="uac-il-96-300">
 			<Type>SimObject</Type>

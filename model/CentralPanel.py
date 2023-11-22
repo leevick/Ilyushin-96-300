@@ -220,8 +220,8 @@ class CentralPanel(BlenderModel):
         lgs.model.parent = panel
 
         panel.rotation_euler[0] = math.radians(75)
-        # panel.rotation_euler[2] = math.radians(180)
-        # panel.location = (0, -0.5, 0.7)
+        panel.rotation_euler[2] = math.radians(180)
+        panel.location = (0, -23.8648, 1.25448)
 
         return panel
 
