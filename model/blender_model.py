@@ -1,7 +1,9 @@
+from __future__ import annotations
 import bpy
 import sys
 import math
 import pathlib
+from typing import List
 
 dir = pathlib.Path(__file__).parent.as_posix()
 if not dir in sys.path:
@@ -10,11 +12,18 @@ if not dir in sys.path:
 
 class BlenderModel:
     model: bpy.types.Object
+    children: List[BlenderModel]
 
     def __init__(self) -> None:
         pass
 
     def create(self) -> bpy.types.Object:
+        pass
+
+    def applyPre(self) -> None:
+        pass
+
+    def applyPost(self) -> None:
         pass
 
     def render(self, name: str) -> None:
