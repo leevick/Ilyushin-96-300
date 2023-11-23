@@ -13,7 +13,7 @@ if not dir in sys.path:
 from blender_model import BlenderModel
 from models import generateClockFace, extrudeFace, US2, digHole, digHoleObj, RMI, AGB, VBM, moveOrigin
 from SignalBoard import SignalBoard
-from utils import add_plane, add_cube, bevel, moveOrigin, digHoleObj, bevelWeight
+from utils import add_plane, add_cube, bevel, moveOrigin, digHoleObj, bevelWeight, shaderSmooth
 from Materials import generateColorBump, generateClockGlass, generateScreenGauge, panelWithPaints
 
 
@@ -54,6 +54,11 @@ class Monitor(BlenderModel):
                 bm.faces.remove(f)
 
         bevelWeight(monitor, self.edge_bevel)
+
+        shaderSmooth(monitor, lambda f:
+                     f.normal.x * f.normal.y != 0
+                     or f.normal.y * f.normal.z != 0
+                     or f.normal.z * f.normal.x != 0)
 
         monitor.location = (0, 0, -self.depth / 2)
         moveOrigin((0, 0, 0))

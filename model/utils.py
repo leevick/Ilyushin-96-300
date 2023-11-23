@@ -295,27 +295,16 @@ def moveFaces(obj: bpy.types.Object, direction: Vector, callback: Callable[[bmes
     bpy.ops.object.mode_set(mode='OBJECT')
 
 
-def shaderSmooth(obj: bpy.types.Object, callback: Callable[[bmesh.types.BMFace], bool] | Callable[[bmesh.types.BMVert], bool]) -> None:
+def shaderSmooth(obj: bpy.types.Object, callback: Callable[[bmesh.types.BMFace], bool]) -> None:
 
-    if isinstance(callback, Callable[[bmesh.types.BMFace], bool]):
-        bpy.ops.object.mode_set(mode='EDIT')
-        bpy.ops.mesh.select_mode(type='FACE')
-        bpy.ops.mesh.select_all(action="DESELECT")
-        bm = bmesh.from_edit_mesh(obj.data)
-        for e in bm.faces:
-            if callback(e):
-                e.select_set(True)
-    elif isinstance(callback, Callable[[bmesh.types.BMVert], bool]):
-        bpy.ops.object.mode_set(mode='EDIT')
-        bpy.ops.mesh.select_mode(type='VERT')
-        bpy.ops.mesh.select_all(action="DESELECT")
-        bm = bmesh.from_edit_mesh(obj.data)
-        for e in bm.verts:
-            if callback(e):
-                e.select_set(True)
-
+    bpy.ops.object.mode_set(mode='EDIT')
     bpy.ops.mesh.select_mode(type='FACE')
-    bpy.ops.object.shade_smooth()
+    bpy.ops.mesh.select_all(action="DESELECT")
+    bm = bmesh.from_edit_mesh(obj.data)
+    for e in bm.faces:
+        if callback(e):
+            e.select_set(True)
+    bpy.ops.mesh.faces_shade_smooth()
     bpy.ops.object.mode_set(mode='OBJECT')
 
     pass
