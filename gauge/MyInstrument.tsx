@@ -1,16 +1,21 @@
-import { FSComponent } from 'msfssdk';
-import { MyComponent } from './MyComponent';
+/// <reference types="@microsoft/msfs-types/Pages/VCockpit/Core/VCockpit" />
+
+import { FSComponent } from "@microsoft/msfs-sdk";
+import { MyComponent } from "./MyComponent";
 
 class MyInstrument extends BaseInstrument {
-    get templateID(): string {
-        return 'MyInstrument';
-    }
+  get templateID(): string {
+    return "MyInstrument";
+  }
 
-    public connectedCallback(): void {
-        super.connectedCallback();
+  public connectedCallback(): void {
+    super.connectedCallback();
 
-        FSComponent.render(<MyComponent />, document.getElementById('InstrumentContent'));
-    }
+    FSComponent.render(
+      <MyComponent />,
+      document.getElementById("InstrumentContent")
+    );
+  }
 }
 
-registerInstrument('my-instrument', MyInstrument);
+registerInstrument("my-instrument", MyInstrument);
