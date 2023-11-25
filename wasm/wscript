@@ -1,0 +1,26 @@
+#!/usr/bin/python3
+
+import glob
+import sys
+from os import path
+
+gauges = ["pfd_captain"]
+
+
+def wasm_build(ctx, name):
+    ctx(rule=f'..\clang-cl.bat ${{SRC}}',
+        source=f'{name}.cpp', target=f'{name}.obj')
+
+
+def wasm_link(ctx, name):
+    ctx(rule=f'..\wasm-ld.bat ${{SRC}} ${{TGT}}',
+        source=f'{name}.obj', target=f'{name}.wasm')
+
+
+def build(ctx):
+    for g in gauges:
+        wasm_build(ctx, g)
+    ctx.add_group()
+    for g in gauges:
+        wasm_link(ctx, g)
+    pass

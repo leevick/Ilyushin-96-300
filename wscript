@@ -21,6 +21,7 @@ def configure(ctx):
 
 def build(ctx):
     ctx.recurse("vectors")
+    ctx.recurse("wasm")
     ctx.add_group()
     ctx(rule="cp -r texture ../msfs/Ilyushin-96-300/PackageSources/SimObjects/Airplanes/uac-il-96-300/")
     ctx.recurse("model")
