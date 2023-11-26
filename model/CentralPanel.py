@@ -153,33 +153,33 @@ class CentralPanel(BlenderModel):
         cr.model.parent = panel
 
         # Monitors
-        m1 = Monitor().create()
+        m1 = Monitor(name="ND").create()
         m1.parent = panel
         m1.location = (- self.width / 2 +
                        1025e-4 + 10e-4, - self.height / 2 - 1160e-4, 0)
-        m2 = Monitor().create()
+        m2 = Monitor(name="ND").create()
         m2.parent = panel
         m2.location = (- self.width / 2 +
                        3075e-4 + 30e-4, - self.height / 2 - 1160e-4, 0)
 
-        leftND: Monitor = Monitor()
+        leftND: Monitor = Monitor(name="ND")
         leftND.model = leftND.create()
         leftND.model.parent = panel
         leftND.model.location = (-self.width / 2 - 1025e-4 -
                                  10e-4, - self.height / 2, 0)
 
-        leftPFD = Monitor().create()
+        leftPFD = Monitor(name="PFD").create()
         leftPFD.parent = panel
         leftPFD.location = (-self.width / 2 - 1025e-4 -
                             30e-4 - 2050e-4, - self.height / 2, 0)
 
-        rightND: Monitor = Monitor()
+        rightND: Monitor = Monitor(name="ND")
         rightND.model = rightND.create()
         rightND.model.parent = panel
         rightND.model.location = (self.width / 2 + rightND.width / 2 +
                                   30e-4 + cr.width, - self.height / 2, 0)
 
-        rightPFD: Monitor = Monitor()
+        rightPFD: Monitor = Monitor(name="PFD")
         rightPFD.model = rightPFD.create()
         rightPFD.model.parent = panel
         rightPFD.model.location = (self.width / 2 + rightND.width +

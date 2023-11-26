@@ -215,8 +215,7 @@ def generateScreenGauge(name: str) -> bpy.types.Material:
         matGlass = bpy.data.materials.new(name=f"$SCREEN_{name.upper()}")
         matGlass.use_nodes = True
         matGlass.msfs_material_type = "msfs_standard"
-        matGlass.msfs_base_color_factor = (0, 0, 0, 1)
-        matGlass.msfs_metallic_factor = 0.0
+        matGlass.msfs_emissive_factor = (1, 1, 1)
         msfs_mat = MSFS_Material(matGlass)
 
         MSFS_Material_Property_Update.update_msfs_material_type(

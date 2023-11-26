@@ -1,4 +1,4 @@
-// Copyright (c) Asobo Studio, All rights reserved. www.asobostudio.com
+﻿// Copyright (c) Asobo Studio, All rights reserved. www.asobostudio.com
 
 #include <MSFS\MSFS.h>
 #include "MSFS\MSFS_Render.h"
@@ -8,7 +8,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
-#include <map>
 
 #ifdef _MSC_VER
 #define snprintf _snprintf_s
@@ -18,13 +17,13 @@
 
 struct sCompassVars
 {
+    NVGcontext *m_nvgctx = nullptr;
     ENUM m_eDegrees;
     ENUM m_ePlaneHeadingDegreesTrue;
     int m_iFont;
 };
 
 sCompassVars g_CompassVars;
-std::map<FsContext, NVGcontext *> g_CompassNVGcontext;
 
 // ------------------------
 // Callbacks
@@ -44,8 +43,8 @@ MSFS_CALLBACK bool Compass_gauge_callback(FsContext ctx, int service_id, void *p
         NVGparams params;
         params.userPtr = ctx;
         params.edgeAntiAlias = true;
-        g_CompassNVGcontext[ctx] = nvgCreateInternal(&params);
-        NVGcontext *nvgctx = g_CompassNVGcontext[ctx];
+        NVGcontext *nvgctx = nvgCreateInternal(&params);
+        g_CompassVars.m_nvgctx = nvgctx;
         g_CompassVars.m_iFont = nvgCreateFont(nvgctx, "sans", "./data/Roboto-Regular.ttf");
         return true;
     } break;
@@ -55,7 +54,7 @@ MSFS_CALLBACK bool Compass_gauge_callback(FsContext ctx, int service_id, void *p
         float fSize = (float)min(p_draw_data->winWidth, p_draw_data->winHeight);
         float fR = fSize * 0.5f;
         float pxRatio = (float)p_draw_data->fbWidth / (float)p_draw_data->winWidth;
-        NVGcontext *nvgctx = g_CompassNVGcontext[ctx];
+        NVGcontext *nvgctx = g_CompassVars.m_nvgctx;
         nvgBeginFrame(nvgctx, p_draw_data->winWidth, p_draw_data->winHeight, pxRatio);
         {
             // Black background
@@ -168,9 +167,8 @@ MSFS_CALLBACK bool Compass_gauge_callback(FsContext ctx, int service_id, void *p
         return true;
     } break;
     case PANEL_SERVICE_PRE_KILL: {
-        NVGcontext *nvgctx = g_CompassNVGcontext[ctx];
+        NVGcontext *nvgctx = g_CompassVars.m_nvgctx;
         nvgDeleteInternal(nvgctx);
-        g_CompassNVGcontext.erase(ctx);
         return true;
     } break;
     }

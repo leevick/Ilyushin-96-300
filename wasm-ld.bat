@@ -1,1 +1,0 @@
-"C:\MSFS SDK\WASM\llvm\bin\wasm-ld.exe"  --no-entry -o %2 --gc-sections -O3 --lto-O3 --strip-debug --allow-undefined --export-dynamic --export malloc --export free --export __wasm_call_ctors --export-table -L "C:\MSFS SDK\WASM\wasi-sysroot\lib\wasm32-wasi" -lc++ -lc++abi -lc "C:\MSFS SDK\WASM\wasi-sysroot\lib\wasm32-wasi\libclang_rt.builtins-wasm32.a" %1

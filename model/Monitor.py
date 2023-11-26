@@ -28,9 +28,11 @@ class Monitor(BlenderModel):
     screenDepth: float = 10e-4
     screenRadius: float = 2e-3
     edge_bevel: float = 50e-4
+    screenName: str
 
-    def __init__(self) -> None:
+    def __init__(self, name: str) -> None:
         super().__init__()
+        self.screenName = name
 
     def create(self) -> bpy.types.Object:
         monitor = add_cube(
@@ -108,12 +110,12 @@ class Monitor(BlenderModel):
         glass = add_plane((self.screenWidth, self.screenHeight),
                           (0, 0, -self.glassDepth))
         glass.data.materials.append(
-            generateClockGlass((0, 0, 0, 0.5)))
+            generateClockGlass((1, 1, 1, 0.01)))
         glass.parent = monitor
 
         screen = add_plane((1.05 * self.screenWidth, 1.05 * self.screenHeight),
                            (0, 0, -self.screenDepth))
-        screen.data.materials.append(generateScreenGauge("KPI"))
+        screen.data.materials.append(generateScreenGauge(self.screenName))
         screen.parent = monitor
 
         self.model = monitor
