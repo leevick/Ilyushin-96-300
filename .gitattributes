@@ -1,1 +1,4 @@
 photo filter=lfs diff=lfs merge=lfs -text
+vectors/src/vss-85.png filter=lfs diff=lfs merge=lfs -text
+vectors/src/vss-85-corrected.png filter=lfs diff=lfs merge=lfs -text
+vectors/src/cabinTop.png filter=lfs diff=lfs merge=lfs -text
