@@ -2,3 +2,8 @@
     font-family: 'LENYA69';
     src: url('../fonts/lenya69.ttf');
 }
+
+@font-face {
+    font-family: 'RUSSIANGAUGE';
+    src: url('../fonts/RussianGuage.ttf');
+}

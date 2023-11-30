@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+    <path d="M 128	128 l	0	128" stroke-width="64" stroke-linecap="round" stroke="black" />
+    <path d="M 128	256 l	256	256" stroke-width="64" stroke-linecap="round" stroke="black" />
+    <path d="M 384	512 l	-256	256" stroke-width="64" stroke-linecap="round" stroke="black" />
+    <path d="M 128	768 l	0	128" stroke-width="64" stroke-linecap="round" stroke="black" />
+    <path d="M 896	128 l	0	128" stroke-width="64" stroke-linecap="round" stroke="black" />
+    <path d="M 896	256 l	-256	256" stroke-width="64" stroke-linecap="round" stroke="black" />
+    <path d="M 640	512 l	256	256" stroke-width="64" stroke-linecap="round" stroke="black" />
+    <path d="M 896	768 l	0	128" stroke-width="64" stroke-linecap="round" stroke="black" />
+    <path d="M 384	512 l	256	0" stroke-width="64" stroke-linecap="round" stroke="black" />
+    <path d="M 512	128 l	0	768" stroke-width="64" stroke-linecap="round" stroke="black" />
+</svg>
