@@ -6,6 +6,7 @@
 <path d="M 640 768 l -128 128" stroke-width="40" stroke-linecap="round" stroke="black" />
 <path d="M 512 896 l -256 0" stroke-width="40" stroke-linecap="round" stroke="black" />
 <path d="M 256 896 l -128 -128" stroke-width="40" stroke-linecap="round" stroke="black" />
-<path d="M 256 512 l 384 0" stroke-width="40" stroke-linecap="round" stroke="black" />
+<path d="M 128 768 l 0 -512" stroke-width="40" stroke-linecap="round" stroke="black" />
+<path d="M 512 640 l 256 256" stroke-width="40" stroke-linecap="round" stroke="black" />
 
 </svg>

@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
-<path d="M 128 128 l 0 768" stroke-width="64" stroke-linecap="round" stroke="black" />
-<path d="M 128 896 l 768 0" stroke-width="64" stroke-linecap="round" stroke="black" />
-<path d="M 896 896 l 0 -768" stroke-width="64" stroke-linecap="round" stroke="black" />
-<path d="M 512 128 l 0 768" stroke-width="64" stroke-linecap="round" stroke="black" />
+<path d="M 128 128 l 0 768" stroke-width="40" stroke-linecap="round" stroke="black" />
+<path d="M 128 896 l 768 0" stroke-width="40" stroke-linecap="round" stroke="black" />
+<path d="M 896 896 l 0 -768" stroke-width="40" stroke-linecap="round" stroke="black" />
+<path d="M 512 128 l 0 768" stroke-width="40" stroke-linecap="round" stroke="black" />
 
 </svg>

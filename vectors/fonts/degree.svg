@@ -1,12 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 768 1024">
 <g transform="translate(0,128)">
-    <path d="M 128	0       l	128	    -128" stroke-width="64" stroke-linecap="round" stroke="black" />
-    <path d="M 256	-128    l	128	    0" stroke-width="64" stroke-linecap="round" stroke="black" />
-    <path d="M 384	-128    l	128	    128" stroke-width="64" stroke-linecap="round" stroke="black" />
-    <path d="M 512	0       l	0	    128" stroke-width="64" stroke-linecap="round" stroke="black" />
-    <path d="M 512	128     l	-128	128" stroke-width="64" stroke-linecap="round" stroke="black" />
-    <path d="M 384	256     l	-128	0" stroke-width="64" stroke-linecap="round" stroke="black" />
-    <path d="M 256	256     l	-128	-128" stroke-width="64" stroke-linecap="round" stroke="black" />
-    <path d="M 128	128     l	0	    -128" stroke-width="64" stroke-linecap="round" stroke="black" />
+    <path d="M 128	0       l	128	    -128" stroke-width="40" stroke-linecap="round" stroke="black" />
+    <path d="M 256	-128    l	128	    0" stroke-width="40" stroke-linecap="round" stroke="black" />
+    <path d="M 384	-128    l	128	    128" stroke-width="40" stroke-linecap="round" stroke="black" />
+    <path d="M 512	0       l	0	    128" stroke-width="40" stroke-linecap="round" stroke="black" />
+    <path d="M 512	128     l	-128	128" stroke-width="40" stroke-linecap="round" stroke="black" />
+    <path d="M 384	256     l	-128	0" stroke-width="40" stroke-linecap="round" stroke="black" />
+    <path d="M 256	256     l	-128	-128" stroke-width="40" stroke-linecap="round" stroke="black" />
+    <path d="M 128	128     l	0	    -128" stroke-width="40" stroke-linecap="round" stroke="black" />
 </g>
 </svg>
