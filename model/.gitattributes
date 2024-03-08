@@ -1,0 +1,10 @@
+cockpit.blend filter=lfs diff=lfs merge=lfs -text
+im.blend filter=lfs diff=lfs merge=lfs -text
+ВСС-95.blend filter=lfs diff=lfs merge=lfs -text
+ХАЭ-85М.blend filter=lfs diff=lfs merge=lfs -text
+head.blend filter=lfs diff=lfs merge=lfs -text
+head_backup.blend filter=lfs diff=lfs merge=lfs -text
+kirill_vc.blend filter=lfs diff=lfs merge=lfs -text
+main.blend filter=lfs diff=lfs merge=lfs -text
+samdim_vc.blend filter=lfs diff=lfs merge=lfs -text
+SPSH4.blend filter=lfs diff=lfs merge=lfs -text
