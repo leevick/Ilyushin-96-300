@@ -8,3 +8,4 @@ kirill_vc.blend filter=lfs diff=lfs merge=lfs -text
 main.blend filter=lfs diff=lfs merge=lfs -text
 samdim_vc.blend filter=lfs diff=lfs merge=lfs -text
 SPSH4.blend filter=lfs diff=lfs merge=lfs -text
+flash_board.blend filter=lfs diff=lfs merge=lfs -text
