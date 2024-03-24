@@ -3,3 +3,11 @@ vectors/src/vss-85.png filter=lfs diff=lfs merge=lfs -text
 vectors/src/vss-85-corrected.png filter=lfs diff=lfs merge=lfs -text
 vectors/src/cabinTop.png filter=lfs diff=lfs merge=lfs -text
 model/ filter=lfs diff=lfs merge=lfs -text
+model/ВСС-95.blend filter=lfs diff=lfs merge=lfs -text
+model/ХАЭ-85М.blend filter=lfs diff=lfs merge=lfs -text
+model/SPSH4.blend filter=lfs diff=lfs merge=lfs -text
+model/console.blend filter=lfs diff=lfs merge=lfs -text
+model/engine_indicator.blend filter=lfs diff=lfs merge=lfs -text
+model/gear_handle.blend filter=lfs diff=lfs merge=lfs -text
+model/pu56.blend filter=lfs diff=lfs merge=lfs -text
+model/vss95.blend filter=lfs diff=lfs merge=lfs -text

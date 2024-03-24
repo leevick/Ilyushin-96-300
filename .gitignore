@@ -15,3 +15,5 @@ texture
 **/model/*.xml
 .waf*
 waf*
+.DS_Store
+*.bkp
