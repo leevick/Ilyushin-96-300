@@ -18,7 +18,7 @@ bpy.ops.msfs.reload_lod_groups()
 lod_group = bpy.context.scene.msfs_multi_exporter_lod_groups[0]
 lod_group.generate_xml = True
 lod_group.overwrite_guid = True
-lod_group.folder_name = "../msfs/Ilyushin-96-300/PackageSources/SimObjects/Airplanes/uac-il-96-300/model/"
+lod_group.folder_name = "../SimObjects/Airplanes/uac-aircraft-il-96/model/"
 lod_group.group_name = "vc"
 
 # print(pathlib.Path(__file__).parent.as_posix())
